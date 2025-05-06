@@ -9,7 +9,7 @@ namespace HikepassApp.Services
 {
     public static class ConfigService
     {
-        public static string[] AvailableTrails { get; private set; } = new string[0];
+        public static string[] AvailableTrails { get; set; } = new string[0];
 
         public static void LoadConfig(string path)
         {
