@@ -1,20 +1,17 @@
-﻿using HikepassApp.Controller;
-using HikepassApp.Services;
-using HikepassApp.View;
+﻿using HikepassLibrary.Controller;
+using HikepassLibrary.Model;
+
 
 class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("== SISTEM PEMESANAN TIKET PENDAKIAN MALABAR ==\n");
+        User user1 = new User("U001", "Agus");
 
-        ConfigService.LoadConfig("config.json");
-        ConfigService.ShowAvailableTrails();
+        Monitoring monitor = new Monitoring();
 
-        var view = new TicketView();
-        var controller = new TicketController(view);
-        controller.CreateTicket();
-
-        Console.WriteLine("\nTerima kasih telah menggunakan layanan kami.");
+        monitor.HandleTransition(user1, "checkin");
+        monitor.HandleTransition(user1, "checkout");
+        monitor.HandleTransition(user1, "checkin"); // Tidak valid, sudah checkout
     }
 }
