@@ -1,20 +1,40 @@
-﻿using HikepassApp.Controller;
-using HikepassApp.Services;
-using HikepassApp.View;
-
+﻿using HikepassApp;
+using System;
 class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("== SISTEM PEMESANAN TIKET PENDAKIAN MALABAR ==\n");
+        var payment = new Payment();
 
-        ConfigService.LoadConfig("config.json");
-        ConfigService.ShowAvailableTrails();
+        Console.WriteLine("== SIMULASI PEMBAYARAN ==\n");
+        Console.Write("Apakah pembayaran berhasil? (y/n): ");
+        var input = Console.ReadLine();
 
-        var view = new TicketView();
-        var controller = new TicketController(view);
-        controller.CreateTicket();
+        bool isSuccess = input?.ToLower() == "y";
 
-        Console.WriteLine("\nTerima kasih telah menggunakan layanan kami.");
+        payment.ProcessPayment(isSuccess);
+
+        Console.WriteLine("\nStatus Akhir:");
+        switch (payment.StateMachine.CurrentState)
+        {
+            case PaymentState.NotPaid:
+                Console.WriteLine("Status: Belum Bayar");
+                break;
+            case PaymentState.WaitingConfirmation:
+                Console.WriteLine("Status: Menunggu Konfirmasi");
+                break;
+            case PaymentState.Paid:
+                Console.WriteLine("Status: Sudah Bayar");
+                break;
+            case PaymentState.Failed:
+                Console.WriteLine("Status: Gagal");
+                break;
+            default:
+                Console.WriteLine("Status: Tidak diketahui");
+                break;
+        }
+
+        Console.WriteLine("\n== SELESAI ==\n");
     }
+
 }
