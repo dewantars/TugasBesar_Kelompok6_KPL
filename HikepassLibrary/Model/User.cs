@@ -6,12 +6,18 @@ using System.Threading.Tasks;
 
 namespace HikepassLibrary.Model
 {
-    class User
+    public class User
     {
-        public int Id { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string FullName { get; set; }
-        public string Email { get; set; }
+        
+        public string Id { get; set; }        // ID unik user
+        public string Name { get; set; }      // Nama pendaki
+        public string Status { get; set; }    // Status pendakian: "paid", "checked_in", "checked_out"
+
+        public User(string id, string name)
+        {
+            Id = id;
+            Name = name;
+            Status = "paid"; // Default setelah pembayaran
+        }
     }
 }
