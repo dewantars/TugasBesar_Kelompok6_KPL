@@ -1,0 +1,6 @@
+@HikepassAPI_HostAddress = http://localhost:5226
+
+GET {{HikepassAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
