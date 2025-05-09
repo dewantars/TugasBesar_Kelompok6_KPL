@@ -1,4 +1,4 @@
-﻿using HikepassApp;
+using HikepassApp;
 
 class Program
 {
