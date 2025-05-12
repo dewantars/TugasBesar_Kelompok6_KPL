@@ -10,21 +10,23 @@ namespace HikepassLibrary.Controller
 {
     public class PengelolaController
     {
-        private Pengelola pengelola;
+        private List<Pendaki> pendakis = new List<Pendaki>(); // Data pendaki yang sedang dipantau
 
-        public PengelolaController(string namaPengelola)
+        // Method to monitor hikers
+        public void MonitorHikers()
         {
-            pengelola = new Pengelola(namaPengelola);
+            Console.WriteLine("Daftar pendaki yang sedang dipantau:");
+            foreach (var pendaki in pendakis)
+            {
+                Console.WriteLine($"Nama: {pendaki.Nama}, Usia: {pendaki.Usia}, Kontak: {pendaki.Kontak}, Alamat: {pendaki.Alamat}");
+            }
         }
 
-        public void LihatStatusPendaki(List<User> pendakiList)
+        // Method to view reports
+        public void ViewReports()
         {
-            pengelola.LihatStatusPendaki(pendakiList);
-        }
-
-        public void KelolaTiket(List<Ticket> tiketList)
-        {
-            pengelola.KelolaTiket(tiketList);
+            Console.WriteLine("Laporan pendakian:");
+            // Implementasi untuk melihat laporan
         }
     }
 }

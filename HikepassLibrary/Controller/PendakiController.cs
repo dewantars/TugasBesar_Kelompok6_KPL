@@ -10,28 +10,78 @@ namespace HikepassLibrary.Controller
 {
     public class PendakiController
     {
-        private User pendaki;
-        private MonitoringService monitoringService;
+        private List<Tiket> tickets = new List<Tiket>(); // Daftar tiket pendaki
+        private List<Pendaki> pendaki = new List<Pendaki>(); // Data pendaki
 
-        public PendakiController(User user)
+        private readonly TiketService _tiketService;
+        private readonly MonitoringService _monitoringService; // Tambahkan MonitoringService
+
+        // Dependency Injection: Menerima instance dari service yang dibutuhkan.
+        public PendakiController(TiketService tiketService, MonitoringService monitoringService)
         {
-            pendaki = user;
-            monitoringService = new MonitoringService();
+            _tiketService = tiketService;
+            _monitoringService = monitoringService; // Inisialisasi MonitoringService
         }
 
-        public void CheckIn()
+        // Method untuk menampilkan daftar tiket pendaki
+        public void ShowMyTickets(string kontak) // Gunakan kontak untuk mencari tiket
         {
-            monitoringService.HandleTransition(pendaki, "checkin");
+            var myTickets = _tiketService.GetTiketByKontak(kontak); // Gunakan TiketService
+            if (myTickets.Count > 0)
+            {
+                Console.WriteLine("\n=== Tiket Saya ===");
+                foreach (var ticket in myTickets)
+                {
+                    Console.WriteLine($"ID Tiket: {ticket.Id}, Tanggal: {ticket.Tanggal.ToShortDateString()}, Jumlah Pendaki: {ticket.JumlahPendaki}, Status Pembayaran: {(ticket.StatusPembayaran ? "Lunas" : "Belum Lunas")}, Status Check-in: {(ticket.IsCheckedIn ? "Sudah Check-in" : "Belum Check-in")}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Anda belum memiliki tiket yang dibayar.");
+            }
         }
 
-        public void CheckOut()
+        // Method untuk check-in tiket
+        public bool CheckInTicket(int ticketId, Dictionary<string, string> daftarPendaki, List<string> barangBawaan)
         {
-            monitoringService.HandleTransition(pendaki, "checkout");
+            var ticket = _tiketService.GetTiketById(ticketId); // Ambil tiket dari service
+
+            if (ticket != null && ticket.StatusPembayaran && !ticket.IsCheckedIn)
+            {
+                ticket.IsCheckedIn = true; // Update status check-in
+                ticket.BarangBawaanSaatCheckin = barangBawaan; // Simpan barang bawaan
+                ticket.DaftarPendaki = daftarPendaki; // Simpan daftar pendaki
+                _tiketService.UpdateTiket(ticket); // Update tiket di service
+                _monitoringService.TambahPendakiMonitoring(ticketId, daftarPendaki,barangBawaan); // Tambah ke monitoring
+                Console.WriteLine("Tiket berhasil check-in.");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Tiket tidak valid atau belum dibayar atau sudah check-in.");
+                return false; // Mengembalikan nilai boolean untuk memberi tahu keberhasilan/kegagalan
+            }
         }
 
-        public void EditProfil(string namaBaru)
+        // Method untuk checkout tiket
+        public bool CheckOutTicket(int ticketId, List<string> barangBawaanKembali)
         {
-            pendaki.EditProfil(namaBaru);
+            var ticket = _tiketService.GetTiketById(ticketId); // Ambil tiket dari service
+
+            if (ticket != null && ticket.IsCheckedIn)
+            {
+                ticket.IsCheckedIn = false; // Update status
+                ticket.BarangBawaanSaatCheckout = barangBawaanKembali; // Simpan barang bawaan kembali
+                _tiketService.UpdateTiket(ticket); // Update tiket
+                _monitoringService.RemovePendakiFromMonitoring(ticketId, ticket.DaftarPendaki); // Hapus dari monitoring
+                Console.WriteLine("Tiket berhasil checkout.");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Tiket tidak ditemukan atau belum check-in.");
+                return false; // Mengembalikan nilai boolean
+            }
         }
     }
 }

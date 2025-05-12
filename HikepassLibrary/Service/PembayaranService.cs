@@ -6,7 +6,20 @@ using System.Threading.Tasks;
 
 namespace HikepassLibrary.Service
 {
-    class PembayaranService
+    public class PembayaranService
     {
+        // Simulasi pengecekan pembayaran berdasarkan ID Pendaki
+        public bool SudahMelakukanPembayaran(int idPendaki)
+        {
+            // Misalnya kita asumsikan pendaki dengan ID genap sudah membayar
+            if (idPendaki % 2 == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
