@@ -4,20 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// User.cs
 namespace HikepassLibrary.Model
 {
     public class User
     {
-        
-        public string Id { get; set; }        // ID unik user
-        public string Name { get; set; }      // Nama pendaki
-        public string Status { get; set; }    // Status pendakian: "paid", "checked_in", "checked_out"
+       
+        public string Username { get; set; }   // Username untuk login
+        public string Password { get; set; }   // Password untuk login
+        public string Role { get; set; }       // Role (Pendaki atau Pengelola)
 
-        public User(string id, string name)
+        // Constructor untuk mempermudah pembuatan objek User
+        public User() { }
+        public User(string username, string password, string role)
         {
-            Id = id;
-            Name = name;
-            Status = "paid"; // Default setelah pembayaran
+            
+            Username = username;
+            Password = password;
+            Role = role;
         }
     }
 }
+

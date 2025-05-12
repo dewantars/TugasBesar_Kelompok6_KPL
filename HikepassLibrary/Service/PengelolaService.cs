@@ -5,48 +5,25 @@ using System.Text;
 using System.Threading.Tasks;
 using HikepassLibrary.Controller;
 using HikepassLibrary.Model;
+using static HikepassLibrary.Model.User;
 
 namespace HikepassLibrary.Service
 {
-    class PengelolaService
+    public class PengelolaService
     {
-        // PembelianTiketService.cs (Service)
-        public class PembelianTiketService
-        {
-            public List<Ticket> TiketTerbeli { get; set; } = new List<Ticket>();
+        private Dictionary<int, User> daftarPengelola;
 
-            public void BeliTiket(User user, Ticket tiket, int jumlahOrang)
-            {
-                for (int i = 0; i < jumlahOrang; i++)
-                {
-                    TiketTerbeli.Add(tiket);
-                    Console.WriteLine($"Tiket untuk {user.Nama} berhasil dibeli untuk {tiket.Tujuan} pada {tiket.TanggalPendakian.ToShortDateString()}.");
-                }
-            }
+        public PengelolaService()
+        {
+            daftarPengelola = new Dictionary<int, User>();
         }
 
-        // MonitoringService.cs (Service)
-        public class MonitoringService
+        // Fungsi untuk menambah pengelola baru (hanya sebagai contoh)
+        public void TambahPengelola(int id, string username, string password,string role)
         {
-            public void HandleTransition(User user, string aksi)
-            {
-                if (aksi == "checkin" && user.Status == "paid")
-                {
-                    user.Status = "checked_in";
-                    Console.WriteLine($"{user.Nama} berhasil check-in.");
-                }
-                else if (aksi == "checkout" && user.Status == "checked_in")
-                {
-                    user.Status = "checked_out";
-                    Console.WriteLine($"{user.Nama} berhasil checkout.");
-                }
-                else
-                {
-                    Console.WriteLine($"Aksi {aksi} tidak valid untuk {user.Nama}. Status saat ini: {user.Status}");
-                }
-            }
+            var pengelola = new User(username , password, role);
+            daftarPengelola[id] = pengelola;
         }
-
     }
 
 }
