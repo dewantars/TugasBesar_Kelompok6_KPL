@@ -1,9 +1,56 @@
 using HikepassApp;
+using HikepassLibrary.Model;
+using System.Xml.Schema;
 
 class Program
 {
-    static void Main(string[] args)
+    public static void Main(string[] args)
     {
+        int pilihan;
+        HikepassLibrary.Model.Menu.SwitchUser();
+        pilihan = int.Parse(Console.ReadLine());
+        if (pilihan == 1)
+        {
+            Console.Write("username : ");
+            string username = Console.ReadLine();
+            Console.Write("password : ");
+            string password = Console.ReadLine();
+            if (username == "admin" && password == "admin")
+            {
+                Console.WriteLine("Login Berhasil");
+                HikepassLibrary.Model.Menu.menuAdmin();
+            }
+            else
+            {
+                Console.WriteLine("Login Gagal");
+                return;
+            }
+            
+        }
+        else if (pilihan == 2)
+        {
+            Console.Write("username : ");
+            string username = Console.ReadLine();
+            Console.Write("password : ");
+            string password = Console.ReadLine();
+            if (username == "user" && password == "user")
+            {
+                Console.WriteLine("Login Berhasil");
+                HikepassLibrary.Model.Menu.menuUser();
+            }
+            else
+            {
+                Console.WriteLine("Login Gagal");
+                return;
+            }
+        }
+        else
+        {
+            Console.WriteLine("Pilihan tidak valid.");
+            return;
+        }
+
+
         // Membaca data dari file
         var riwayat = RiwayatPendakianConfig.ReadFileConfig();
 
@@ -33,4 +80,5 @@ class Program
         Console.WriteLine($"Tanggal Check-Out         : {data.tanggal_checkout}");
         Console.WriteLine($"Laporan Sampah Check-Out  : {data.laporan_sampah_checkout}");
     }
+
 }
