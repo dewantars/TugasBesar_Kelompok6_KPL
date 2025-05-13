@@ -34,7 +34,7 @@ class Program
             Password = "12345"
         });
 
-        string baseUrl = "http://localhost:7108/api/HikingTicket";
+        string baseUrl = "http://localhost:5226/api/reservasi";
 
         string username = null;
         string password = null;
@@ -238,9 +238,9 @@ class Program
         };
 
         Console.Write("Enter Jalur Pendakian (Cinyiruan/Panorama): ");
-        string jalur = Console.ReadLine();
+        int jalur = int.Parse(Console.ReadLine());
         Console.Write("Enter Tanggal Pendakian (yyyy-MM-dd): ");
-        DateTime tanggalPendakian = DateTime.Parse(Console.ReadLine());
+        string tanggalPendakian = Console.ReadLine();
         Console.Write("Enter Status Pembayaran: ");
         string statusPembayaran = Console.ReadLine();
         Console.Write("Enter Keterangan: ");
@@ -257,21 +257,39 @@ class Program
             Keterangan = keterangan
         };
 
-        using (var client = new HttpClient())
+        try
         {
-            var json = JsonSerializer.Serialize(newReservasi);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            using (var client = new HttpClient())
+            {
+                var json = JsonSerializer.Serialize(newReservasi);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await client.PostAsync(baseUrl, content);
-            if (response.IsSuccessStatusCode)
-            {
-                Console.WriteLine("Reservasi created successfully!");
-            }
-            else
-            {
-                Console.WriteLine($"Failed to create reservasi. Status code: {response.StatusCode}");
+                var response = await client.PostAsync(baseUrl, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("Reservasi created successfully!");
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to create reservasi. Status code: {response.StatusCode}");
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Error details: {errorContent}");
+                }
             }
         }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"Request error: {ex.Message}");
+            if (ex.InnerException != null)
+            {
+                Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error: {ex.Message}");
+        }
+
     }
 
 
@@ -289,15 +307,16 @@ class Program
 
         var dataPendaki = new
         {
+            Id = id,
             NamaPendaki = namaPendaki,
             NomorHP = nomorHP,
             JumlahPendaki = jumlahPendaki
         };
 
         Console.Write("Enter Jalur Pendakian (Cinyiruan/Panorama): ");
-        string jalur = Console.ReadLine();
+        int jalur = int.Parse(Console.ReadLine());
         Console.Write("Enter Tanggal Pendakian (yyyy-MM-dd): ");
-        DateTime tanggalPendakian = DateTime.Parse(Console.ReadLine());
+        string tanggalPendakian = Console.ReadLine();
         Console.Write("Enter Status Pembayaran: ");
         string statusPembayaran = Console.ReadLine();
         Console.Write("Enter Keterangan: ");
@@ -305,6 +324,7 @@ class Program
 
         var updatedReservasi = new
         {
+            Id = id,
             DataPendaki = dataPendaki,
             Jalur = jalur,
             TanggalPendakian = tanggalPendakian,
