@@ -7,4 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HikepassAPI\HikepassAPI.csproj" />
+    <ProjectReference Include="..\HikepassLibrary\HikepassLibrary.csproj" />
+  </ItemGroup>
+
 </Project>
