@@ -135,7 +135,38 @@ class Program
                         break;
 
                     case "2":
-                        await GetAllReservasi(baseUrl);
+                        Menu.menuTiketSaya();
+                        int pilihanTiket = int.Parse(Console.ReadLine());
+                        switch(pilihanTiket)
+                        {
+                            case 1:
+                                Console.WriteLine("Lihat Tiket:");
+                                await GetAllReservasi(baseUrl);
+                                break;
+                            case 2:
+                                Console.WriteLine("Bayar Tiket:");
+                                //tiketController.BayarTiket();
+                                break;
+                            case 3:
+                                Console.WriteLine("Reschedule Tiket:");
+                                await GetAllReservasi(baseUrl);
+                                await UpdateReservasi(baseUrl);
+                                break;
+                            case 4:
+                                Console.WriteLine("Batalkan Tiket:");
+                                await GetAllReservasi(baseUrl);
+                                await DeleteReservasi(baseUrl);
+                                break;
+                            case 5:
+                                Console.WriteLine("Lihat Riwayat Pendakian:");
+                                await GetAllReservasi(baseUrl);
+                                break;
+                            case 6:
+                                break;
+                            default:
+                                Console.WriteLine("Pilihan tidak valid. Silakan coba lagi.\n");
+                                break;
+                        }
                         break;
 
                     case "3":
@@ -151,7 +182,7 @@ class Program
                     case "5":
                         Console.WriteLine("Terima kasih telah menggunakan Hikepass. Sampai jumpa!");
                         running = false;
-                        break;
+                        return;
 
                     default:
                         Console.WriteLine("Pilihan tidak valid. Silakan coba lagi.\n");
@@ -241,8 +272,6 @@ class Program
         int jalur = int.Parse(Console.ReadLine());
         Console.Write("Enter Tanggal Pendakian (yyyy-MM-dd): ");
         string tanggalPendakian = Console.ReadLine();
-        Console.Write("Enter Status Pembayaran: ");
-        string statusPembayaran = Console.ReadLine();
         Console.Write("Enter Keterangan: ");
         string keterangan = Console.ReadLine();
         id = random.Next(100, 999);
@@ -253,7 +282,7 @@ class Program
             DataPendaki = dataPendaki,
             Jalur = jalur,
             TanggalPendakian = tanggalPendakian,
-            StatusPembayaran = statusPembayaran,
+            StatusPembayaran = "Belum Lunas",
             Keterangan = keterangan
         };
 
