@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\HikepassAPI\HikepassAPI.csproj" />
     <ProjectReference Include="..\HikepassLibrary\HikepassLibrary.csproj" />
   </ItemGroup>
 
