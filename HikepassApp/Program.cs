@@ -131,7 +131,26 @@ class Program
                 switch (pilihan)
                 {
                     case "1":
-                        await ControllerReservasi.CreateReservasi(baseUrl);
+                        Menu.DaftarTiket();
+                        string lanjutkan = Console.ReadLine();
+                        while(lanjutkan.ToLower() != "y" && lanjutkan.ToLower() != "n")
+                        {
+                            if (lanjutkan.ToLower() == "y")
+                            {
+                                Console.WriteLine("Reservasi Tiket:");
+                                await ControllerReservasi.CreateReservasi(baseUrl);
+                            }
+                            else if (lanjutkan.ToLower() == "n")
+                            {
+                                Console.WriteLine("Reservasi dibatalkan.");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Pilihan tidak valid. Silakan coba lagi.\n");
+                            }
+                            lanjutkan = Console.ReadLine();
+                        }
+                        
                         break;
 
                     case "2":
@@ -160,7 +179,7 @@ class Program
                             case 5:
                                 Console.WriteLine("Lihat Riwayat Pendakian:");
                                 var riwayat = RiwayatPendakianConfig.ReadFileConfig();
-                                TampilkanData(riwayat);
+                                Menu.TampilkanData(riwayat);
                                 break;
                             case 6:
                                 break;
@@ -217,18 +236,5 @@ class Program
         //RiwayatPendakianConfig.WriteFileConfig(riwayat);
     }
 
-    static void TampilkanData(RiwayatPendakianConfig data)
-    {
-        Console.WriteLine($"Tanggal Reservasi         : {data.tanggal_reservasi}");
-        Console.WriteLine($"Jumlah Reservasi          : {data.jumlah_reservasi}");
-        Console.WriteLine($"Jalur Pendakian           : {data.jalur_pendakian}");
-        Console.WriteLine($"Tanggal Pembayaran        : {data.tanggal_pembayaran}");
-        Console.WriteLine($"Metode Pembayaran         : {data.metode_pembayaran}");
-        Console.WriteLine($"Total Pembayaran          : Rp{data.total_pembayaran}");
-        Console.WriteLine($"Tanggal Check-In          : {data.tanggal_checkin}");
-        Console.WriteLine($"Laporan Sampah Check-In   : {data.laporan_sampah_checkin}");
-        Console.WriteLine($"Tanggal Check-Out         : {data.tanggal_checkout}");
-        Console.WriteLine($"Laporan Sampah Check-Out  : {data.laporan_sampah_checkout}");
-    }
     
 }
