@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text;
 using System.Xml.Schema;
 using System.Threading.Tasks;
+using HikepassApp;
 
 class Program
 {
@@ -40,8 +41,6 @@ class Program
 
         string baseUrl = "http://localhost:5226/api/reservasi";
 
-        // Simpan kembali data yang telah dimodifikasi
-        RiwayatPendakianConfig.WriteFileConfig(riwayat);
       
         string username = null;
         string password = null;
