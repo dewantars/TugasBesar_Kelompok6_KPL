@@ -12,10 +12,12 @@ namespace HikepassLibrary.Service
     public class PengelolaService
     {
         private readonly ListPengelola _listPengelola;
+
         public PengelolaService()
         {
             _listPengelola = new ListPengelola();
         }
+
         public void AddPengelola(Pengelola pengelola)
         {
             if (pengelola == null)
@@ -31,6 +33,7 @@ namespace HikepassLibrary.Service
             _listPengelola.AddPengelola(pengelola);
             Console.WriteLine($"Pengelola {pengelola.FullName} berhasil ditambahkan.");
         }
+
         public void RemovePengelola(int id)
         {
             var pengelola = _listPengelola.GetPengelolaById(id);
@@ -42,6 +45,7 @@ namespace HikepassLibrary.Service
             _listPengelola.RemovePengelola(pengelola);
             Console.WriteLine($"Pengelola {pengelola.FullName} berhasil dihapus.");
         }
+
         public Pengelola GetPengelolaById(int id)
         {
             var pengelola = _listPengelola.GetPengelolaById(id);
@@ -52,6 +56,7 @@ namespace HikepassLibrary.Service
             }
             return pengelola;
         }
+
         public void GetAllPengelola()
         {
             var pengelolaList = _listPengelola.GetAllPengelola();
@@ -65,15 +70,18 @@ namespace HikepassLibrary.Service
                 Console.WriteLine($"ID: {peng.Id}, Nama: {peng.FullName}, Email: {peng.Email}");
             }
         }
+
         public void ClearPengelolaList()
         {
             _listPengelola.ClearPengelolaList();
             Console.WriteLine("Daftar pengelola telah dikosongkan.");
         }
+
         public int CountPengelola()
         {
             return _listPengelola.CountPengelola();
         }
+
         public void UpdatePengelola(int id, Pengelola updatedPengelola)
         {
             var pengelola = _listPengelola.GetPengelolaById(id);
@@ -85,7 +93,15 @@ namespace HikepassLibrary.Service
             pengelola = updatedPengelola;
             Console.WriteLine($"Data pengelola dengan ID {id} berhasil diperbarui.");
         }
-        public bool ValidatePengelola(string username, string password)
+
+        // Perbaikan untuk method ini, seharusnya mengembalikan Pengelola berdasarkan username
+        public Pengelola GetPengelolaByUsername(string username)
+        {
+            return _listPengelola.GetAllPengelola().FirstOrDefault(p => p.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+        }
+
+        // Validasi login dengan username, password, dan role
+        public bool ValidatePengelola(string username, string password, string role)
         {
             var pengelola = _listPengelola.GetAllPengelola().FirstOrDefault(p => p.Username == username);
             if (pengelola == null)
@@ -98,17 +114,16 @@ namespace HikepassLibrary.Service
                 Console.WriteLine("Password salah.");
                 return false;
             }
-            else
+            if (pengelola.Role != role)  // Pastikan role juga cocok
             {
-                Console.WriteLine($"Login berhasil untuk pengelola {pengelola.FullName}.");
-                return true;
+                Console.WriteLine($"Akses ditolak untuk role {role}. Hanya pengelola yang dapat mengakses menu ini.");
+                return false;
             }
-            
-        }
-        public Pengelola GetPendakiByUsername(string username)
-        {
-            return _listPengelola.GetAllPengelola()
-                .FirstOrDefault(p => p.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+
+            Console.WriteLine($"Login berhasil untuk pengelola {pengelola.FullName}.");
+            return true;
         }
     }
 }
+
+

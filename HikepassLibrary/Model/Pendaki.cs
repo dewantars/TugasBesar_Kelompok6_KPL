@@ -22,6 +22,9 @@ namespace HikepassLibrary.Model
             this.FullName = fullName;
             this.Email = email;
         }
+        
+
+        
     }
 }
 

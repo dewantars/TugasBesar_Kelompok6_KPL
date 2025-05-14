@@ -12,10 +12,10 @@ namespace HikepassLibrary.Controller
     {
         private List<MonitoringEntry> monitoringList = new List<MonitoringEntry>();
         private readonly MonitoringService _monitoringService;
+
         public MonitoringPendaki(MonitoringService monitoringService)
         {
             _monitoringService = monitoringService;
-            // Kamu bisa melakukan inisialisasi lain di sini jika perlu
         }
 
         public void AddPendakiToMonitoring(int ticketId, Dictionary<string, string> daftarPendaki, List<string> barangBawaan)
@@ -74,12 +74,10 @@ namespace HikepassLibrary.Controller
             }
         }
 
-        // Metode untuk mendapatkan semua data monitoring (untuk pengelola)
         public List<MonitoringEntry> GetAllMonitoring()
         {
             return monitoringList;
         }
-
-       
     }
 }
+

@@ -5,36 +5,35 @@ using System.Text;
 using System.Threading.Tasks;
 using HikepassLibrary.Model;
 
+
 namespace HikepassLibrary.Service
 {
     public class TiketService
     {
-        private List<Tiket> _daftarTiket = new List<Tiket>(); // In-memory storage
-
-        public void TambahTiket(Tiket tiket)
-        {
-            _daftarTiket.Add(tiket);
-        }
-        // Buat user pendaki dummy
-       
+        private readonly List<Tiket> _tiketDatabase = new List<Tiket>();
 
         public Tiket GetTiketById(int id)
         {
-            return _daftarTiket.FirstOrDefault(t => t.Id == id);
+            return _tiketDatabase.Find(t => t.Id == id);
         }
 
         public List<Tiket> GetTiketByKontak(string kontak)
         {
-            return _daftarTiket.Where(t => t.Kontak == kontak).ToList();
+            return _tiketDatabase.FindAll(t => t.Kontak == kontak);
         }
 
         public void UpdateTiket(Tiket tiket)
         {
-            var existingTiketIndex = _daftarTiket.FindIndex(t => t.Id == tiket.Id);
-            if (existingTiketIndex != -1)
+            var index = _tiketDatabase.FindIndex(t => t.Id == tiket.Id);
+            if (index >= 0)
             {
-                _daftarTiket[existingTiketIndex] = tiket;
+                _tiketDatabase[index] = tiket;
             }
+        }
+
+        public void AddTiket(Tiket tiket)
+        {
+            _tiketDatabase.Add(tiket);
         }
     }
 }
