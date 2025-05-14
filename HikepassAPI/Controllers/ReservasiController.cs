@@ -1,12 +1,12 @@
-using HikepassAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using HikepassLibrary.Model;
 
 namespace HikepassAPI.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController] 
     public class ReservasiController : ControllerBase
     {
         private static List<Reservasi> reservasiList = new List<Reservasi>();
