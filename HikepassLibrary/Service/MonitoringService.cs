@@ -13,50 +13,27 @@ namespace HikepassLibrary.Service
 {
     public class MonitoringService
     {
-        private List<MonitoringEntry> monitoringList = new List<MonitoringEntry>();
+        public List<Pendaki> DaftarPendakiMonitoring { get; set; } = new List<Pendaki>();
 
-        public void AddPendakiToMonitoring(int tiketId, Dictionary<string, string> daftarPendaki, List<string> barangBawaan)
+        public void AddToMonitoring(Pendaki pendaki)
         {
-            foreach (var pendaki in daftarPendaki)
-            {
-                if (!monitoringList.Any(m => m.TiketId == tiketId && m.NikPendaki == pendaki.Key))
-                {
-                    monitoringList.Add(new MonitoringEntry
-                    {
-                        TiketId = tiketId,
-                        NikPendaki = pendaki.Key,
-                        NamaPendaki = new List<string> { pendaki.Value },
-                        BarangBawaanSaatCheckin = barangBawaan,
-                        CheckinTime = DateTime.Now
-                    });
-                    Console.WriteLine($"Pendaki {pendaki.Value} (NIK: {pendaki.Key}) dari tiket {tiketId} berhasil ditambahkan ke monitoring.");
-                }
-                else
-                {
-                    Console.WriteLine($"Pendaki dengan NIK {pendaki.Key} dari tiket {tiketId} sudah terdaftar dalam monitoring.");
-                }
-            }
+            DaftarPendakiMonitoring.Add(pendaki);
+            Console.WriteLine($"{pendaki.FullName} telah ditambahkan ke daftar monitoring.");
         }
 
-        public void RemovePendakiFromMonitoring(int tiketId, Dictionary<string, string> daftarPendaki)
+        public void RemoveFromMonitoring(Pendaki pendaki)
         {
-            foreach (var pendaki in daftarPendaki)
-            {
-                int removedCount = monitoringList.RemoveAll(m => m.TiketId == tiketId && m.NikPendaki == pendaki.Key);
-                if (removedCount > 0)
-                {
-                    Console.WriteLine($"Pendaki dengan NIK {pendaki.Key} dari tiket {tiketId} berhasil dihapus dari monitoring.");
-                }
-                else
-                {
-                    Console.WriteLine($"Pendaki dengan NIK {pendaki.Key} dari tiket {tiketId} tidak ditemukan dalam monitoring.");
-                }
-            }
+            DaftarPendakiMonitoring.Remove(pendaki);
+            Console.WriteLine($"{pendaki.FullName} telah dikeluarkan dari daftar monitoring.");
         }
 
-        public List<MonitoringEntry> GetAllMonitoring()
+        public void ShowMonitoring()
         {
-            return monitoringList;
+            Console.WriteLine("Daftar Pendaki yang Sedang Check-in:");
+            foreach (var pendaki in DaftarPendakiMonitoring)
+            {
+                Console.WriteLine($"{pendaki.FullName} ({pendaki.Nik})");
+            }
         }
     }
 }
