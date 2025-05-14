@@ -1,276 +1,221 @@
 using HikepassApp;
-using HikepassLibrary.Controller;
 using HikepassLibrary.Model;
 using HikepassLibrary.Service;
+using System.Text.Json;
+using System.Text;
+using System.Xml.Schema;
+using System.Threading.Tasks;
 
-
-namespace HikepassApp
+class Program
 {
-    class Program
+    public static async Task Main(string[] args)
     {
-        static AuthController _authController;
-        static TiketController _tiketController;
-        static MonitoringPendaki _monitoringPendaki;
-        static PendakiService _pendakiService = new PendakiService();
+        // Inisialisasi layanan
+        Pendaki loggedInPendaki = null;
+        Pengelola loggedInPengelola = null;
+        var pendakiService = new PendakiService();
+        var pengelolaService = new PengelolaService();
 
-        static void Main(string[] args)
+        pendakiService.AddPendaki(new Pendaki
         {
-            AuthService authService = new AuthService();
-            TiketService tiketService = new TiketService();
-            MonitoringService monitoringService = new MonitoringService();
+            Id = 1,
+            FullName = "John Doe",
+            Email = "john.doe@example.com",
+            Username = "admin",
+            Password = "12345"
+        });
 
-            _authController = new AuthController(authService);
-            _tiketController = new TiketController(tiketService, monitoringService);
-            _monitoringPendaki = new MonitoringPendaki(monitoringService);
+        pengelolaService.AddPengelola(new Pengelola
+        {
+            Id = 2,
+            FullName = "Jane Smith",
+            Email = "sas",
+            Username = "admin",
+            Password = "12345"
+        });
 
-            // Tambahkan pendaki baru
-            _pendakiService.TambahPendaki(new Pendaki
-            {
-                Id = 3,
-                Nama = "Budi Gunawan",
-                Kontak = "budi123",
-                Alamat = "Bandung",
-                Nik = "3201010101010001",
-                Usia = 30
-            });
+        string baseUrl = "http://localhost:5226/api/reservasi";
 
-            // Tambahkan tiket dummy
-            var tiketDummy = new Tiket
-            {
-                Id = 1,
-                Tanggal = DateTime.Today,
-                StatusPembayaran = true,
-                JumlahPendaki = 2,
-                Kontak = "budi123",
-                DaftarPendaki = new Dictionary<string, string>
-            {
-                { "3201010101010001", "Budi Gunawan" },
-                { "3201010101010002", "Ani Lestari" }
-            },
-                IsCheckedIn = false
-            };
-            tiketService.TambahTiket(tiketDummy);
+        string username = null;
+        string password = null;
 
-            while (true)
+        Console.WriteLine("=== Selamat Datang di Hikepass ===");
+        Menu.SwitchUser();
+        int userType = int.Parse(Console.ReadLine());
+        if (userType == 1)
+        {
+            Console.WriteLine("=== Masuk sebagai Pengelola ===");
+            while (loggedInPengelola == null)
             {
-                if (_authController.GetCurrentUser() == null)
+                Console.Write("Masukkan Username: ");
+                username = Console.ReadLine();
+
+                Console.Write("Masukkan Password: ");
+                password = Console.ReadLine();
+                bool isValid = pengelolaService.ValidatePengelola(username, password);
+                if (isValid)
                 {
-                    TampilkanMenuLogin();
+                    loggedInPengelola = pengelolaService.GetPendakiByUsername(username);
+                    Console.WriteLine($"Selamat datang, {loggedInPengelola.FullName}!");
                 }
-                else if (_authController.GetCurrentUser().Role == "pendaki")
+            }
+        }
+        else if (userType == 2)
+        {
+            Console.WriteLine("=== Masuk sebagai Pendaki ===");
+            while (loggedInPendaki == null)
+            {
+                Console.Write("Masukkan Username: ");
+                username = Console.ReadLine();
+
+                Console.Write("Masukkan Password: ");
+                password = Console.ReadLine();
+                bool isValid = pendakiService.ValidasiPendaki(username, password);
+                if (isValid)
                 {
-                    TampilkanMenuPendaki();
-                }
-                else if (_authController.GetCurrentUser().Role == "pengelola")
-                {
-                    TampilkanMenuPengelola();
+                    loggedInPendaki = pendakiService.GetPendakiByUsername(username);
+                    Console.WriteLine($"Selamat datang, {loggedInPendaki.FullName}!");
                 }
             }
         }
 
-        static void TampilkanMenuLogin()
+        // Inisialisasi menu utama
+
+        bool running = true;
+        while (running)
         {
-            Console.WriteLine("\n=== Menu Login ===");
-            Console.WriteLine("1. Daftar");
-            Console.WriteLine("2. Login");
-            Console.WriteLine("3. Ubah Password");
-            Console.WriteLine("4. Keluar");
-            Console.Write("Pilih menu: ");
-            string pilihan = Console.ReadLine();
+            Console.Clear();
+            if (loggedInPengelola != null)
+            {
+                Menu.menuAdmin();
+                string pilihan = Console.ReadLine();
+                Console.WriteLine();
+                switch (pilihan)
+                {
+                    case "1":
+                        Console.WriteLine("Daftar Tiket Tersedia:");
+                        //tiketController.LihatTiketTersedia();
+                        Console.WriteLine();
+                        break;
+
+                    case "2":
+                        Console.WriteLine("Pemesanan Tiket:");
+                        Console.Write("Masukkan ID Tiket yang ingin dipesan: ");
+                        //if (int.TryParse(Console.ReadLine(), out int tiketId))
+                        //{
+                        //    tiketController.PesanTiket(loggedInPendaki, tiketId);
+                        //}
+                        //else
+                        //{
+                        //    Console.WriteLine("ID Tiket tidak valid.\n");
+                        //}
+                        break;
+
+                    case "3":
+                        Console.WriteLine("Terima kasih telah menggunakan Hikepass. Sampai jumpa!");
+                        running = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("Pilihan tidak valid. Silakan coba lagi.\n");
+                        break;
+                }
+                Console.WriteLine("\nPress any key to return to the main menu...");
+                Console.ReadKey();
+            }
+            else if (loggedInPendaki != null)
+            {
+                Menu.menuUser();
+                string pilihan = Console.ReadLine();
+                Console.WriteLine();
+                switch (pilihan)
+                {
+                    case "1":
+                        await CreateReservasi(baseUrl);
+                        break;
+
+                    case "2":
+                        Menu.menuTiketSaya();
+                        int pilihanTiket = int.Parse(Console.ReadLine());
+                        switch(pilihanTiket)
+                        {
+                            case 1:
+                                Console.WriteLine("Lihat Tiket:");
+                                await GetAllReservasi(baseUrl);
+                                break;
+                            case 2:
+                                Console.WriteLine("Bayar Tiket:");
+                                //tiketController.BayarTiket();
+                                break;
+                            case 3:
+                                Console.WriteLine("Reschedule Tiket:");
+                                await GetAllReservasi(baseUrl);
+                                await UpdateReservasi(baseUrl);
+                                break;
+                            case 4:
+                                Console.WriteLine("Batalkan Tiket:");
+                                await GetAllReservasi(baseUrl);
+                                await DeleteReservasi(baseUrl);
+                                break;
+                            case 5:
+                                Console.WriteLine("Lihat Riwayat Pendakian:");
+                                await GetAllReservasi(baseUrl);
+                                break;
+                            case 6:
+                                break;
+                            default:
+                                Console.WriteLine("Pilihan tidak valid. Silakan coba lagi.\n");
+                                break;
+                        }
+                        break;
+
+                    case "3":
+                        Console.WriteLine("Lihat Informasi:");
+                        //tiketController.LihatInformasi();
+                        Console.WriteLine();
+                        break;
+                    case "4":
+                        Console.WriteLine("Edit Profil:");
+                        //pendakiController.EditProfil(loggedInPendaki);
+                        Console.WriteLine();
+                        break;
+                    case "5":
+                        Console.WriteLine("Terima kasih telah menggunakan Hikepass. Sampai jumpa!");
+                        running = false;
+                        return;
+
+                    default:
+                        Console.WriteLine("Pilihan tidak valid. Silakan coba lagi.\n");
+                        break;
+                }
+                Console.WriteLine("\nPress any key to return to the main menu...");
+                Console.ReadKey();
+            }
 
             
-            switch (pilihan)
-            {
-                case "1":
-                    Console.Write("Username: ");
-                    string username = Console.ReadLine();
-                    Console.Write("Password: ");
-                    string password = Console.ReadLine();
-                    Console.Write("Role (pendaki/pengelola): ");
-                    string role = Console.ReadLine();
-                    _authController.Daftar(username, password);
-                    break;
-                case "2":
-                    Console.Write("Username: ");
-                    username = Console.ReadLine();
-                    Console.Write("Password: ");
-                    password = Console.ReadLine();
-                    _authController.Login(username, password);
-                    break;
-                case "3":
-                    Console.Write("Username: ");
-                    username = Console.ReadLine();
-                    Console.Write("Password lama: ");
-                    string oldPassword = Console.ReadLine();
-                    Console.Write("Password baru: ");
-                    string newPassword = Console.ReadLine();
-                    _authController.UbahPassword(newPassword);
-                    break;
-                case "4":
-                    Environment.Exit(0);
-                    break;
-            }
-        }
 
-        static void TampilkanMenuPendaki()
-        {
-            Console.WriteLine("\n=== Menu Pendaki ===");
-            Console.WriteLine("1. Informasi (belum diimplementasikan)");
-            Console.WriteLine("2. Reservasi (belum diimplementasikan)");
-            Console.WriteLine("3. Tiket Saya");
-            Console.WriteLine("4. Lapor (belum diimplementasikan)");
-            Console.WriteLine("5. Logout");
-            Console.Write("Pilih menu: ");
-            string pilihan = Console.ReadLine();
             
-
-            switch (pilihan)
-            {
-                case "3":
-                    Console.Write("Masukkan ID tiket: ");
-                    string nokontak = Console.ReadLine();
-                    _tiketController.GetTiketSaya(nokontak);
-
-
-
-                    break;
-                case "5":
-                    _authController.Logout();
-                    break;
-                    // ... pilihan lainnya
-            }
         }
 
-        static void MenuTiketSaya()
-        {
-            User currentUser = _authController.GetCurrentUser();
-            if (currentUser != null && currentUser.Role == "pendaki")
-            {
-                // Asumsi kita punya cara mendapatkan informasi Pendaki berdasarkan User
-                Pendaki pendaki = _pendakiService.GetPendakiByUsername(currentUser.Username);
 
-                if (pendaki != null)
-                {
-                    List<Tiket> daftarTiket = _tiketController.GetTiketSaya(pendaki.Kontak);
 
-                    if (daftarTiket.Any())
-                    {
-                        Console.WriteLine("\n=== Tiket Saya ===");
-                        foreach (var tiket in daftarTiket)
-                        {
-                            Console.WriteLine($"ID: {tiket.Id}, Tanggal: {tiket.Tanggal.ToShortDateString()}, Status Pembayaran: {(tiket.StatusPembayaran ? "Sudah Dibayar" : "Belum Dibayar")}, Status Check-in: {(tiket.IsCheckedIn ? "Sudah Check-in" : "Belum Check-in")}");
-                        }
 
-                        Console.Write("Masukkan ID Tiket untuk Check-in/Check-out (atau ketik 'kembali'): ");
-                        string inputId = Console.ReadLine();
-                        if (inputId.ToLower() != "kembali" && int.TryParse(inputId, out int idTiket))
-                        {
-                            Tiket tiketDipilih = _tiketController.GetTiketById(idTiket);
-                            if (tiketDipilih != null && daftarTiket.Contains(tiketDipilih))
-                            {
-                                if (!tiketDipilih.IsCheckedIn)
-                                {
-                                    ProsesCheckin(tiketDipilih);
-                                }
-                                else
-                                {
-                                    ProsesCheckout(tiketDipilih);
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine("ID Tiket tidak valid atau tidak ditemukan dalam daftar tiket Anda.");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Anda belum memiliki tiket.");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Informasi pendaki tidak ditemukan untuk pengguna ini.");
-                }
-            }
-            else if (currentUser != null && currentUser.Role != "pendaki")
-            {
-                Console.WriteLine("Menu ini hanya tersedia untuk pengguna dengan peran Pendaki.");
-            }
-            else
-            {
-                Console.WriteLine("Anda belum login.");
-            }
-        }
 
-        static void ProsesCheckin(Tiket tiket)
-        {
-            if (!tiket.StatusPembayaran)
-            {
-                Console.WriteLine("Tiket belum dibayar, tidak bisa check-in.");
-                return;
-            }
+        //// Membaca data dari file
+        //var riwayat = RiwayatPendakianConfig.ReadFileConfig();
 
-            Console.WriteLine("\n=== Check-in Tiket ID: " + tiket.Id + " ===");
-            List<string> barangBawaan = new List<string>();
-            string inputBarang;
-            Console.WriteLine("Masukkan barang bawaan (ketik 'selesai' jika selesai):");
-            while ((inputBarang = Console.ReadLine().ToLower()) != "selesai")
-            {
-                barangBawaan.Add(inputBarang);
-            }
+        //Console.WriteLine("=== Data Riwayat Pendakian (Sebelum Pajak) ===");
+        //TampilkanData(riwayat);
 
-            if (_tiketController.CheckinTiket(tiket, barangBawaan))
-            {
-                Console.WriteLine("Check-in berhasil.");
-            }
-        }
+        //// Menambahkan pajak 10%
+        //riwayat.total_pembayaran = (int)(riwayat.total_pembayaran * 1.10);
 
-        static void ProsesCheckout(Tiket tiket)
-        {
-            if (!tiket.IsCheckedIn)
-            {
-                Console.WriteLine("Tiket belum di check-in, tidak bisa check-out.");
-                return;
-            }
+        //Console.WriteLine("\n=== Data Riwayat Pendakian (Setelah Pajak 10%) ===");
+        //TampilkanData(riwayat);
 
-            Console.WriteLine("\n=== Check-out Tiket ID: " + tiket.Id + " ===");
-            List<string> barangBawaanKembali = new List<string>();
-            string inputBarang;
-            Console.WriteLine("Masukkan barang bawaan yang dibawa kembali (ketik 'selesai' jika selesai):");
-            while ((inputBarang = Console.ReadLine().ToLower()) != "selesai")
-            {
-                barangBawaanKembali.Add(inputBarang);
-            }
-
-            if (_tiketController.CheckoutTiket(tiket, barangBawaanKembali))
-            {
-                Console.WriteLine("Check-out berhasil.");
-            }
-        }
-
-        static void TampilkanMenuPengelola()
-        {
-            Console.WriteLine("\n=== Menu Pengelola ===");
-            Console.WriteLine("1. Monitoring");
-            Console.WriteLine("2. Lihat Laporan (belum diimplementasikan)");
-            Console.WriteLine("3. Penetapan Aturan (belum diimplementasikan)");
-            Console.WriteLine("4. Riwayat Pendakian (belum diimplementasikan)");
-            Console.WriteLine("5. Logout");
-            Console.Write("Pilih menu: ");
-            string pilihan = Console.ReadLine();
-
-            switch (pilihan)
-            {
-                case "1":
-                    TampilkanMonitoring();
-                    break;
-                case "5":
-                    _authController.Logout();
-                    break;
-                    // ... pilihan lainnya
-            }
-        }
+        //// Simpan kembali data yang telah dimodifikasi
+        //RiwayatPendakianConfig.WriteFileConfig(riwayat);
+    }
 
         static void TampilkanMonitoring()
         {
@@ -290,4 +235,191 @@ namespace HikepassApp
             }
         }
     }
+    static async Task GetAllReservasi(string baseUrl)
+    {
+        using (var client = new HttpClient())
+        {
+            var response = await client.GetAsync(baseUrl);
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("Reservasi: ");
+                Console.WriteLine(result);
+            }
+            else
+            {
+                Console.WriteLine($"Failed to get reservasi. Status code: {response.StatusCode}");
+            }
+        }
+    }
+
+
+    static async Task CreateReservasi(string baseUrl)
+    {
+        Console.Write("Enter Nama Pendaki: ");
+        string namaPendaki = Console.ReadLine();
+        Console.Write("Enter Nomor HP: ");
+        string nomorHP = Console.ReadLine();
+        Console.Write("Enter Jumlah Pendaki: ");
+        int jumlahPendaki = int.Parse(Console.ReadLine());
+        Random random = new Random();
+        int id = random.Next(100, 999);
+
+        var dataPendaki = new
+        {
+            Id = id,
+            NamaPendaki = namaPendaki,
+            NomorHP = nomorHP,
+            JumlahPendaki = jumlahPendaki
+        };
+
+        Console.Write("Enter Jalur Pendakian (Cinyiruan/Panorama): ");
+        int jalur = int.Parse(Console.ReadLine());
+        Console.Write("Enter Tanggal Pendakian (yyyy-MM-dd): ");
+        string tanggalPendakian = Console.ReadLine();
+        Console.Write("Enter Keterangan: ");
+        string keterangan = Console.ReadLine();
+        id = random.Next(100, 999);
+
+        var newReservasi = new
+        {
+            Id = id,
+            DataPendaki = dataPendaki,
+            Jalur = jalur,
+            TanggalPendakian = tanggalPendakian,
+            StatusPembayaran = "Belum Lunas",
+            Keterangan = keterangan
+        };
+
+        try
+        {
+            using (var client = new HttpClient())
+            {
+                var json = JsonSerializer.Serialize(newReservasi);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await client.PostAsync(baseUrl, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("Reservasi created successfully!");
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to create reservasi. Status code: {response.StatusCode}");
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Error details: {errorContent}");
+                }
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"Request error: {ex.Message}");
+            if (ex.InnerException != null)
+            {
+                Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error: {ex.Message}");
+        }
+
+    }
+
+
+    static async Task UpdateReservasi(string baseUrl)
+    {
+        Console.Write("Enter Reservasi ID to update: ");
+        int id = int.Parse(Console.ReadLine());
+
+        Console.Write("Enter Nama Pendaki: ");
+        string namaPendaki = Console.ReadLine();
+        Console.Write("Enter Nomor HP: ");
+        string nomorHP = Console.ReadLine();
+        Console.Write("Enter Jumlah Pendaki: ");
+        int jumlahPendaki = int.Parse(Console.ReadLine());
+
+        var dataPendaki = new
+        {
+            Id = id,
+            NamaPendaki = namaPendaki,
+            NomorHP = nomorHP,
+            JumlahPendaki = jumlahPendaki
+        };
+
+        Console.Write("Enter Jalur Pendakian (Cinyiruan/Panorama): ");
+        int jalur = int.Parse(Console.ReadLine());
+        Console.Write("Enter Tanggal Pendakian (yyyy-MM-dd): ");
+        string tanggalPendakian = Console.ReadLine();
+        Console.Write("Enter Status Pembayaran: ");
+        string statusPembayaran = Console.ReadLine();
+        Console.Write("Enter Keterangan: ");
+        string keterangan = Console.ReadLine();
+
+        var updatedReservasi = new
+        {
+            Id = id,
+            DataPendaki = dataPendaki,
+            Jalur = jalur,
+            TanggalPendakian = tanggalPendakian,
+            StatusPembayaran = statusPembayaran,
+            Keterangan = keterangan
+        };
+
+        using (var client = new HttpClient())
+        {
+            var json = JsonSerializer.Serialize(updatedReservasi);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PutAsync($"{baseUrl}/{id}", content);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Reservasi updated successfully!");
+            }
+            else
+            {
+                Console.WriteLine($"Failed to update reservasi. Status code: {response.StatusCode}");
+            }
+        }
+    }
+
+    static async Task DeleteReservasi(string baseUrl)
+    {
+        Console.Write("Enter Reservasi ID to delete: ");
+        int id = int.Parse(Console.ReadLine());
+        using (var client = new HttpClient())
+        {
+            var response = await client.DeleteAsync($"{baseUrl}/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Reservasi deleted successfully!");
+            }
+            else
+            {
+                Console.WriteLine($"Failed to delete reservasi. Status code: {response.StatusCode}");
+            }
+        }
+    }
+
+
+    static async Task GetReservasiById(string baseUrl)
+    {
+        Console.Write("Enter Reservasi ID: ");
+        int id = int.Parse(Console.ReadLine());
+        using (var client = new HttpClient())
+        {
+            var response = await client.GetAsync($"{baseUrl}/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("Reservasi: ");
+                Console.WriteLine(result);
+            }
+            else
+            {
+                Console.WriteLine($"Failed to get reservasi. Status code: {response.StatusCode}");
+            }
+        }
+    }
+    
 }

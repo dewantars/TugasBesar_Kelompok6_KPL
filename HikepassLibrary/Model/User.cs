@@ -9,20 +9,13 @@ namespace HikepassLibrary.Model
 {
     public class User
     {
-       
-        public string Username { get; set; }   // Username untuk login
-        public string Password { get; set; }   // Password untuk login
-        public string Role { get; set; }       // Role (Pendaki atau Pengelola)
+        public int Id { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string FullName { get; set; }
+        public string Email { get; set; }
 
-        // Constructor untuk mempermudah pembuatan objek User
-        public User() { }
-        public User(string username, string password, string role)
-        {
-            
-            Username = username;
-            Password = password;
-            Role = role;
-        }
+        
     }
 }
 
