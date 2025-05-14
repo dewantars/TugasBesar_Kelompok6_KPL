@@ -10,6 +10,10 @@ class Program
 {
     public static async Task Main(string[] args)
     {
+        // TEST LAPORAN
+        Laporan<string> laporan = Laporan<string>.InputLaporan();
+        laporan.PrintLaporan();
+      
         // Inisialisasi layanan
         Pendaki loggedInPendaki = null;
         Pengelola loggedInPengelola = null;
@@ -36,6 +40,9 @@ class Program
 
         string baseUrl = "http://localhost:5226/api/reservasi";
 
+        // Simpan kembali data yang telah dimodifikasi
+        RiwayatPendakianConfig.WriteFileConfig(riwayat);
+      
         string username = null;
         string password = null;
 

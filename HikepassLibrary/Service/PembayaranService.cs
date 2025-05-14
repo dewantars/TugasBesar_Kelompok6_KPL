@@ -8,5 +8,6 @@ namespace HikepassLibrary.Service
 {
     class PembayaranService
     {
+
     }
 }
