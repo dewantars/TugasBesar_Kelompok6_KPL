@@ -1,24 +1,90 @@
-using HikepassApp;
+using HikepassLibrary.Model;
+using HikepassLibrary.Service;
+using HikepassLibrary.Controller;
+using System.Text.Json;
+using System.Text;
+using System.Xml.Schema;
+using System.Threading.Tasks;
 
 class Program
 {
-    static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
-        // Membaca data dari file
-        var riwayat = RiwayatPendakianConfig.ReadFileConfig();
+        // TEST LAPORAN
+        Laporan<string> laporan = Laporan<string>.InputLaporan();
+        laporan.PrintLaporan();
+      
+        // Inisialisasi layanan
+        Pendaki loggedInPendaki = null;
+        Pengelola loggedInPengelola = null;
+        var pendakiService = new PendakiService();
+        var pengelolaService = new PengelolaService();
 
-        Console.WriteLine("=== Data Riwayat Pendakian (Sebelum Pajak) ===");
-        TampilkanData(riwayat);
+        pendakiService.AddPendaki(new Pendaki
+        {
+            Id = 1,
+            FullName = "John Doe",
+            Email = "john.doe@example.com",
+            Username = "admin",
+            Password = "12345"
+        });
 
-        // Menambahkan pajak 10%
-        riwayat.total_pembayaran = (int)(riwayat.total_pembayaran * 1.10);
+        pengelolaService.AddPengelola(new Pengelola
+        {
+            Id = 2,
+            FullName = "Jane Smith",
+            Email = "sas",
+            Username = "admin",
+            Password = "12345"
+        });
 
-        Console.WriteLine("\n=== Data Riwayat Pendakian (Setelah Pajak 10%) ===");
-        TampilkanData(riwayat);
+        string baseUrl = "http://localhost:5226/api/reservasi";
 
         // Simpan kembali data yang telah dimodifikasi
         RiwayatPendakianConfig.WriteFileConfig(riwayat);
-    }
+      
+        string username = null;
+        string password = null;
+
+        Console.WriteLine("=== Selamat Datang di Hikepass ===");
+        Menu.SwitchUser();
+        int userType = int.Parse(Console.ReadLine());
+        if (userType == 1)
+        {
+            Console.WriteLine("=== Masuk sebagai Pengelola ===");
+            while (loggedInPengelola == null)
+            {
+                Console.Write("Masukkan Username: ");
+                username = Console.ReadLine();
+
+                Console.Write("Masukkan Password: ");
+                password = Console.ReadLine();
+                bool isValid = pengelolaService.ValidatePengelola(username, password);
+                if (isValid)
+                {
+                    loggedInPengelola = pengelolaService.GetPendakiByUsername(username);
+                    Console.WriteLine($"Selamat datang, {loggedInPengelola.FullName}!");
+                }
+            }
+        }
+        else if (userType == 2)
+        {
+            Console.WriteLine("=== Masuk sebagai Pendaki ===");
+            while (loggedInPendaki == null)
+            {
+                Console.Write("Masukkan Username: ");
+                username = Console.ReadLine();
+
+                Console.Write("Masukkan Password: ");
+                password = Console.ReadLine();
+                bool isValid = pendakiService.ValidasiPendaki(username, password);
+                if (isValid)
+                {
+                    loggedInPendaki = pendakiService.GetPendakiByUsername(username);
+                    Console.WriteLine($"Selamat datang, {loggedInPendaki.FullName}!");
+                }
+            }
+        }
 
         // Inisialisasi menu utama
 
@@ -73,10 +139,9 @@ class Program
                 {
                     case "1":
                         Menu.DaftarTiket();
-                        string lanjutkan = "";
+                        string lanjutkan = Console.ReadLine();
                         while(lanjutkan.ToLower() != "y" && lanjutkan.ToLower() != "n")
                         {
-                            lanjutkan = Console.ReadLine();
                             if (lanjutkan.ToLower() == "y")
                             {
                                 Console.WriteLine("Reservasi Tiket:");
@@ -90,7 +155,7 @@ class Program
                             {
                                 Console.WriteLine("Pilihan tidak valid. Silakan coba lagi.\n");
                             }
-                            
+                            lanjutkan = Console.ReadLine();
                         }
                         
                         break;
