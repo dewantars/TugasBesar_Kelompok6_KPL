@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
+using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 
-namespace HikepassApp
+namespace HikepassLibrary.Model
 {
-    class RiwayatPendakianConfig
+    public class RiwayatPendakianConfig
     {
         private const string ConfigFileName = "RiwayatPendakian.json";
 
