@@ -12,7 +12,7 @@ namespace HikepassLibrary.Model
         private const string ConfigFileName = "RiwayatPendakian.json";
 
         public string tanggal_reservasi { get; set; }
-        public int jumlah_reservasi { get; set; }
+        public int jumlah_pendaki { get; set; }
         public string jalur_pendakian { get; set; }
         public string tanggal_pembayaran { get; set; }
         public string metode_pembayaran { get; set; }
@@ -40,7 +40,7 @@ namespace HikepassLibrary.Model
             catch (Exception ex)
             {
                 Console.WriteLine($"Gagal membaca file config: " + ex.Message);
-                return new RiwayatPendakianConfig(); // fallback to default object
+                return new RiwayatPendakianConfig();
             }
         }
 
