@@ -138,9 +138,10 @@ class Program
                 {
                     case "1":
                         Menu.DaftarTiket();
-                        string lanjutkan = Console.ReadLine();
+                        string lanjutkan = "";
                         while(lanjutkan.ToLower() != "y" && lanjutkan.ToLower() != "n")
                         {
+                            lanjutkan = Console.ReadLine();
                             if (lanjutkan.ToLower() == "y")
                             {
                                 Console.WriteLine("Reservasi Tiket:");
