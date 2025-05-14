@@ -8,18 +8,15 @@ using System.Threading.Tasks;
 // Pengelola.cs
 namespace HikepassLibrary.Model
 {
-    public class Pengelola
+    public class Pengelola : User
     {
-        public int Id { get; set; }         // ID Pengelola
-        public string Nama { get; set; }       // Nama Pengelola
-        public string Kontak { get; set; }     // Kontak Pengelola
-
-        // Constructor untuk mempermudah pembuatan objek Pengelola
-        public Pengelola(int id, string nama, string kontak)
+        public Pengelola() { }
+        public Pengelola(string username, string password, string fullName, string email)
         {
-            Id = id;
-            Nama = nama;
-            Kontak = kontak;
+            this.Username = username;
+            this.Password = password;
+            this.FullName = fullName;
+            this.Email = email;
         }
     }
 }

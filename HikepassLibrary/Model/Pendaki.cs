@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HikepassLibrary.Model
 {
-    public class Pendaki
+    public class Pendaki : User
     {
         public int Id { get; set; }         // ID Pendaki
         public string Nama { get; set; }       // Nama Pendaki
@@ -15,16 +15,12 @@ namespace HikepassLibrary.Model
         public string Nik { get; set; }        // NIK Pendaki
         public int Usia { get; set; }          // Usia Pendaki
         public Pendaki() { }
-
-        // Constructor untuk mempermudah pembuatan objek Pendaki
-        public Pendaki(int id, string nama, string kontak, string alamat, string nik, int usia)
+        public Pendaki(string username, string password, string fullName, string email)
         {
-            Id = id;
-            Nama = nama;
-            Kontak = kontak;
-            Alamat = alamat;
-            Nik = nik;
-            Usia = usia;
+            this.Username = username;
+            this.Password = password;
+            this.FullName = fullName;
+            this.Email = email;
         }
     }
 }
