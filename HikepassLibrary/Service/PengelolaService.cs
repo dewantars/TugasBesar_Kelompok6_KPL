@@ -101,28 +101,29 @@ namespace HikepassLibrary.Service
         }
 
         // Validasi login dengan username, password, dan role
-        public bool ValidatePengelola(string username, string password, string role)
+        public bool ValidasiPengelola(string username, string password)
         {
-            var pengelola = _listPengelola.GetAllPengelola().FirstOrDefault(p => p.Username == username);
-            if (pengelola == null)
+            var pendaki = _listPengelola.GetAllPengelola()
+                .FirstOrDefault(p => p.Username == username);
+
+            if (pendaki == null)
             {
-                Console.WriteLine("Pengelola tidak ditemukan.");
-                return false;
-            }
-            if (pengelola.Password != password)
-            {
-                Console.WriteLine("Password salah.");
-                return false;
-            }
-            if (pengelola.Role != role)  // Pastikan role juga cocok
-            {
-                Console.WriteLine($"Akses ditolak untuk role {role}. Hanya pengelola yang dapat mengakses menu ini.");
+                Console.WriteLine("Username tidak ditemukan.");
                 return false;
             }
 
-            Console.WriteLine($"Login berhasil untuk pengelola {pengelola.FullName}.");
-            return true;
+            if (pendaki.Password == password)
+            {
+                Console.WriteLine("Validasi berhasil.");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Password tidak sesuai.");
+                return false;
+            }
         }
+        
     }
 }
 

@@ -6,20 +6,17 @@ using System.Text;
 using System.Xml.Schema;
 
 using HikepassApp;
-using HikepassLibrary.Model;
-using HikepassLibrary.Service;
-
 using System.Threading.Tasks;
-using HikepassApp;
+using HikepassApp.Controller;
 
 class Program
 {
     public static async Task Main(string[] args)
     {
         // TEST LAPORAN
-        Laporan<string> laporan = Laporan<string>.InputLaporan();
-        laporan.PrintLaporan();
-      
+        //Laporan<string> laporan = Laporan<string>.InputLaporan();
+        //laporan.PrintLaporan();
+
         // Inisialisasi layanan
         Pendaki loggedInPendaki = null;
         Pengelola loggedInPengelola = null;
@@ -28,11 +25,13 @@ class Program
         var tiketService = new TiketService();
         var monitoringService = new MonitoringService();
 
+
         // Inisialisasi Controller
         var authController = new AuthController(new AuthService());
         var pendakiController = new PendakiController(tiketService, monitoringService);
         var tiketController = new TiketController(tiketService, monitoringService);
         var monitoringPendakiController = new MonitoringPendaki(monitoringService);
+        var checktiket = new TiketController();
 
         // Menambahkan data awal untuk testing
         pendakiService.AddPendaki(new Pendaki { Id = 1, FullName = "John Doe", Username = "john.doe", Password = "12345", Email = "john.doe@example.com" });
@@ -43,6 +42,7 @@ class Program
       
         string username = null;
         string password = null;
+        Pendaki pendaki;
 
         Console.WriteLine("=== Selamat Datang di Hikepass ===");
         Menu.SwitchUser();
@@ -60,12 +60,12 @@ class Program
                 password = Console.ReadLine();
                 
 
-                bool isValid = pengelolaService.ValidatePengelola(username, password,"Pengelola");
+                bool isValid = pengelolaService.ValidasiPengelola(username, password);
                 if (isValid)
                 {
                     loggedInPengelola = pengelolaService.GetPengelolaByUsername(username);
                     Console.WriteLine($"Selamat datang, {loggedInPengelola.FullName}!");
-                    isLoggedIn = true;
+                   
                 }
             }
         }
@@ -79,12 +79,12 @@ class Program
                 Console.Write("Masukkan Password: ");
                 password = Console.ReadLine();
 
-                bool isValid = pendakiService.ValidasiPendaki(username, password,"Pendaki");
+                bool isValid = pendakiService.ValidasiPendaki(username, password);
                 if (isValid)
                 {
                     loggedInPendaki = pendakiService.GetPendakiByUsername(username);
                     Console.WriteLine($"Selamat datang, {loggedInPendaki.FullName}!");
-                    isLoggedIn = true;
+                   
                 }
             }
         }
@@ -128,7 +128,7 @@ class Program
             else if (loggedInPendaki != null)
             {
                 // Menu untuk Pendaki
-                Pendaki pendaki;
+                
                 Menu.menuUser();
                 string pilihan = Console.ReadLine();
                 Console.WriteLine();
@@ -143,7 +143,7 @@ class Program
                             if (lanjutkan.ToLower() == "y")
                             {
                                 Console.WriteLine("Reservasi Tiket:");
-                                await ControllerReservasi.CreateReservasi(baseUrl);
+                                await ControllerReservasi.CreateReservasi(baseUrl, loggedInPendaki);
                             }
                             else if (lanjutkan.ToLower() == "n")
                             {
@@ -153,7 +153,7 @@ class Program
                             {
                                 Console.WriteLine("Pilihan tidak valid. Silakan coba lagi.\n");
                             }
-                            lanjutkan = Console.ReadLine();
+                           
                         }
                         
                         break;
@@ -174,7 +174,7 @@ class Program
                             case 3:
                                 Console.WriteLine("Reschedule Tiket:");
                                 await ControllerReservasi.GetAllReservasi(baseUrl);
-                                await ControllerReservasi.UpdateReservasi(baseUrl);
+                                await ControllerReservasi.UpdateReservasi(baseUrl, loggedInPendaki);
                                 break;
                             case 4:
                                 Console.WriteLine("Batalkan Tiket:");
@@ -187,12 +187,10 @@ class Program
                                 Menu.TampilkanData(riwayat);
                                 break;
                             case 6:
-                                Console.WriteLine("Check-in Tiket:");
-                                await CheckInTiket("http://localhost:5226/api/reservasi");
+                                Console.WriteLine("Check-in/Check-out Tiket:");
+                                checktiket.KonfirmasiTiket(loggedInPendaki);
                                 break;
-                            case 7:
-                                Console.WriteLine("Check-out Tiket:");
-                                await CheckOutTiket("http://localhost:5226/api/reservasi");
+                            
                                 break;
                             default:
                                 Console.WriteLine("Pilihan tidak valid. Silakan coba lagi.\n");

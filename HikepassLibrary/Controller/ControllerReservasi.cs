@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using HikepassLibrary.Model;
 
 namespace HikepassLibrary.Controller
 {
@@ -28,47 +29,70 @@ namespace HikepassLibrary.Controller
         }
 
 
-        public static async Task CreateReservasi(string baseUrl)
+        public static async Task CreateReservasi(string baseUrl, Pendaki pendaki)
         {
-            Console.Write("Enter Nama Pendaki: ");
-            string namaPendaki = Console.ReadLine();
-            Console.Write("Enter Nomor HP: ");
-            string nomorHP = Console.ReadLine();
-            Console.Write("Enter Jumlah Pendaki: ");
-            int jumlahPendaki = int.Parse(Console.ReadLine());
-            Random random = new Random();
-            int id = random.Next(100, 999);
-
-            var dataPendaki = new
-            {
-                Id = id,
-                NamaPendaki = namaPendaki,
-                NomorHP = nomorHP,
-                JumlahPendaki = jumlahPendaki
-            };
-
-            Console.Write("Enter Jalur Pendakian (Cinyiruan/Panorama): ");
-            int jalur = int.Parse(Console.ReadLine());
-            Console.Write("Enter Tanggal Pendakian (yyyy-MM-dd): ");
-            string tanggalPendakian = Console.ReadLine();
-            Console.Write("Enter Keterangan: ");
-            string keterangan = Console.ReadLine();
-            id = random.Next(100, 999);
-
-            var newReservasi = new
-            {
-                Id = id,
-                DataPendaki = dataPendaki,
-                Jalur = jalur,
-                TanggalPendakian = tanggalPendakian,
-                StatusPembayaran = "Belum Lunas",
-                Keterangan = keterangan
-            };
-
             try
             {
+                Console.Write("Enter Nama Pendaki: ");
+                string namaPendaki = Console.ReadLine();
+                Console.Write("Enter Nomor HP: ");
+                string nomorHP = Console.ReadLine();
+                Random random = new Random();
+                int id = random.Next(100, 999);
+                Console.Write("Enter Jalur Pendakian (Cinyiruan/Panorama): ");
+                int jalur = int.Parse(Console.ReadLine());
+                Console.Write("Masukkan tanggal pendakian (format:YYYY-MM-DD): ");
+                DateTime tanggalPendakian;
+                while (!DateTime.TryParse(Console.ReadLine(), out tanggalPendakian))
+                {
+                    Console.WriteLine("Tanggal tidak valid. Masukkan ulang (format:YYYY-MM-DD): ");
+                }
+
+                Console.Write("Masukkan jumlah pendaki: ");
+                int jumlahPendaki;
+                while (!int.TryParse(Console.ReadLine(), out jumlahPendaki) || jumlahPendaki <= 0)
+                {
+                    Console.WriteLine("Jumlah pendaki tidak valid. Masukkan angka lebih dari 0: ");
+                }
+                Dictionary<string, string> daftarPendaki = new Dictionary<string, string>();
+                daftarPendaki.Add(pendaki.FullName, $"NIK: {pendaki.Nik}, Kontak: {pendaki.Kontak}, Usia: {pendaki.Usia}");
+
+                for (int i = 1; i < jumlahPendaki; i++)
+                {
+                    Console.WriteLine($"Masukkan data pendaki ke-{i + 1}:");
+                    Console.Write("Nama: ");
+                    string namaRekan = Console.ReadLine();
+                    Console.Write("NIK: ");
+                    string nikRekan = Console.ReadLine();
+                    Console.Write("Kontak: ");
+                    string kontakRekan = Console.ReadLine();
+                    Console.Write("Usia: ");
+                    string usiaRekan = Console.ReadLine();
+                    daftarPendaki.Add(namaRekan, $"NIK: {nikRekan}, Kontak: {kontakRekan}, Usia: {usiaRekan}");
+                }
+
+                Console.Write("Enter Keterangan: ");
+                string keterangan = Console.ReadLine();
+
+                var newReservasi = new
+                {
+                    Id = id,
+                    Tanggal = tanggalPendakian,
+                    StatusPembayaran = "BelumDibayar",
+                    JumlahPendaki = jumlahPendaki,
+                    Kontak = nomorHP,
+                    Jalur = jalur,
+                    IsCheckedIn = false,
+                    DaftarPendaki = daftarPendaki,
+                    Status = Tiket.StatusTiket.BelumDibayar,
+                    BarangBawaanSaatCheckin = new List<string> { null },
+                    BarangBawaanSaatCheckout = new List<string> { null },
+                    Keterangan = keterangan
+                };
+
                 using (var client = new HttpClient())
                 {
+                    client.Timeout = TimeSpan.FromSeconds(30);  // Mengatur timeout lebih panjang
                     var json = JsonSerializer.Serialize(newReservasi);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -97,11 +121,11 @@ namespace HikepassLibrary.Controller
             {
                 Console.WriteLine($"Unexpected error: {ex.Message}");
             }
-
         }
 
 
-        public static async Task UpdateReservasi(string baseUrl)
+
+        public static async Task UpdateReservasi(string baseUrl,Pendaki pendaki)
         {
             Console.Write("Enter Reservasi ID to update: ");
             int id = int.Parse(Console.ReadLine());
@@ -110,33 +134,54 @@ namespace HikepassLibrary.Controller
             string namaPendaki = Console.ReadLine();
             Console.Write("Enter Nomor HP: ");
             string nomorHP = Console.ReadLine();
-            Console.Write("Enter Jumlah Pendaki: ");
-            int jumlahPendaki = int.Parse(Console.ReadLine());
-
-            var dataPendaki = new
-            {
-                Id = id,
-                NamaPendaki = namaPendaki,
-                NomorHP = nomorHP,
-                JumlahPendaki = jumlahPendaki
-            };
-
             Console.Write("Enter Jalur Pendakian (Cinyiruan/Panorama): ");
             int jalur = int.Parse(Console.ReadLine());
-            Console.Write("Enter Tanggal Pendakian (yyyy-MM-dd): ");
-            string tanggalPendakian = Console.ReadLine();
-            Console.Write("Enter Status Pembayaran: ");
-            string statusPembayaran = Console.ReadLine();
+            Console.Write("Masukkan tanggal pendakian (format:YYYY-MM-DD): ");
+            DateTime tanggalPendakian;
+            while (!DateTime.TryParse(Console.ReadLine(), out tanggalPendakian))
+            {
+                Console.WriteLine("Tanggal tidak valid. Masukkan ulang (format:YYYY-MM-DD): ");
+            }
+
+            Console.Write("Masukkan jumlah pendaki: ");
+            int jumlahPendaki;
+            while (!int.TryParse(Console.ReadLine(), out jumlahPendaki) || jumlahPendaki <= 0)
+            {
+                Console.WriteLine("Jumlah pendaki tidak valid. Masukkan angka lebih dari 0: ");
+            }
+            Dictionary<string, string> daftarPendaki = new Dictionary<string, string>();
+            daftarPendaki.Add(pendaki.FullName, $"NIK: {pendaki.Nik}, Kontak: {pendaki.Kontak}, Usia: {pendaki.Usia}");
+
+            for (int i = 1; i < jumlahPendaki; i++)
+            {
+                Console.WriteLine($"Masukkan data pendaki ke-{i + 1}:");
+                Console.Write("Nama: ");
+                string namaRekan = Console.ReadLine();
+                Console.Write("NIK: ");
+                string nikRekan = Console.ReadLine();
+                Console.Write("Kontak: ");
+                string kontakRekan = Console.ReadLine();
+                Console.Write("Usia: ");
+                string usiaRekan = Console.ReadLine();
+                daftarPendaki.Add(namaRekan, $"NIK: {nikRekan}, Kontak: {kontakRekan}, Usia: {usiaRekan}");
+            }
             Console.Write("Enter Keterangan: ");
             string keterangan = Console.ReadLine();
+
 
             var updatedReservasi = new
             {
                 Id = id,
-                DataPendaki = dataPendaki,
+                Tanggal = tanggalPendakian,
+                StatusPembayaran = "BelumDibayar",
+                JumlahPendaki = jumlahPendaki,
+                Kontak = nomorHP,
                 Jalur = jalur,
-                TanggalPendakian = tanggalPendakian,
-                StatusPembayaran = statusPembayaran,
+                IsCheckedIn = false,
+                DaftarPendaki = daftarPendaki,
+                Status = Tiket.StatusTiket.BelumDibayar,
+                BarangBawaanSaatCheckin = new List<string> { null },
+                BarangBawaanSaatCheckout = new List<string> { null },
                 Keterangan = keterangan
             };
 

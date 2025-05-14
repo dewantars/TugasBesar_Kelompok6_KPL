@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace HikepassLibrary.Model
@@ -28,14 +29,17 @@ namespace HikepassLibrary.Model
         public bool StatusPembayaran { get; set; }
         public int JumlahPendaki { get; set; }
         public string Kontak { get; set; }
-        public string Jalur {  get; set; }
+        public JalurPendakian Jalur {  get; set; }
+        public bool IsCheckedIn {  get; set; }
         public Dictionary<string, string> DaftarPendaki { get; set; } // Nik -> Nama
-        public bool IsCheckedIn { get; set; }
         public StatusTiket Status { get; set; }
         public List<string> BarangBawaanSaatCheckin { get; set; } = new List<string>();
         public List<string> BarangBawaanSaatCheckout { get; set; } = new List<string>();
+        public string Keterangan { get; set; }
 
-        public Tiket(int id, DateTime tanggalPendakian, String jalur, int jumlahPendaki)
+
+        public Tiket() { }
+        public Tiket(int id, DateTime tanggalPendakian, JalurPendakian jalur, int jumlahPendaki, String keterangan)
         {
             Id = id;
             Jalur = jalur;
@@ -44,6 +48,7 @@ namespace HikepassLibrary.Model
             DaftarPendaki = new Dictionary<string, string>();
             StatusPembayaran = false;
             Status = StatusTiket.BelumDibayar;
+            Keterangan = Keterangan;
         }
         public void ShowTiketInfo()
         {
