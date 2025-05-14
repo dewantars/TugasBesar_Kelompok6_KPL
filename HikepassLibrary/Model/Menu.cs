@@ -49,5 +49,26 @@ namespace HikepassLibrary.Model
             Console.WriteLine("6. Kembali");
             Console.Write("Pilih: ");
         }
+        public static void DaftarTiket()
+        {
+            Console.WriteLine("================= Pendakian Gunung Malabar =================");
+            Console.WriteLine("Daftar Tiket:");
+            Console.WriteLine("1. Puncak Besar Malabar Via Cinyiruan");
+            Console.WriteLine("2. Puncak Besar Malabar Via Panorama");
+            Console.WriteLine("Lanjutkan reservasi y/n?");
+        }
+        public static void TampilkanData(RiwayatPendakianConfig data)
+        {
+            Console.WriteLine($"Tanggal Reservasi         : {data.tanggal_reservasi}");
+            Console.WriteLine($"Jumlah Reservasi          : {data.jumlah_reservasi}");
+            Console.WriteLine($"Jalur Pendakian           : {data.jalur_pendakian}");
+            Console.WriteLine($"Tanggal Pembayaran        : {data.tanggal_pembayaran}");
+            Console.WriteLine($"Metode Pembayaran         : {data.metode_pembayaran}");
+            Console.WriteLine($"Total Pembayaran          : Rp{data.total_pembayaran}");
+            Console.WriteLine($"Tanggal Check-In          : {data.tanggal_checkin}");
+            Console.WriteLine($"Laporan Sampah Check-In   : {data.laporan_sampah_checkin}");
+            Console.WriteLine($"Tanggal Check-Out         : {data.tanggal_checkout}");
+            Console.WriteLine($"Laporan Sampah Check-Out  : {data.laporan_sampah_checkout}");
+        }
     }
 }
