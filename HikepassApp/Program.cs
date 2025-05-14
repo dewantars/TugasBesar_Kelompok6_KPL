@@ -1,36 +1,42 @@
-using HikepassApp;
+using System;
+using HikepassLibrary.Model;
+using HikepassLibrary.Service;
 
-class Program
+namespace HikepassApp
 {
-    static void Main(string[] args)
+    class Program
     {
-        // Membaca data dari file
-        var riwayat = RiwayatPendakianConfig.ReadFileConfig();
+        static void Main(string[] args)
+        { 
+            // Baca dan proses data riwayat pendakian
+            var riwayat = RiwayatPendakianConfig.ReadFileConfig();
 
-        Console.WriteLine("=== Data Riwayat Pendakian (Sebelum Pajak) ===");
-        TampilkanData(riwayat);
+            Console.WriteLine("---------- Riwayat Pendakian (Sebelum Pajak) ----------");
+            TampilkanData(riwayat);
 
-        // Menambahkan pajak 10%
-        riwayat.total_pembayaran = (int)(riwayat.total_pembayaran * 1.10);
+            // Tambahkan pajak 10%
+            riwayat.total_pembayaran = (int)(riwayat.total_pembayaran * 1.10);
 
-        Console.WriteLine("\n=== Data Riwayat Pendakian (Setelah Pajak 10%) ===");
-        TampilkanData(riwayat);
+            Console.WriteLine("\n---------- Riwayat Pendakian (Setelah Pajak 10%) ----------");
+            TampilkanData(riwayat);
 
-        // Simpan kembali data yang telah dimodifikasi
-        RiwayatPendakianConfig.WriteFileConfig(riwayat);
-    }
+            // Simpan kembali ke file
+            RiwayatPendakianConfig.WriteFileConfig(riwayat);
+        }
 
-    static void TampilkanData(RiwayatPendakianConfig data)
-    {
-        Console.WriteLine($"Tanggal Reservasi         : {data.tanggal_reservasi}");
-        Console.WriteLine($"Jumlah Reservasi          : {data.jumlah_reservasi}");
-        Console.WriteLine($"Jalur Pendakian           : {data.jalur_pendakian}");
-        Console.WriteLine($"Tanggal Pembayaran        : {data.tanggal_pembayaran}");
-        Console.WriteLine($"Metode Pembayaran         : {data.metode_pembayaran}");
-        Console.WriteLine($"Total Pembayaran          : Rp{data.total_pembayaran}");
-        Console.WriteLine($"Tanggal Check-In          : {data.tanggal_checkin}");
-        Console.WriteLine($"Laporan Sampah Check-In   : {data.laporan_sampah_checkin}");
-        Console.WriteLine($"Tanggal Check-Out         : {data.tanggal_checkout}");
-        Console.WriteLine($"Laporan Sampah Check-Out  : {data.laporan_sampah_checkout}");
+        // Fungsi untuk menampilkan data riwayat pendakian
+        static void TampilkanData(RiwayatPendakianConfig data)
+        {
+            Console.WriteLine($"Tanggal Reservasi         : {data.tanggal_reservasi}");
+            Console.WriteLine($"Jumlah Pendaki            : {data.jumlah_pendaki}");
+            Console.WriteLine($"Jalur Pendakian           : {data.jalur_pendakian}");
+            Console.WriteLine($"Tanggal Pembayaran        : {data.tanggal_pembayaran}");
+            Console.WriteLine($"Metode Pembayaran         : {data.metode_pembayaran}");
+            Console.WriteLine($"Total Pembayaran          : Rp{data.total_pembayaran}");
+            Console.WriteLine($"Tanggal Check-In          : {data.tanggal_checkin}");
+            Console.WriteLine($"Laporan Sampah Check-In   : {data.laporan_sampah_checkin}");
+            Console.WriteLine($"Tanggal Check-Out         : {data.tanggal_checkout}");
+            Console.WriteLine($"Laporan Sampah Check-Out  : {data.laporan_sampah_checkout}");
+        }
     }
 }
