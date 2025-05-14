@@ -18,6 +18,10 @@ class Program
 
         // Simpan kembali data yang telah dimodifikasi
         RiwayatPendakianConfig.WriteFileConfig(riwayat);
+
+        // TEST LAPORAN
+        Laporan<string> laporan = Laporan<string>.InputLaporan();
+        laporan.PrintLaporan();
     }
 
     static void TampilkanData(RiwayatPendakianConfig data)

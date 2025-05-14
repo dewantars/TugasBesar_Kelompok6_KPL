@@ -6,7 +6,7 @@ using System.Linq;
 namespace HikepassAPI.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController] 
     public class ReservasiController : ControllerBase
     {
         private static List<Reservasi> reservasiList = new List<Reservasi>();
