@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using HikepassLibrary.Model;
 using HikepassLibrary.Service;
 
-namespace HikepassLibrary.Controller
+namespace HikepassApp.Controller
 {
     public class TiketController
     {
@@ -19,15 +19,7 @@ namespace HikepassLibrary.Controller
             _monitoringService = monitoringService;
         }
 
-        public List<Tiket> GetTiketSaya(string kontak)
-        {
-            return _tiketService.GetTiketByKontak(kontak);
-        }
-
-        public Tiket GetTiketById(int id)
-        {
-            return _tiketService.GetTiketById(id);
-        }
+        
 
         public bool CheckinTiket(Tiket tiket, List<string> barangBawaan)
         {
@@ -36,13 +28,9 @@ namespace HikepassLibrary.Controller
                 tiket.IsCheckedIn = true;
                 tiket.BarangBawaanSaatCheckin = barangBawaan;
                 _tiketService.UpdateTiket(tiket);
-                _monitoringService.TambahPendakiMonitoring(tiket.Id, tiket.DaftarPendaki,tiket.BarangBawaanSaatCheckin);
+                _monitoringService.AddPendakiToMonitoring(tiket.Id, tiket.DaftarPendaki, tiket.BarangBawaanSaatCheckin);
                 Console.WriteLine("Check-in berhasil.");
                 return true;
-            }
-            else if (tiket != null && tiket.IsCheckedIn)
-            {
-                Console.WriteLine("Tiket ini sudah check-in sebelumnya.");
             }
             else
             {
@@ -62,15 +50,12 @@ namespace HikepassLibrary.Controller
                 Console.WriteLine("Check-out berhasil.");
                 return true;
             }
-            else if (tiket != null && !tiket.IsCheckedIn)
-            {
-                Console.WriteLine("Tiket ini belum check-in.");
-            }
             else
             {
-                Console.WriteLine("Tiket tidak valid.");
+                Console.WriteLine("Tiket tidak valid atau belum check-in.");
             }
             return false;
         }
     }
 }
+

@@ -21,18 +21,27 @@ namespace HikepassLibrary.Controller
 
         public User GetCurrentUser() => _currentUser;
 
-        public bool Daftar(string username, string password)
+        // Daftar dengan role
+        public bool Daftar(string username, string password, string role)
         {
-            _authService.Register(username, password);
-            return true; // Simplifikasi, perlu penanganan error lebih baik
+            _authService.Register(username, password, role); 
+            return true; 
         }
 
-        public bool Login(string username, string password)
+        // Login dengan role
+        public bool Login(string username, string password, string role)
         {
-            _currentUser = _authService.Authenticate(username, password);
-            return _currentUser != null;
+            _currentUser = _authService.Authenticate(username, password, role); 
+            if (_currentUser != null && _currentUser.Role == role)
+            {
+                Console.WriteLine($"Login berhasil sebagai {role}: {_currentUser.FullName}");
+                return true;
+            }
+            Console.WriteLine("Login gagal.");
+            return false;
         }
 
+        // Ubah password
         public bool UbahPassword(string newPassword)
         {
             if (_currentUser != null)
@@ -50,3 +59,5 @@ namespace HikepassLibrary.Controller
         }
     }
 }
+
+
