@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// User.cs
 namespace HikepassLibrary.Model
 {
     public class User
@@ -11,9 +12,16 @@ namespace HikepassLibrary.Model
         public int Id { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
+        public string Role { get; set; }  
         public string FullName { get; set; }
         public string Email { get; set; }
+    }
 
-        
+
+    public enum UserRole
+    {
+        Pendaki,
+        Pengelola
     }
 }
+
