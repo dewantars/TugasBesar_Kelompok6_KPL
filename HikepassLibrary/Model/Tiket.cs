@@ -22,7 +22,7 @@ namespace HikepassLibrary.Model
             Dibayar,
             Checkin,
             Checkout,
-            selesai
+            Selesai
         }
         public int Id { get; set; }
         public DateTime Tanggal { get; set; }
@@ -56,14 +56,27 @@ namespace HikepassLibrary.Model
             Console.WriteLine($"Jalur Pendakian: {Jalur}");
             Console.WriteLine($"Tanggal Pendakian: {Tanggal.ToShortDateString()}");
             Console.WriteLine($"Jumlah Pendaki: {JumlahPendaki}");
-            Console.WriteLine($"Status Pembayaran: {(StatusPembayaran ? "Dibayar" : "Belum Dibayar")}");
+            Console.WriteLine($"Status Pembayaran: {(StatusPembayaran ? "Dibayar" : "BelumDibayar" )}");
             Console.WriteLine($"Status Tiket: {Status}");
             Console.WriteLine("Daftar Pendaki:");
+
             foreach (var pendaki in DaftarPendaki)
             {
-                Console.WriteLine($"{pendaki.Key}: {pendaki.Value}");
+                // Menangani data kosong atau tidak lengkap
+                string pendakiInfo = pendaki.Value;
+                if (string.IsNullOrWhiteSpace(pendakiInfo))
+                {
+                    // Jika data pendaki kosong, beri tahu bahwa data tidak lengkap
+                    Console.WriteLine($"{pendaki.Key}: Data tidak lengkap");
+                }
+                else
+                {
+                    // Jika data lengkap, tampilkan informasi pendaki
+                    Console.WriteLine($"{pendaki.Key}: {pendakiInfo}");
+                }
             }
         }
+
     }
 }
 

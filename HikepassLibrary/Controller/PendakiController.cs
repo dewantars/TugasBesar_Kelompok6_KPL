@@ -37,46 +37,9 @@ namespace HikepassApp.Controller
             }
         }
 
-        public bool CheckInTicket(int ticketId, Dictionary<string, string> daftarPendaki, List<string> barangBawaan)
-        {
-            var ticket = _tiketService.GetTiketById(ticketId); // Ambil tiket dari service
+        
 
-            if (ticket != null && ticket.StatusPembayaran && !ticket.IsCheckedIn)
-            {
-                ticket.IsCheckedIn = true;
-                ticket.BarangBawaanSaatCheckin = barangBawaan;
-                ticket.DaftarPendaki = daftarPendaki;
-                _tiketService.UpdateTiket(ticket);
-                _monitoringService.AddPendakiToMonitoring(ticketId, daftarPendaki, barangBawaan);
-                Console.WriteLine("Tiket berhasil check-in.");
-                return true;
-            }
-            else
-            {
-                Console.WriteLine("Tiket tidak valid atau belum dibayar atau sudah check-in.");
-                return false;
-            }
-        }
-
-        public bool CheckOutTicket(int ticketId, List<string> barangBawaanKembali)
-        {
-            var ticket = _tiketService.GetTiketById(ticketId); // Ambil tiket dari service
-
-            if (ticket != null && ticket.IsCheckedIn)
-            {
-                ticket.IsCheckedIn = false;
-                ticket.BarangBawaanSaatCheckout = barangBawaanKembali;
-                _tiketService.UpdateTiket(ticket);
-                _monitoringService.RemovePendakiFromMonitoring(ticketId, ticket.DaftarPendaki);
-                Console.WriteLine("Tiket berhasil checkout.");
-                return true;
-            }
-            else
-            {
-                Console.WriteLine("Tiket tidak ditemukan atau belum check-in.");
-                return false;
-            }
-        }
+        
     }
 }
 

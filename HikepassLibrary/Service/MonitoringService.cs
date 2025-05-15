@@ -13,26 +13,34 @@ namespace HikepassLibrary.Service
 {
     public class MonitoringService
     {
-        public List<Pendaki> DaftarPendakiMonitoring { get; set; } = new List<Pendaki>();
+        public static List<Tiket> DaftarPendakiMonitoring { get; set; } = new List<Tiket>();
 
-        public void AddToMonitoring(Pendaki pendaki)
+        public void AddToMonitoring(Tiket tiket)
         {
-            DaftarPendakiMonitoring.Add(pendaki);
-            Console.WriteLine($"{pendaki.FullName} telah ditambahkan ke daftar monitoring.");
+            DaftarPendakiMonitoring.Add(tiket);
+            Console.WriteLine($"{tiket.DaftarPendaki.Values} telah ditambahkan ke daftar monitoring.");
         }
 
-        public void RemoveFromMonitoring(Pendaki pendaki)
+        public void RemoveFromMonitoring(Tiket tiket)
         {
-            DaftarPendakiMonitoring.Remove(pendaki);
-            Console.WriteLine($"{pendaki.FullName} telah dikeluarkan dari daftar monitoring.");
+            DaftarPendakiMonitoring.Remove(tiket);
+            Console.WriteLine($"{tiket.DaftarPendaki.Values} telah dikeluarkan dari daftar monitoring.");
         }
 
         public void ShowMonitoring()
         {
             Console.WriteLine("Daftar Pendaki yang Sedang Check-in:");
-            foreach (var pendaki in DaftarPendakiMonitoring)
+            foreach (var tiket in DaftarPendakiMonitoring)
             {
-                Console.WriteLine($"{pendaki.FullName} ({pendaki.Nik})");
+                // Menampilkan semua nama pendaki yang terdaftar di DaftarPendaki
+                Console.WriteLine($"Tiket ID: {tiket.Id} - Pendaki: ");
+
+                foreach (var pendaki in tiket.DaftarPendaki.Keys)
+                {
+                    Console.WriteLine($"Nama: {pendaki}");
+                }
+
+                Console.WriteLine("--------------------------------------------------");
             }
         }
     }
