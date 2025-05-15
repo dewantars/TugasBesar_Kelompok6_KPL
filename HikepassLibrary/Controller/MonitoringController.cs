@@ -22,14 +22,14 @@ namespace HikepassLibrary.Controller
             _monitoringService.ShowMonitoring();
         }
 
-        public void AddPendakiToMonitoring(Pendaki pendaki)
+        public void AddPendakiToMonitoring(Tiket tiket)
         {
-            _monitoringService.AddToMonitoring(pendaki);
+            _monitoringService.AddToMonitoring(tiket);
         }
 
-        public void RemovePendakiFromMonitoring(Pendaki pendaki)
+        public void RemovePendakiFromMonitoring(Tiket tiket)
         {
-            _monitoringService.RemoveFromMonitoring(pendaki);
+            _monitoringService.RemoveFromMonitoring(tiket);
         }
     }
 
