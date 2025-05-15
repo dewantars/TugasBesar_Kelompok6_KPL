@@ -112,6 +112,7 @@ namespace HikepassLibrary.Service
                 return false;
             }
         }
+
         public Pendaki GetPendakiByUsername(string username)
         {
             return _listPendaki.GetAllPendaki()

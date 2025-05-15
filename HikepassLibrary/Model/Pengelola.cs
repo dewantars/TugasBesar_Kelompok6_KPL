@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
+// Pengelola.cs
 namespace HikepassLibrary.Model
 {
     public class Pengelola : User
@@ -18,3 +20,4 @@ namespace HikepassLibrary.Model
         }
     }
 }
+
