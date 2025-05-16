@@ -62,7 +62,7 @@ namespace HikepassLibrary.Model
         public static void TampilkanData(RiwayatPendakianConfig data)
         {
             Console.WriteLine($"Tanggal Reservasi         : {data.tanggal_reservasi}");
-            Console.WriteLine($"Jumlah Pendaki          : {data.jumlah_pendaki}");
+            Console.WriteLine($"Jumlah Pendaki            : {data.jumlah_reservasi}");
             Console.WriteLine($"Jalur Pendakian           : {data.jalur_pendakian}");
             Console.WriteLine($"Tanggal Pembayaran        : {data.tanggal_pembayaran}");
             Console.WriteLine($"Metode Pembayaran         : {data.metode_pembayaran}");
