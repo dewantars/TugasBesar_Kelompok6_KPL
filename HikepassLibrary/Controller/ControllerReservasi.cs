@@ -66,12 +66,13 @@ namespace HikepassLibrary.Controller
                 string usiaPendaki = Console.ReadLine();
 
                 int usiaPendakiInt = int.Parse(usiaPendaki);
+                pendaki.FullName = namaPendaki;
                 pendaki.Nik = nikPendaki;
                 pendaki.Kontak = nomorHP;
                 pendaki.Usia = usiaPendakiInt;
                 
                 int id = reservasiList.Count == 0 ? 1 : reservasiList.Max(r => r.Id) + 1;
-                Console.Write("Jalur Pendakian (0 = Cinyiruan/ 1 = Panorama): ");
+                Console.Write("Jalur Pendakian (0 = Panorama/ 1 = Cinyiruan): ");
                 int jalur = int.Parse(Console.ReadLine());
                 Console.Write("Masukkan tanggal pendakian (format:YYYY-MM-DD): ");
                 DateTime tanggalPendakian;
