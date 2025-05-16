@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HikepassForm", "HikepassFor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HikepassAPI", "HikepassAPI\HikepassAPI.csproj", "{0776B4D9-8E15-42AA-98E3-F2113B2EE440}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestHikepass", "UnitTestHikepass\UnitTestHikepass.csproj", "{C496DFDA-3C59-4724-8E45-5E29782027BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HikepassTestProject", "HikepassTestProject\HikepassTestProject.csproj", "{34AD4779-DAA3-408F-97D7-82808BE9C7F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{0776B4D9-8E15-42AA-98E3-F2113B2EE440}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0776B4D9-8E15-42AA-98E3-F2113B2EE440}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0776B4D9-8E15-42AA-98E3-F2113B2EE440}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C496DFDA-3C59-4724-8E45-5E29782027BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C496DFDA-3C59-4724-8E45-5E29782027BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C496DFDA-3C59-4724-8E45-5E29782027BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C496DFDA-3C59-4724-8E45-5E29782027BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34AD4779-DAA3-408F-97D7-82808BE9C7F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34AD4779-DAA3-408F-97D7-82808BE9C7F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34AD4779-DAA3-408F-97D7-82808BE9C7F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34AD4779-DAA3-408F-97D7-82808BE9C7F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
