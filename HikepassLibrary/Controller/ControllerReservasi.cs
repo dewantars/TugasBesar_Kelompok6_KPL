@@ -72,8 +72,42 @@ namespace HikepassLibrary.Controller
                 pendaki.Usia = usiaPendakiInt;
                 
                 int id = reservasiList.Count == 0 ? 1 : reservasiList.Max(r => r.Id) + 1;
-                Console.Write("Jalur Pendakian (0 = Panorama/ 1 = Cinyiruan): ");
-                int jalur = int.Parse(Console.ReadLine());
+                Dictionary<int, Jarak> jarakTabel = new Dictionary<int, Jarak>
+                {
+                    { 0, Jarak.Pendek }, // Pilihan untuk Pendek
+                    { 1, Jarak.Sedang }  // Pilihan untuk Sedang
+                };
+
+                Console.Write("Jarak Pendakian (0 = Panorama(pendek) / 1 = Cinyiruan(sedang): ");
+                int jarakInput = int.Parse(Console.ReadLine());
+
+                // Menentukan Jarak Pendakian menggunakan tabel
+                Jarak jarak;
+                if (jarakTabel.ContainsKey(jarakInput))
+                {
+                    jarak = jarakTabel[jarakInput];
+                }
+                else
+                {
+                    Console.WriteLine("Pilihan jarak tidak valid. Menggunakan default: Pendek.");
+                    jarak = Jarak.Pendek; // Default jika input tidak valid
+                }
+
+                // Menentukan Jalur Pendakian berdasarkan Jarak
+                Tiket.JalurPendakian jalur;
+                if (jarak == Jarak.Pendek)
+                {
+                    jalur = Tiket.JalurPendakian.Panorama;  // Jika Jarak Pendek, Jalur adalah Panorama
+                }
+                else if (jarak == Jarak.Sedang)
+                {
+                    jalur = Tiket.JalurPendakian.Cinyiruan; // Jika Jarak Sedang, Jalur adalah Cinyiruan
+                }
+                else
+                {
+                    Console.WriteLine("Jalur tidak valid berdasarkan jarak.");
+                    jalur = Tiket.JalurPendakian.Panorama; // Default jika terjadi kesalahan
+                }
                 Console.Write("Masukkan tanggal pendakian (format:YYYY-MM-DD): ");
                 DateTime tanggalPendakian;
                 while (!DateTime.TryParse(Console.ReadLine(), out tanggalPendakian))
@@ -123,7 +157,7 @@ namespace HikepassLibrary.Controller
                     StatusPembayaran = false, 
                     JumlahPendaki = jumlahPendaki,
                     Kontak = nomorHP,
-                    Jalur = (int)(Tiket.JalurPendakian)jalur,  
+                    Jalur = (int)jalur,  
                     IsCheckedIn = false,
                     DaftarPendaki = daftarPendaki.ToDictionary(
                     kvp => kvp.Key,
@@ -141,7 +175,7 @@ namespace HikepassLibrary.Controller
                     StatusPembayaran = newReservasi.StatusPembayaran,
                     JumlahPendaki = newReservasi.JumlahPendaki,
                     Kontak = newReservasi.Kontak,
-                    Jalur = (Tiket.JalurPendakian)newReservasi.Jalur,
+                    Jalur = jalur,
                     IsCheckedIn = newReservasi.IsCheckedIn,
                     DaftarPendaki = newReservasi.DaftarPendaki, 
                     Status = (Tiket.StatusTiket)newReservasi.Status,
@@ -354,8 +388,6 @@ namespace HikepassLibrary.Controller
                 {
                     tiketToUpdate.Status = Tiket.StatusTiket.Selesai;
                     tiketToUpdate.IsCheckedIn = false;
-
-                    
                 }
                 else
                 {
@@ -393,7 +425,7 @@ namespace HikepassLibrary.Controller
 
                     if (response.IsSuccessStatusCode)
                     {
-                        Console.WriteLine("Reservasi berhasil diperbarui pada server!");
+                        Console.WriteLine("Tiket berhasil diperbarui pada server!");
                     }
                     else
                     {
