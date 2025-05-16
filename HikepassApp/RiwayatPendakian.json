@@ -1,12 +1,49 @@
-{
-  "tanggal_reservasi": "2025-05-10",
-  "jumlah_reservasi": 4,
-  "jalur_pendakian": "Panorama",
-  "tanggal_pembayaran": "2025-05-08",
-  "metode_pembayaran": "Transfer Bank",
-  "total_pembayaran": 200000,
-  "tanggal_checkin": "2025-05-11",
-  "laporan_sampah_checkin": "Tidak membawa sampah",
-  "tanggal_checkout": "2025-05-13",
-  "laporan_sampah_checkout": "Membawa turun semua sampah"
-}
+[
+  {
+    "Id": 1,
+    "Tanggal": "2025-05-01T00:00:00",
+    "StatusPembayaran": true,
+    "JumlahPendaki": 3,
+    "Kontak": "081234567890",
+    "Jalur": "panorama",
+    "IsCheckedIn": true,
+    "DaftarPendaki": {
+      "1234567890123456": "Pendaki A",
+      "1234567890123457": "Pendaki B",
+      "1234567890123458": "Pendaki C"
+    },
+    "Status": "selesai",
+    "BarangBawaanSaatCheckin": [
+      "Tenda",
+      "Sleeping Bag"
+    ],
+    "BarangBawaanSaatCheckout": [
+      "Tenda",
+      "Sleeping Bag",
+      "Botol Air"
+    ],
+    "Keterangan": "Pendakian lancar tanpa kendala"
+  },
+  {
+    "Id": 1,
+    "Tanggal": "2024-12-21T00:00:00",
+    "StatusPembayaran": true,
+    "JumlahPendaki": 1,
+    "Kontak": "942",
+    "Jalur": "panorama",
+    "IsCheckedIn": false,
+    "DaftarPendaki": {
+      "John Doe": "NIK: 9203, Kontak: 942, Usia: 12"
+    },
+    "Status": "selesai",
+    "BarangBawaanSaatCheckin": [
+      null,
+      "kompor"
+    ],
+    "BarangBawaanSaatCheckout": [
+      null,
+      "kompor"
+    ],
+    "Keterangan": "done"
+  }
+]
