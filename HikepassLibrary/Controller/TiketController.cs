@@ -178,8 +178,8 @@ namespace HikepassLibrary.Controller
                         {
                             
                             // Panggil metode UpdateCheckInCheckOut untuk melakukan Check-in
-                            ControllerReservasi.UpdatedCheckInCheckOut("http://localhost:5226/api/reservasi", idTiket);  // true untuk Check-in
-                            selectedTiket.Status = StatusTiket.Checkin;
+                              // true untuk Check-in
+                           
                             Console.WriteLine("Barang yang dibawa: ");
                             string InputBarangBawaan;
                             while (true)  
@@ -203,9 +203,12 @@ namespace HikepassLibrary.Controller
                                     selectedTiket.BarangBawaanSaatCheckin.Add(InputBarangBawaan);  
                                 }
                             }
+                            ControllerReservasi.UpdatedCheckInCheckOut("http://localhost:5226/api/reservasi", selectedTiket.Id);
+                            selectedTiket.Status = StatusTiket.Checkin;
                             monitoring.AddPendakiToMonitoring(selectedTiket);
                             Console.WriteLine("Check-in berhasil!");
                             
+
                         }
                     }
                     else if (selectedTiket.Status == StatusTiket.Checkin)
@@ -214,7 +217,7 @@ namespace HikepassLibrary.Controller
                         string jawab = Console.ReadLine();
                         if (jawab.ToLower() == "y")
                         {
-                            selectedTiket.Status = StatusTiket.Checkout;
+                            
                             string InputBarangBawaan;
                             while (true)  
                             {
@@ -238,9 +241,12 @@ namespace HikepassLibrary.Controller
                                     selectedTiket.BarangBawaanSaatCheckout.Add(InputBarangBawaan);  
                                 }
                             }
+                            ControllerReservasi.UpdatedCheckInCheckOut("http://localhost:5226/api/reservasi", selectedTiket.Id);
+                            selectedTiket.Status = StatusTiket.Checkout;
                             monitoring.RemovePendakiFromMonitoring(selectedTiket);
                             Console.WriteLine("Check-out berhasil!");
                             
+
                         }
                         else
                         {
