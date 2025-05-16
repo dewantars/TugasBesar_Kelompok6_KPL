@@ -66,6 +66,7 @@ namespace HikepassLibrary.Controller
                 string usiaPendaki = Console.ReadLine();
 
                 int usiaPendakiInt = int.Parse(usiaPendaki);
+                pendaki.FullName = namaPendaki;
                 pendaki.Nik = nikPendaki;
                 pendaki.Kontak = nomorHP;
                 pendaki.Usia = usiaPendakiInt;
