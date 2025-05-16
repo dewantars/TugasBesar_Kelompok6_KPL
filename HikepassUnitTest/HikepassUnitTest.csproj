@@ -5,11 +5,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C496DFDA-3C59-4724-8E45-5E29782027BA}</ProjectGuid>
+    <ProjectGuid>{4D5DCC3E-7944-4CA4-A89C-D658EAB7431C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UnitTestHikepass</RootNamespace>
-    <AssemblyName>UnitTestHikepass</AssemblyName>
+    <RootNamespace>HikepassUnitTest</RootNamespace>
+    <AssemblyName>HikepassUnitTest</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -49,26 +49,11 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnitTestLaporan.cs" />
-    <Compile Include="UnitTest2.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\HikepassAPI\HikepassAPI.csproj">
-      <Project>{0776b4d9-8e15-42aa-98e3-f2113b2ee440}</Project>
-      <Name>HikepassAPI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HikepassApp\HikepassApp.csproj">
-      <Project>{e6952520-1d45-4c79-81ba-7d3bcde0c092}</Project>
-      <Name>HikepassApp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HikepassLibrary\HikepassLibrary.csproj">
-      <Project>{093091e0-2929-4b04-b04f-45545f6e3fdb}</Project>
-      <Name>HikepassLibrary</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
