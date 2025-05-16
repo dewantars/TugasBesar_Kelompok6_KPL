@@ -392,6 +392,7 @@ namespace HikepassLibrary.Controller
                 else
                 {
                     Console.WriteLine("Tiket belum dibayar. Silakan lakukan pembayaran terlebih dahulu.");
+                    Console.WriteLine("");
                     return;
                 }
 
