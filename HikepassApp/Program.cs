@@ -21,11 +21,14 @@ class Program
         // Inisialisasi layanan
         Pendaki loggedInPendaki = null;
         Pengelola loggedInPengelola = null;
+        
         var pendakiService = new PendakiService();
         var pengelolaService = new PengelolaService();
         var tiketService = new TiketService();
         var monitoringService = new MonitoringService();
         var informasiService = new InformasiService();
+
+        RiwayatPendakian riwayat = new RiwayatPendakian();
 
         // Inisialisasi Controller
         //var authController = new AuthController(new AuthService());
@@ -126,9 +129,9 @@ class Program
                             break;
                             case "4":
                                 Console.WriteLine("Lihat Riwayat Pendakian:");
-                                var riwayat = RiwayatPendakianConfig.ReadFileConfig();
-                                Menu.TampilkanData(riwayat);
-                                break;
+                                riwayat.SaveRiwayat();
+                                riwayat.ShowRiwayat();
+                            break;
                             case "5":
                                 Console.WriteLine("Terima kasih telah menggunakan Hikepass. Sampai jumpa!");
                                 loggedInPengelola = null;
@@ -200,11 +203,8 @@ class Program
                                         break;
                                     case 5:
                                         Console.WriteLine("Lihat Riwayat Pendakian:");
-                                        RiwayatPendakian riwayat = new RiwayatPendakian();
                                         riwayat.ShowRiwayat();
-                                        //var riwayat = RiwayatPendakianConfig.ReadFileConfig();
-                                        //Menu.TampilkanData(riwayat);
-                                        break;
+                                    break;
                                     case 6:
                                         Console.WriteLine("Check-in/Check-out Tiket:");
                                         tiketCtrl.KonfirmasiTiket(loggedInPendaki, monitoring);
