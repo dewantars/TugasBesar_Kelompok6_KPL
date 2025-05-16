@@ -197,7 +197,8 @@ class Program
                                         break;
                                     case 5:
                                         Console.WriteLine("Lihat Riwayat Pendakian:");
-                                        
+                                        RiwayatPendakian riwayat = new RiwayatPendakian();
+                                        riwayat.ShowRiwayat();
                                         //var riwayat = RiwayatPendakianConfig.ReadFileConfig();
                                         //Menu.TampilkanData(riwayat);
                                         break;
