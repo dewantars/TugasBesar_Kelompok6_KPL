@@ -409,6 +409,74 @@ namespace HikepassLibrary.Controller
             }
         }
 
+        public static async Task RescheduleTanggalTiket(string baseUrl, int id, DateTime newTanggal)
+        {
+            try
+            {
+                Tiket tiketToReschedule = reservasiList.FirstOrDefault(t => t.Id == id);
+
+                if (tiketToReschedule == null)
+                {
+                    Console.WriteLine("Tiket dengan ID tersebut tidak ditemukan.");
+                    return;
+                }
+
+                // Memeriksa apakah tiket dapat diubah tanggalnya
+                if (tiketToReschedule.Status != Tiket.StatusTiket.BelumDibayar)
+                {
+                    Console.WriteLine("Tanggal tidak dapat diubah karena tiket sudah dibayar atau digunakan.");
+                    return;
+                }
+
+                // Mengubah tanggal tiket
+                tiketToReschedule.Tanggal = newTanggal;
+
+                // Membuat objek untuk dikirim ke server
+                var updatedReservasi = new
+                {
+                    Id = tiketToReschedule.Id,
+                    Tanggal = tiketToReschedule.Tanggal.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
+                    StatusPembayaran = tiketToReschedule.StatusPembayaran,
+                    JumlahPendaki = tiketToReschedule.JumlahPendaki,
+                    Kontak = tiketToReschedule.Kontak,
+                    Jalur = (int)tiketToReschedule.Jalur,
+                    IsCheckedIn = tiketToReschedule.IsCheckedIn,
+                    DaftarPendaki = tiketToReschedule.DaftarPendaki.ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
+                    Status = tiketToReschedule.Status,
+                    BarangBawaanSaatCheckin = tiketToReschedule.BarangBawaanSaatCheckin,
+                    BarangBawaanSaatCheckout = tiketToReschedule.BarangBawaanSaatCheckout,
+                    Keterangan = tiketToReschedule.Keterangan
+                };
+
+                // Menampilkan informasi tiket yang diperbarui
+                tiketToReschedule.ShowTiketInfo();
+
+                using (var client = new HttpClient())
+                {
+                    client.Timeout = TimeSpan.FromSeconds(30);
+                    var json = JsonSerializer.Serialize(updatedReservasi);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    var response = await client.PutAsync($"{baseUrl}/{id}", content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        Console.WriteLine("Tanggal tiket berhasil diperbarui pada server!");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Failed to update tiket. Status code: {response.StatusCode}");
+                        var errorContent = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"Error details: {errorContent}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
 
         public static async Task UpdateReservasi(string baseUrl,Pendaki pendaki)
         {
@@ -505,23 +573,45 @@ namespace HikepassLibrary.Controller
             }
         }
 
-        public static async Task DeleteReservasi(string baseUrl)
+        public static async Task DeleteTiket(string baseUrl, int id)
         {
-            Console.Write("Enter Reservasi ID to delete: ");
-            int id = int.Parse(Console.ReadLine());
-            using (var client = new HttpClient())
+            try
             {
-                var response = await client.DeleteAsync($"{baseUrl}/{id}");
-                if (response.IsSuccessStatusCode)
+                // Cari tiket di dalam reservasiList
+                Tiket tiketToDelete = reservasiList.FirstOrDefault(t => t.Id == id);
+
+                if (tiketToDelete == null)
                 {
-                    Console.WriteLine("Reservasi deleted successfully!");
+                    Console.WriteLine("Tiket dengan ID tersebut tidak ditemukan.");
+                    return;
                 }
-                else
+
+                // Hapus dari server
+                using (var client = new HttpClient())
                 {
-                    Console.WriteLine($"Failed to delete reservasi. Status code: {response.StatusCode}");
+                    client.Timeout = TimeSpan.FromSeconds(30);
+                    var response = await client.DeleteAsync($"{baseUrl}/{id}");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Hapus dari daftar lokal
+                        reservasiList.Remove(tiketToDelete);
+                        Console.WriteLine("Tiket berhasil dihapus!");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Gagal menghapus tiket. Status code: {response.StatusCode}");
+                        var errorContent = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"Error details: {errorContent}");
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
         }
+
         public static async Task GetReservasiById(string baseUrl)
         {
             Console.Write("Enter Reservasi ID: ");
