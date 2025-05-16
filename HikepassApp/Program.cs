@@ -31,7 +31,7 @@ class Program
         RiwayatPendakian riwayat = new RiwayatPendakian();
 
         // Inisialisasi Controller
-        var authController = new AuthController(new AuthService());
+        //var authController = new AuthController(new AuthService());
         var pendakiController = new PendakiController(tiketService, monitoringService);
         var tiketController = new TiketController(tiketService, monitoringService);
         var monitoringPendakiController = new MonitoringController(monitoringService);
