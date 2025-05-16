@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
+using System.Text.Json;
 
-namespace HikepassApp
+namespace HikepassLibrary.Model
 {
     class Informasi<T>
     {
@@ -9,7 +11,7 @@ namespace HikepassApp
         public string Judul { get; set; }
         public string Isi { get; set; }
         public DateTime TanggalDibuat { get; set; }
-
+        public Informasi() { }
         public Informasi(string id, T kategori, string judul, string isi, DateTime tanggal)
         {
             IdInformasi = id;
@@ -30,9 +32,9 @@ namespace HikepassApp
             Console.WriteLine();
         }
 
-        public static Informasi<T> InputInformasi()
+        public static Informasi<T> EditInformasi()
         {
-            Console.WriteLine("------------- Input Informasi Pendakian -------------");
+            Console.WriteLine("------------- Edit Informasi Pendakian -------------");
 
             DateTime tanggal = DateTime.Now;
             string idOtomatis = "INF" + tanggal.ToString("yyyyMMddHHmmss");
@@ -72,6 +74,24 @@ namespace HikepassApp
             string isi = Console.ReadLine();
 
             return new Informasi<T>(idOtomatis, kategori, judul, isi, tanggal);
+        }
+
+        public void TulisKeFileJson(string filePath)
+        {
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            string jsonString = JsonSerializer.Serialize(this, options);
+            File.WriteAllText(filePath, jsonString);
+        }
+
+        public static Informasi<T> BacaDariFileJson(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                throw new FileNotFoundException("File tidak ditemukan: " + filePath);
+            }
+
+            string jsonString = File.ReadAllText(filePath);
+            return JsonSerializer.Deserialize<Informasi<T>>(jsonString);
         }
     }
 }
