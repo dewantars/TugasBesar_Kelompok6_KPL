@@ -22,6 +22,7 @@ class Program
         var pengelolaService = new PengelolaService();
         var tiketService = new TiketService();
         var monitoringService = new MonitoringService();
+        var informasiService = new InformasiService();
 
         // Inisialisasi Controller
         var authController = new AuthController(new AuthService());
@@ -113,7 +114,7 @@ class Program
 
                             case "2":
                                 Console.WriteLine("Edit Informasi:");
-                            // tiketController.PesanTiket();  // Implement ticket ordering logic here
+                                informasiService.TambahAtauEditInformasi();
                             break;
 
                             case "3":
@@ -196,8 +197,9 @@ class Program
                                         break;
                                     case 5:
                                         Console.WriteLine("Lihat Riwayat Pendakian:");
-                                        var riwayat = RiwayatPendakianConfig.ReadFileConfig();
-                                        Menu.TampilkanData(riwayat);
+                                        
+                                        //var riwayat = RiwayatPendakianConfig.ReadFileConfig();
+                                        //Menu.TampilkanData(riwayat);
                                         break;
                                     case 6:
                                         Console.WriteLine("Check-in/Check-out Tiket:");
@@ -215,8 +217,8 @@ class Program
 
                             case "3":
                                 Console.WriteLine("Lihat Informasi:");
-                                // tiketController.LihatInformasi();  // Implement info display logic here
-                                break;
+                                informasiService.TampilkanInformasi(); 
+                            break;
 
                             case "4":
                                 Console.WriteLine("Laporan:");
