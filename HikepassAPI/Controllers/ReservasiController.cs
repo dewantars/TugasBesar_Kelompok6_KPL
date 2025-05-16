@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using HikepassLibrary.Model;
@@ -11,62 +12,90 @@ namespace HikepassAPI.Controllers
     [ApiController]
     public class ReservasiController : ControllerBase
     {
-        
-
-        // GET: api/reservasi (Mendapatkan semua data reservasi)
+        // GET: api/reservasi
         [HttpGet]
         public IActionResult GetAllReservasi()
         {
-            if (ControllerReservasi.reservasiList.Count == 0)
-                return NotFound("Tidak ada data reservasi");
+            if (ControllerReservasi.reservasiList == null)
+                return StatusCode(500, "Data reservasi tidak tersedia.");
 
-            return Ok(ControllerReservasi.reservasiList); // Mengembalikan seluruh data reservasi
+            if (!ControllerReservasi.reservasiList.Any())
+                return NotFound("Tidak ada data reservasi.");
+
+            return Ok(ControllerReservasi.reservasiList);
         }
 
-        // GET: api/reservasi/{id} (Mendapatkan reservasi berdasarkan ID)
+        // GET: api/reservasi/{id}
         [HttpGet("{id}")]
         public IActionResult GetReservasiById(int id)
         {
+            if (id <= 0)
+                return BadRequest("ID tidak valid.");
+
             var reservasi = ControllerReservasi.reservasiList.FirstOrDefault(r => r.Id == id);
             if (reservasi == null)
-                return NotFound("Reservasi tidak ditemukan");
+                return NotFound("Reservasi tidak ditemukan.");
 
-            return Ok(reservasi); // Mengembalikan data reservasi berdasarkan ID
+            return Ok(reservasi);
         }
 
-        // POST: api/reservasi (Menambah data reservasi baru)
+        // POST: api/reservasi
         [HttpPost]
         public IActionResult CreateReservasi([FromBody] Tiket newReservasi)
         {
             if (newReservasi == null)
-                return BadRequest("Data reservasi tidak boleh kosong");
+                return BadRequest("Data reservasi tidak boleh kosong.");
 
-            // Pastikan data yang dikirimkan sudah valid
-            if (newReservasi.DaftarPendaki == null || newReservasi.DaftarPendaki.Count == 0)
-                return BadRequest("Daftar pendaki tidak boleh kosong");
+            if (newReservasi.DaftarPendaki == null || !newReservasi.DaftarPendaki.Any())
+                return BadRequest("Daftar pendaki tidak boleh kosong.");
 
-            if (!Enum.IsDefined(typeof(Tiket.JalurPendakian), newReservasi.Jalur))
-                return BadRequest("Jalur yang dipilih tidak valid");
+            if (!Enum.IsDefined(typeof(JalurPendakian), newReservasi.Jalur))
+                return BadRequest("Jalur pendakian tidak valid.");
 
-            // Menambahkan ID baru secara otomatis (auto increment)
-            newReservasi.Id = ControllerReservasi.reservasiList.Count == 0 ? 1 : ControllerReservasi.reservasiList.Max(r => r.Id) + 1;
-            newReservasi.Status = Tiket.StatusTiket.BelumDibayar; // Status awal "Belum Dibayar"
-            ControllerReservasi.reservasiList.Add(newReservasi);  // Menambahkan reservasi ke list
+            if (newReservasi.Tanggal == default)
+                return BadRequest("Tanggal pendakian harus diisi.");
+
+            if (newReservasi.JumlahPendaki <= 0)
+                return BadRequest("Jumlah pendaki harus lebih dari 0.");
+
+            newReservasi.Id = ControllerReservasi.reservasiList.Count == 0
+                ? 1
+                : ControllerReservasi.reservasiList.Max(r => r.Id) + 1;
+
+            newReservasi.Status = StatusTiket.BelumDibayar;
+
+            ControllerReservasi.reservasiList.Add(newReservasi);
+
             return CreatedAtAction(nameof(GetReservasiById), new { id = newReservasi.Id }, newReservasi);
         }
 
-        // PUT: api/reservasi/{id} (Memperbarui data reservasi berdasarkan ID)
+        // PUT: api/reservasi/{id}
         [HttpPut("{id}")]
         public IActionResult UpdateReservasi(int id, [FromBody] Tiket updatedReservasi)
         {
-            if (updatedReservasi == null || updatedReservasi.DaftarPendaki == null)
-                return BadRequest("Data reservasi atau daftar pendaki tidak valid");
+            if (id <= 0)
+                return BadRequest("ID tidak valid.");
+
+            if (updatedReservasi == null)
+                return BadRequest("Data reservasi tidak boleh kosong.");
+
+            if (updatedReservasi.DaftarPendaki == null || !updatedReservasi.DaftarPendaki.Any())
+                return BadRequest("Daftar pendaki tidak boleh kosong.");
+
+            if (!Enum.IsDefined(typeof(JalurPendakian), updatedReservasi.Jalur))
+                return BadRequest("Jalur pendakian tidak valid.");
+
+            if (updatedReservasi.Tanggal == default)
+                return BadRequest("Tanggal pendakian harus diisi.");
+
+            if (updatedReservasi.JumlahPendaki <= 0)
+                return BadRequest("Jumlah pendaki harus lebih dari 0.");
 
             var reservasi = ControllerReservasi.reservasiList.FirstOrDefault(r => r.Id == id);
             if (reservasi == null)
-                return NotFound("Reservasi tidak ditemukan");
+                return NotFound("Reservasi tidak ditemukan.");
 
-            // Memperbarui data reservasi yang ada
+            // Update properti
             reservasi.DaftarPendaki = updatedReservasi.DaftarPendaki;
             reservasi.Jalur = updatedReservasi.Jalur;
             reservasi.Tanggal = updatedReservasi.Tanggal;
@@ -78,18 +107,23 @@ namespace HikepassAPI.Controllers
             reservasi.BarangBawaanSaatCheckout = updatedReservasi.BarangBawaanSaatCheckout;
             reservasi.Status = updatedReservasi.Status;
 
-            return Ok(reservasi);  // Mengembalikan data reservasi yang telah diperbarui
+            return Ok(reservasi);
         }
 
-        // DELETE: api/reservasi/{id} (Menghapus data reservasi berdasarkan ID)
+        // DELETE: api/reservasi/{id}
         [HttpDelete("{id}")]
         public IActionResult DeleteReservasi(int id)
         {
+            if (id <= 0)
+                return BadRequest("ID tidak valid.");
+
             var reservasi = ControllerReservasi.reservasiList.FirstOrDefault(r => r.Id == id);
             if (reservasi == null)
-                return NotFound("Reservasi tidak ditemukan");
-            ControllerReservasi.reservasiList.Remove(reservasi);  // Menghapus reservasi dari list
-            return NoContent();  // Mengembalikan status 204 (No Content)
+                return NotFound("Reservasi tidak ditemukan.");
+
+            ControllerReservasi.reservasiList.Remove(reservasi);
+
+            return NoContent();
         }
     }
 }

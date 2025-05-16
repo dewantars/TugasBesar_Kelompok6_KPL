@@ -16,7 +16,7 @@ class Program
     {
         // TEST LAPORAN
         //Laporan<string> laporan = Laporan<string>.InputLaporan();
-        //laporan.PrintLaporan();
+        //laporan.PrintLaporan(); 
 
         // Inisialisasi layanan
         Pendaki loggedInPendaki = null;
