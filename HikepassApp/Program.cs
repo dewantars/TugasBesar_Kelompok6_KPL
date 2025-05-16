@@ -1,3 +1,6 @@
+using HikepassApp;
+using System;
+
 using HikepassLibrary.Model;
 using HikepassLibrary.Service;
 using HikepassLibrary.Controller;
@@ -14,9 +17,6 @@ class Program
     public static string baseUrl = "http://localhost:5226/api/reservasi";
     public static async Task Main(string[] args)
     {
-        // TEST LAPORAN
-        //Laporan<string> laporan = Laporan<string>.InputLaporan();
-        //laporan.PrintLaporan(); 
 
         // Inisialisasi layanan
         Pendaki loggedInPendaki = null;
@@ -25,7 +25,7 @@ class Program
         var pengelolaService = new PengelolaService();
         var tiketService = new TiketService();
         var monitoringService = new MonitoringService();
-
+        var informasiService = new InformasiService();
 
         // Inisialisasi Controller
         var authController = new AuthController(new AuthService());
@@ -35,22 +35,15 @@ class Program
         var tiketCtrl = new TiketController();
         var monitoring = new MonitoringController(monitoringService);
         
-
         // Menambahkan data awal untuk testing
         pendakiService.AddPendaki(new Pendaki { Id = 1, FullName = "John Doe", Username = "user", Password = "user", Email = "john.doe@example.com" });
         pengelolaService.AddPengelola(new Pengelola { Id = 2, FullName = "Jane Smith", Username = "admin", Password = "admin123", Email = "admin@example.com" });
-
-        
 
         var tiket = new Tiket();
         string username = null;
         string password = null;
         Pendaki pendaki;
 
-        
-
-        // Proses login
-        
 
         // Menu utama aplikasi
         bool running1 = true, running2 = true;
@@ -123,18 +116,25 @@ class Program
                                 break;
 
                             case "2":
-                                Console.WriteLine("Pemesanan Tiket:");
-                                Console.Write("Masukkan ID Tiket yang ingin dipesan: ");
-                                // tiketController.PesanTiket();  // Implement ticket ordering logic here
-                                break;
+                                Console.WriteLine("Edit Informasi:");
+                                informasiService.TambahAtauEditInformasi();
+                            break;
 
                             case "3":
+                                Console.WriteLine("Lihat Laporan:");
+                                LaporanService.PrintLaporan();
+                            break;
+                            case "4":
+                                Console.WriteLine("Lihat Riwayat Pendakian:");
+                                var riwayat = RiwayatPendakianConfig.ReadFileConfig();
+                                Menu.TampilkanData(riwayat);
+                                break;
+                            case "5":
                                 Console.WriteLine("Terima kasih telah menggunakan Hikepass. Sampai jumpa!");
                                 loggedInPengelola = null;
                                 loggedInPendaki = null;
                                 running2 = false;
                                 break;
-
                             default:
                                 Console.WriteLine("Pilihan tidak valid. Silakan coba lagi.\n");
                                 break;
@@ -200,8 +200,10 @@ class Program
                                         break;
                                     case 5:
                                         Console.WriteLine("Lihat Riwayat Pendakian:");
-                                        var riwayat = RiwayatPendakianConfig.ReadFileConfig();
-                                        Menu.TampilkanData(riwayat);
+                                        RiwayatPendakian riwayat = new RiwayatPendakian();
+                                        riwayat.ShowRiwayat();
+                                        //var riwayat = RiwayatPendakianConfig.ReadFileConfig();
+                                        //Menu.TampilkanData(riwayat);
                                         break;
                                     case 6:
                                         Console.WriteLine("Check-in/Check-out Tiket:");
@@ -219,21 +221,24 @@ class Program
 
                             case "3":
                                 Console.WriteLine("Lihat Informasi:");
-                                // tiketController.LihatInformasi();  // Implement info display logic here
-                                break;
+                                informasiService.TampilkanInformasi(); 
+                            break;
 
                             case "4":
+                                Console.WriteLine("Laporan:");
+                                LaporanService.inputLaporan();
+                            break;
+                            
+                            case "5":
                                 Console.WriteLine("Edit Profil:");
                                 // pendakiController.EditProfil(loggedInPendaki);  // Implement profile editing logic here
-                                break;
-
-                            case "5":
+                            break;
+                            case "6":
                                 Console.WriteLine("Terima kasih telah menggunakan Hikepass. Sampai jumpa!");
                                 loggedInPendaki = null;
                                 loggedInPengelola = null;
                                 running2 = false;
                                 break;
-
                             default:
                                 Console.WriteLine("Pilihan tidak valid. Silakan coba lagi.\n");
                                 break;
@@ -294,6 +299,42 @@ class Program
     }
     static async Task BayarTiket(string baseUrl)
     {
+
+        var payment = new Payment();
+
+        Console.WriteLine("== SIMULASI PEMBAYARAN ==\n");
+        Console.Write("Apakah pembayaran berhasil? (y/n): ");
+        var input = Console.ReadLine();
+
+        bool isSuccess = input?.ToLower() == "y";
+
+        payment.ProcessPayment(isSuccess);
+
+        Console.WriteLine("\nStatus Akhir:");
+        switch (payment.StateMachine.CurrentState)
+        {
+            case PaymentState.NotPaid:
+                Console.WriteLine("Status: Belum Bayar");
+                break;
+            case PaymentState.WaitingConfirmation:
+                Console.WriteLine("Status: Menunggu Konfirmasi");
+                break;
+            case PaymentState.Paid:
+                Console.WriteLine("Status: Sudah Bayar");
+                break;
+            case PaymentState.Failed:
+                Console.WriteLine("Status: Gagal");
+                break;
+            default:
+                Console.WriteLine("Status: Tidak diketahui");
+                break;
+        }
+
+        Console.WriteLine("\n== SELESAI ==\n");
+    }
+
+}
+
         Console.Write("Masukkan ID Tiket yang ingin dibayar: ");
         int idTiket = int.Parse(Console.ReadLine());
 
