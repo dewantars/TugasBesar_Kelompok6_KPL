@@ -58,8 +58,8 @@ namespace HikepassLibrary.Model
         {
             Console.WriteLine("================= Pendakian Gunung Malabar =================");
             Console.WriteLine("Daftar Jalur:");
-            Console.WriteLine("1. Puncak Besar Malabar Via Cinyiruan 150k/orang");
-            Console.WriteLine("2. Puncak Besar Malabar Via Panorama 20k/orang");
+            Console.WriteLine("1. Puncak Besar Malabar Via Cinyiruan(Sedang) 50k/orang");
+            Console.WriteLine("2. Puncak Besar Malabar Via Panorama(Pendek) 20k/orang");
             Console.WriteLine("Lanjutkan reservasi y/n?");
         }
         public static void TampilkanData(RiwayatPendakianConfig data)
