@@ -26,6 +26,7 @@ class Program
         var informasiService = new InformasiService();
 
         // Inisialisasi Controller
+        //var authController = new AuthController(new AuthService());
         var pendakiController = new PendakiController(tiketService, monitoringService);
         var tiketController = new TiketController(tiketService, monitoringService);
         var monitoringPendakiController = new MonitoringController(monitoringService);
