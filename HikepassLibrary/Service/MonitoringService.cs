@@ -7,40 +7,84 @@ using HikepassLibrary.Model;
 
 using System;
 using System.Collections.Generic;
-using HikepassLibrary.Model;
 
 namespace HikepassLibrary.Service
 {
     public class MonitoringService
     {
-        public static List<Tiket> DaftarPendakiMonitoring { get; set; } = new List<Tiket>();
+        // Daftar pendaki yang sedang dalam proses monitoring (aktif)
+        public static List<Tiket> DaftarPendakiMonitoring { get; set; } = new();
 
+        // FSM per pendaki berdasarkan ID tiket
+        private static Dictionary<int, MonitoringFSM> PendakiStates = new();
+
+        // Tambah pendaki ke monitoring
         public void AddToMonitoring(Tiket tiket)
         {
-            DaftarPendakiMonitoring.Add(tiket);
-            Console.WriteLine($"{tiket.DaftarPendaki.Values} telah ditambahkan ke daftar monitoring.");
+            if (!DaftarPendakiMonitoring.Contains(tiket))
+            {
+                DaftarPendakiMonitoring.Add(tiket);
+                PendakiStates[tiket.Id] = new MonitoringFSM();
+                Console.WriteLine($"[+] Tiket ID {tiket.Id} dimasukkan ke daftar monitoring.");
+            }
+            else
+            {
+                Console.WriteLine($"[!] Tiket ID {tiket.Id} sudah ada dalam monitoring.");
+            }
         }
 
+        // Hapus pendaki dari monitoring
         public void RemoveFromMonitoring(Tiket tiket)
         {
-            DaftarPendakiMonitoring.Remove(tiket);
-            Console.WriteLine($"{tiket.DaftarPendaki.Values} telah dikeluarkan dari daftar monitoring.");
+            if (DaftarPendakiMonitoring.Remove(tiket))
+            {
+                PendakiStates.Remove(tiket.Id);
+                Console.WriteLine($"[-] Tiket ID {tiket.Id} dikeluarkan dari monitoring.");
+            }
+            else
+            {
+                Console.WriteLine($"[!] Tiket ID {tiket.Id} tidak ditemukan.");
+            }
         }
 
+        // Lanjutkan status FSM pendaki berdasarkan ID
+        public string LanjutkanPendakian(int id)
+        {
+            if (!PendakiStates.ContainsKey(id))
+                return $"[x] Pendaki ID {id} belum dimonitoring.";
+
+            var fsm = PendakiStates[id];
+
+            switch (fsm.current)
+            {
+                case MonitoringFSM.State.Basecamp:
+                case MonitoringFSM.State.Pos1:
+                    fsm.NaikPos(); break;
+                case MonitoringFSM.State.Pos2:
+                    fsm.CapaiPuncak(); break;
+                case MonitoringFSM.State.Puncak:
+                    fsm.TurunGunung(); break;
+                case MonitoringFSM.State.Turun:
+                    fsm.SelesaiPendakian(); break;
+                case MonitoringFSM.State.Selesai:
+                    return $"✓ Pendaki ID {id} telah menyelesaikan pendakian.";
+            }
+
+            return $"→ Pendaki ID {id} sekarang di tahap: {fsm.current}";
+        }
+
+        // Tampilkan daftar semua pendaki dalam monitoring
         public void ShowMonitoring()
         {
-            Console.WriteLine("Daftar Pendaki yang Sedang Check-in:");
+            Console.WriteLine("=== Daftar Pendaki yang Sedang Dimonitoring ===");
             foreach (var tiket in DaftarPendakiMonitoring)
             {
-                // Menampilkan semua nama pendaki yang terdaftar di DaftarPendaki
-                Console.WriteLine($"Tiket ID: {tiket.Id} - Pendaki: ");
-
+                Console.WriteLine($"Tiket ID: {tiket.Id}");
                 foreach (var pendaki in tiket.DaftarPendaki.Keys)
                 {
-                    Console.WriteLine($"Nama: {pendaki}");
+                    Console.WriteLine($"- Nama: {pendaki} | Status: {PendakiStates[tiket.Id].current}");
                 }
-
-                Console.WriteLine("--------------------------------------------------");
+                Console.WriteLine("---------------------------------------------");
             }
         }
     }
