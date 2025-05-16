@@ -11,6 +11,10 @@ class Program
 {
     public static async Task Main(string[] args)
     {
+        // TEST INFORMASI
+        Informasi<string> informasi = Informasi<string>.InputInformasi();
+        informasi.TampilkanInformasi();
+
         // TEST LAPORAN
         Laporan<string> laporan = Laporan<string>.InputLaporan();
         laporan.PrintLaporan();
