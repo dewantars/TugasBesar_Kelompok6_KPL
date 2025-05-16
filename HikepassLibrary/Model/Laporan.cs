@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace HikepassApp
+namespace HikepassLibrary.Model
 {
-    class Laporan<T>
+    public class Laporan<T>
     {
         public string IdLaporan { get; private set; }
         public string Deskripsi { get; private set; }
