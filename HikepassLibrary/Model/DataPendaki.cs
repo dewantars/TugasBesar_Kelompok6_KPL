@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace HikepassLibrary.Model
 {
-    class Checkout
+    public class DataPendaki
     {
         public int Id { get; set; }
-        public int BookingId { get; set; }
-        public DateTime CheckOutTime { get; set; }
+        public string NamaPendaki { get; set; }
+        public string NomorHP { get; set; }
+        public int JumlahPendaki { get; set; }
     }
 }
