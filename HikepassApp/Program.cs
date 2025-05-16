@@ -21,11 +21,14 @@ class Program
         // Inisialisasi layanan
         Pendaki loggedInPendaki = null;
         Pengelola loggedInPengelola = null;
+        
         var pendakiService = new PendakiService();
         var pengelolaService = new PengelolaService();
         var tiketService = new TiketService();
         var monitoringService = new MonitoringService();
         var informasiService = new InformasiService();
+
+        RiwayatPendakian riwayat = new RiwayatPendakian();
 
         // Inisialisasi Controller
         var authController = new AuthController(new AuthService());
@@ -126,9 +129,9 @@ class Program
                             break;
                             case "4":
                                 Console.WriteLine("Lihat Riwayat Pendakian:");
-                                var riwayat = RiwayatPendakianConfig.ReadFileConfig();
-                                Menu.TampilkanData(riwayat);
-                                break;
+                                riwayat.SaveRiwayat();
+                                riwayat.ShowRiwayat();
+                            break;
                             case "5":
                                 Console.WriteLine("Terima kasih telah menggunakan Hikepass. Sampai jumpa!");
                                 loggedInPengelola = null;
@@ -200,11 +203,8 @@ class Program
                                         break;
                                     case 5:
                                         Console.WriteLine("Lihat Riwayat Pendakian:");
-                                        RiwayatPendakian riwayat = new RiwayatPendakian();
                                         riwayat.ShowRiwayat();
-                                        //var riwayat = RiwayatPendakianConfig.ReadFileConfig();
-                                        //Menu.TampilkanData(riwayat);
-                                        break;
+                                    break;
                                     case 6:
                                         Console.WriteLine("Check-in/Check-out Tiket:");
                                         tiketCtrl.KonfirmasiTiket(loggedInPendaki, monitoring);
@@ -252,113 +252,113 @@ class Program
     }
 
 
-    static async Task CheckInTiket(string baseUrl)
-    {
-        Console.Write("Masukkan ID Tiket untuk Check-in: ");
-        int idTiket = int.Parse(Console.ReadLine());
+//    static async Task CheckInTiket(string baseUrl)
+//    {
+//        Console.Write("Masukkan ID Tiket untuk Check-in: ");
+//        int idTiket = int.Parse(Console.ReadLine());
 
-        // Proses Check-in
-        var tiket = new { Id = idTiket, Status = "Checkin" };
-        using (var client = new HttpClient())
-        {
-            var json = JsonSerializer.Serialize(tiket);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PutAsync($"{baseUrl}/{idTiket}/checkin", content);
-            if (response.IsSuccessStatusCode)
-            {
-                Console.WriteLine("Tiket berhasil check-in.");
-            }
-            else
-            {
-                Console.WriteLine("Gagal check-in tiket.");
-            }
-        }
-    }
+//        // Proses Check-in
+//        var tiket = new { Id = idTiket, Status = "Checkin" };
+//        using (var client = new HttpClient())
+//        {
+//            var json = JsonSerializer.Serialize(tiket);
+//            var content = new StringContent(json, Encoding.UTF8, "application/json");
+//            var response = await client.PutAsync($"{baseUrl}/{idTiket}/checkin", content);
+//            if (response.IsSuccessStatusCode)
+//            {
+//                Console.WriteLine("Tiket berhasil check-in.");
+//            }
+//            else
+//            {
+//                Console.WriteLine("Gagal check-in tiket.");
+//            }
+//        }
+//    }
 
-    static async Task CheckOutTiket(string baseUrl)
-    {
-        Console.Write("Masukkan ID Tiket untuk Check-out: ");
-        int idTiket = int.Parse(Console.ReadLine());
+//    static async Task CheckOutTiket(string baseUrl)
+//    {
+//        Console.Write("Masukkan ID Tiket untuk Check-out: ");
+//        int idTiket = int.Parse(Console.ReadLine());
 
-        // Proses Check-out
-        var tiket = new { Id = idTiket, Status = "Checkout" };
-        using (var client = new HttpClient())
-        {
-            var json = JsonSerializer.Serialize(tiket);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PutAsync($"{baseUrl}/{idTiket}/checkout", content);
-            if (response.IsSuccessStatusCode)
-            {
-                Console.WriteLine("Tiket berhasil check-out.");
-            }
-            else
-            {
-                Console.WriteLine("Gagal check-out tiket.");
-            }
-        }
-    }
-    static async Task BayarTiket(string baseUrl)
-    {
+//        // Proses Check-out
+//        var tiket = new { Id = idTiket, Status = "Checkout" };
+//        using (var client = new HttpClient())
+//        {
+//            var json = JsonSerializer.Serialize(tiket);
+//            var content = new StringContent(json, Encoding.UTF8, "application/json");
+//            var response = await client.PutAsync($"{baseUrl}/{idTiket}/checkout", content);
+//            if (response.IsSuccessStatusCode)
+//            {
+//                Console.WriteLine("Tiket berhasil check-out.");
+//            }
+//            else
+//            {
+//                Console.WriteLine("Gagal check-out tiket.");
+//            }
+//        }
+//    }
+//    static async Task BayarTiket(string baseUrl)
+//    {
 
-        var payment = new Payment();
+//        var payment = new Payment();
 
-        Console.WriteLine("== SIMULASI PEMBAYARAN ==\n");
-        Console.Write("Apakah pembayaran berhasil? (y/n): ");
-        var input = Console.ReadLine();
+//        Console.WriteLine("== SIMULASI PEMBAYARAN ==\n");
+//        Console.Write("Apakah pembayaran berhasil? (y/n): ");
+//        var input = Console.ReadLine();
 
-        bool isSuccess = input?.ToLower() == "y";
+//        bool isSuccess = input?.ToLower() == "y";
 
-        payment.ProcessPayment(isSuccess);
+//        payment.ProcessPayment(isSuccess);
 
-        Console.WriteLine("\nStatus Akhir:");
-        switch (payment.StateMachine.CurrentState)
-        {
-            case PaymentState.NotPaid:
-                Console.WriteLine("Status: Belum Bayar");
-                break;
-            case PaymentState.WaitingConfirmation:
-                Console.WriteLine("Status: Menunggu Konfirmasi");
-                break;
-            case PaymentState.Paid:
-                Console.WriteLine("Status: Sudah Bayar");
-                break;
-            case PaymentState.Failed:
-                Console.WriteLine("Status: Gagal");
-                break;
-            default:
-                Console.WriteLine("Status: Tidak diketahui");
-                break;
-        }
+//        Console.WriteLine("\nStatus Akhir:");
+//        switch (payment.StateMachine.CurrentState)
+//        {
+//            case PaymentState.NotPaid:
+//                Console.WriteLine("Status: Belum Bayar");
+//                break;
+//            case PaymentState.WaitingConfirmation:
+//                Console.WriteLine("Status: Menunggu Konfirmasi");
+//                break;
+//            case PaymentState.Paid:
+//                Console.WriteLine("Status: Sudah Bayar");
+//                break;
+//            case PaymentState.Failed:
+//                Console.WriteLine("Status: Gagal");
+//                break;
+//            default:
+//                Console.WriteLine("Status: Tidak diketahui");
+//                break;
+//        }
 
-        Console.WriteLine("\n== SELESAI ==\n");
-    }
+//        Console.WriteLine("\n== SELESAI ==\n");
+//    }
 
-}
+//}
 
-        Console.Write("Masukkan ID Tiket yang ingin dibayar: ");
-        int idTiket = int.Parse(Console.ReadLine());
+//        Console.Write("Masukkan ID Tiket yang ingin dibayar: ");
+//        int idTiket = int.Parse(Console.ReadLine());
 
-        // Simulasi pembayaran
-        Console.WriteLine("Pilih metode pembayaran:");
-        Console.WriteLine("1. QRIS");
-        Console.WriteLine("2. Bayar di Tempat");
-        string metodePembayaran = Console.ReadLine();
+//        // Simulasi pembayaran
+//        Console.WriteLine("Pilih metode pembayaran:");
+//        Console.WriteLine("1. QRIS");
+//        Console.WriteLine("2. Bayar di Tempat");
+//        string metodePembayaran = Console.ReadLine();
 
 
-        //// Membaca data dari file
+//        //// Membaca data dari file
         
-        //Console.WriteLine("=== Data Riwayat Pendakian (Sebelum Pajak) ===");
+//        //Console.WriteLine("=== Data Riwayat Pendakian (Sebelum Pajak) ===");
 
 
-        //// Menambahkan pajak 10%
-        //riwayat.total_pembayaran = (int)(riwayat.total_pembayaran * 1.10);
+//        //// Menambahkan pajak 10%
+//        //riwayat.total_pembayaran = (int)(riwayat.total_pembayaran * 1.10);
 
-        //Console.WriteLine("\n=== Data Riwayat Pendakian (Setelah Pajak 10%) ===");
-        //TampilkanData(riwayat);
+//        //Console.WriteLine("\n=== Data Riwayat Pendakian (Setelah Pajak 10%) ===");
+//        //TampilkanData(riwayat);
 
-        //// Simpan kembali data yang telah dimodifikasi
-        //RiwayatPendakianConfig.WriteFileConfig(riwayat);
-    }
+//        //// Simpan kembali data yang telah dimodifikasi
+//        //RiwayatPendakianConfig.WriteFileConfig(riwayat);
+//    }
 
     
 }
