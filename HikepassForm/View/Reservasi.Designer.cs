@@ -35,10 +35,10 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Font = new Font("BD Cartoon Shout", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label3.Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label3.Location = new Point(51, 58);
             label3.Name = "label3";
-            label3.Size = new Size(196, 33);
+            label3.Size = new Size(140, 36);
             label3.TabIndex = 10;
             label3.Text = "HikePass";
             // 
@@ -48,6 +48,7 @@
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(125, 27);
             textBox1.TabIndex = 11;
+            textBox1.TextChanged += textBox1_TextChanged;
             // 
             // Reservasi
             // 
