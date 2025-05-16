@@ -13,6 +13,7 @@ namespace HikepassLibrary.Model
             Console.WriteLine("Pilih Pengguna:");
             Console.WriteLine("1. Pengelola");
             Console.WriteLine("2. Pendaki");
+            Console.WriteLine("3. Exit");
             Console.Write("Pilih: ");
         }
        
@@ -20,10 +21,11 @@ namespace HikepassLibrary.Model
         {
             Console.WriteLine("==================== HikePass App ====================");
             Console.WriteLine("Selamat Datang Admin!");
-            Console.WriteLine("1. Riwayat Pendakian");
+            Console.WriteLine("1. Monitoring Pendaki");
             Console.WriteLine("2. Edit Informasi");
-            Console.WriteLine("3. Monitoring");
-            Console.WriteLine("4. Log Out");
+            Console.WriteLine("3. Lihat Laporan");
+            Console.WriteLine("4. Lihat Riwayat Pendakian");
+            Console.WriteLine("5. Log Out");
             Console.Write("Pilih: ");
         }
         public static void menuUser()
@@ -33,8 +35,9 @@ namespace HikepassLibrary.Model
             Console.WriteLine("1. Reservasi");
             Console.WriteLine("2. Tiket Saya");
             Console.WriteLine("3. Lihat Informasi");
-            Console.WriteLine("4. Edit Profil");
-            Console.WriteLine("5. Log Out");
+            Console.WriteLine("4. Input Laporan");
+            Console.WriteLine("5. Edit Profil");
+            Console.WriteLine("6. Log Out");
             Console.Write("Pilih: ");
         }
         public static void menuTiketSaya() 
@@ -62,7 +65,7 @@ namespace HikepassLibrary.Model
         public static void TampilkanData(RiwayatPendakianConfig data)
         {
             Console.WriteLine($"Tanggal Reservasi         : {data.tanggal_reservasi}");
-            Console.WriteLine($"Jumlah Pendaki            : {data.jumlah_reservasi}");
+            Console.WriteLine($"Jumlah Pendaki          : {data.jumlah_reservasi}");
             Console.WriteLine($"Jalur Pendakian           : {data.jalur_pendakian}");
             Console.WriteLine($"Tanggal Pembayaran        : {data.tanggal_pembayaran}");
             Console.WriteLine($"Metode Pembayaran         : {data.metode_pembayaran}");
