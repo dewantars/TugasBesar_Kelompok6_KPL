@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace HikepassForm.View
 {
-    public partial class Reservasi: UserControl
+    public partial class Reservasi : UserControl
     {
         public Reservasi()
         {
             InitializeComponent();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
