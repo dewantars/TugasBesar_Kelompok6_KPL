@@ -351,60 +351,31 @@ namespace HikepassLibrary.Controller
             }
         }
 
-        public async Task TampilkanTiketAsync(string baseUrl)
+        public void TampilkanTiket()
         {
             try
             {
-                // Mendapatkan data reservasi dari server
-                using (var client = new HttpClient())
+                if (ControllerReservasi.reservasiList == null || ControllerReservasi.reservasiList.Count == 0)
                 {
-                    var response = await client.GetAsync(baseUrl);
-                    if (response.IsSuccessStatusCode)
+                    Console.WriteLine("Tidak ada tiket yang tersedia.");
+                    return;
+                }
+
+                foreach (var tiket in ControllerReservasi.reservasiList)
+                {
+                    try
                     {
-                        var result = await response.Content.ReadAsStringAsync();
-                        Console.WriteLine(result);
-                        var reservasiList = JsonSerializer.Deserialize<List<Tiket>>(result);
-
-                        if (reservasiList != null && reservasiList.Any())
-                        {
-                            Console.WriteLine("Tiket saya:");
-
-                            foreach (var tiket in reservasiList)
-                            {
-                                Console.WriteLine($"ID: {tiket.Id}");
-                                Console.WriteLine($"Tanggal: {tiket.Tanggal:yyyy-MM-dd}");
-                                Console.WriteLine($"Status: {tiket.Status}");
-                                Console.WriteLine($"Jumlah Pendaki: {tiket.JumlahPendaki}");
-                                Console.WriteLine($"Jalur: {tiket.Jalur}");
-                                Console.WriteLine("---------------------------------------------");
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine("Tidak ada tiket yang tersedia.");
-                        }
+                        tiket.ShowTiketInfo();
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        Console.WriteLine($"Failed to get reservasi. Status code: {response.StatusCode}");
+                        Console.WriteLine($"Gagal menampilkan info tiket: {ex.Message}");
                     }
                 }
-            }
-            catch (HttpRequestException ex)
-            {
-                Console.WriteLine($"Request error: {ex.Message}");
-                if (ex.InnerException != null)
-                {
-                    Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
-                }
-            }
-            catch (TaskCanceledException ex)
-            {
-                Console.WriteLine($"Request timeout: {ex.Message}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Unexpected error: {ex.Message}");
+                Console.WriteLine($"Terjadi kesalahan saat menampilkan tiket: {ex.Message}");
             }
         }
 

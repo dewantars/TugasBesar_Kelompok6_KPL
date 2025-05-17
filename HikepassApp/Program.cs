@@ -7,8 +7,6 @@ using HikepassLibrary.Controller;
 using System.Text.Json;
 using System.Text;
 using System.Xml.Schema;
-
-using HikepassApp;
 using System.Threading.Tasks;
 using HikepassApp.Controller;
 
@@ -185,7 +183,7 @@ class Program
                                 {
                                     case 1:
                                         Console.WriteLine("Lihat Tiket:");
-                                        tiketCtrl.TampilkanTiketAsync(baseUrl);
+                                        tiketCtrl.TampilkanTiket();
                                     break;
                                     case 2:
                                         Console.WriteLine("Bayar Tiket:");
