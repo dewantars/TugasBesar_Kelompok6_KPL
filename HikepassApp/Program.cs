@@ -183,7 +183,7 @@ class Program
                                 {
                                     case 1:
                                         Console.WriteLine("Lihat Tiket:");
-                                        tiketCtrl.TampilkanTiketAsync(baseUrl);
+                                        tiketCtrl.TampilkanTiket();
                                     break;
                                     case 2:
                                         Console.WriteLine("Bayar Tiket:");
