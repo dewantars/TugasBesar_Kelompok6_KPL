@@ -143,7 +143,7 @@ namespace HikepassLibrary.Controller
                     Kontak = newReservasi.Kontak,
                     Jalur = (Tiket.JalurPendakian)newReservasi.Jalur,
                     IsCheckedIn = newReservasi.IsCheckedIn,
-                    DaftarPendaki = newReservasi.DaftarPendaki, 
+                    DaftarPendaki = newReservasi.DaftarPendaki,
                     Status = (Tiket.StatusTiket)newReservasi.Status,
                     BarangBawaanSaatCheckin = newReservasi.BarangBawaanSaatCheckin,
                     BarangBawaanSaatCheckout = newReservasi.BarangBawaanSaatCheckout,

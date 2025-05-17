@@ -15,9 +15,8 @@ namespace HikepassLibrary.Controller
     {
         private readonly TiketService _tiketService;
         private readonly MonitoringService _monitoringService;
-        
+        private readonly MonitoringController _monitoringController;
 
-        public TiketController(){}
         public TiketController(TiketService tiketService, MonitoringService monitoringService)
         {
             _tiketService = tiketService;
@@ -97,7 +96,6 @@ namespace HikepassLibrary.Controller
             }
         }
 
-       
         public void BayarTiket(Tiket tiket)
         {
             TampilkanDaftarTiket();
@@ -123,6 +121,8 @@ namespace HikepassLibrary.Controller
                             ControllerReservasi.UpdatedPembayaran("http://localhost:5226/api/reservasi", idTiket);
                             selectedTiket.Status = StatusTiket.Dibayar;
                             Console.WriteLine("Pembayaran berhasil!");
+
+                            _monitoringService.AddToMonitoring(selectedTiket);
 
                         }
                     }
@@ -177,9 +177,6 @@ namespace HikepassLibrary.Controller
                         string jawaban = Console.ReadLine();
                         if (jawaban.ToLower() == "y")
                         {
-                            
-                            // Panggil metode UpdateCheckInCheckOut untuk melakukan Check-in
-                              // true untuk Check-in
                            
                             Console.WriteLine("Barang yang dibawa: ");
                             string InputBarangBawaan;
@@ -273,8 +270,6 @@ namespace HikepassLibrary.Controller
                 Console.WriteLine("ID Tiket tidak valid.");
             }
         }
-        
-
         
     }
 }

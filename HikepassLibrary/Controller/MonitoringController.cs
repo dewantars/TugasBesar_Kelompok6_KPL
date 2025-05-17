@@ -29,7 +29,12 @@ namespace HikepassLibrary.Controller
 
         public void RemovePendakiFromMonitoring(Tiket tiket)
         {
-            _monitoringService.RemoveFromMonitoring(tiket);
+            _monitoringService.RemoveFromMonitoring(tiket.Id);
+        }
+
+        public void HandleStatusUpdate()
+        {
+            _monitoringService.HandleStatusUpdate();
         }
     }
 

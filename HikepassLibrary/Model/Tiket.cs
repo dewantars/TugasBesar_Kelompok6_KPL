@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 
 namespace HikepassLibrary.Model
 {
-    
-    
     public class Tiket
     {
         public enum JalurPendakian
