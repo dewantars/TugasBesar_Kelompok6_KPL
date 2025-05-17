@@ -117,6 +117,8 @@ class Program
 
                             Console.WriteLine();
                             monitoring.HandleStatusUpdate();
+
+
                             break;
 
                             case "2":
@@ -186,7 +188,7 @@ class Program
                                 {
                                     case 1:
                                         Console.WriteLine("Lihat Tiket:");
-                                        tiketCtrl.TampilkanTiket();
+                                        tiketCtrl.TampilkanDaftarTiket();
                                     break;
                                     case 2:
                                         Console.WriteLine("Bayar Tiket:");
@@ -194,11 +196,11 @@ class Program
                                         break;
                                     case 3:
                                         Console.WriteLine("Reschedule Tiket:");
-                                        tiketCtrl.RescheduleTiket();
+                                        //tiketCtrl.RescheduleTiket();
                                     break;
                                     case 4:
                                         Console.WriteLine("Batalkan Tiket:");
-                                        tiketCtrl.HapusTiket();
+                                        //tiketCtrl.HapusTiket();
                                     break;
                                     case 5:
                                         Console.WriteLine("Lihat Riwayat Pendakian:");

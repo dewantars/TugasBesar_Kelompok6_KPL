@@ -18,6 +18,7 @@ namespace HikepassLibrary.Controller
         private readonly MonitoringService _monitoringService;
         private readonly MonitoringController _monitoringController;
 
+        public TiketController() { }
         public TiketController(TiketService tiketService, MonitoringService monitoringService)
         {
             _tiketService = tiketService;
