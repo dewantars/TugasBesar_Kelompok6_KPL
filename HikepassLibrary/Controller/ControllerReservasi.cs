@@ -74,8 +74,8 @@ namespace HikepassLibrary.Controller
                 int id = reservasiList.Count == 0 ? 1 : reservasiList.Max(r => r.Id) + 1;
                 Dictionary<int, Jarak> jarakTabel = new Dictionary<int, Jarak>
                 {
-                    { 0, Jarak.Pendek }, // Pilihan untuk Pendek
-                    { 1, Jarak.Sedang }  // Pilihan untuk Sedang
+                    { 0, Jarak.Pendek }, 
+                    { 1, Jarak.Sedang }  
                 };
 
                 Console.Write("Jarak Pendakian (0 = Panorama(pendek) / 1 = Cinyiruan(sedang): ");
@@ -90,23 +90,23 @@ namespace HikepassLibrary.Controller
                 else
                 {
                     Console.WriteLine("Pilihan jarak tidak valid. Menggunakan default: Pendek.");
-                    jarak = Jarak.Pendek; // Default jika input tidak valid
+                    jarak = Jarak.Pendek; 
                 }
 
-                // Menentukan Jalur Pendakian berdasarkan Jarak
+                
                 Tiket.JalurPendakian jalur;
                 if (jarak == Jarak.Pendek)
                 {
-                    jalur = Tiket.JalurPendakian.Panorama;  // Jika Jarak Pendek, Jalur adalah Panorama
+                    jalur = Tiket.JalurPendakian.Panorama;  
                 }
                 else if (jarak == Jarak.Sedang)
                 {
-                    jalur = Tiket.JalurPendakian.Cinyiruan; // Jika Jarak Sedang, Jalur adalah Cinyiruan
+                    jalur = Tiket.JalurPendakian.Cinyiruan; 
                 }
                 else
                 {
                     Console.WriteLine("Jalur tidak valid berdasarkan jarak.");
-                    jalur = Tiket.JalurPendakian.Panorama; // Default jika terjadi kesalahan
+                    jalur = Tiket.JalurPendakian.Panorama; 
                 }
                 Console.Write("Masukkan tanggal pendakian (format:YYYY-MM-DD): ");
                 DateTime tanggalPendakian;
@@ -157,7 +157,7 @@ namespace HikepassLibrary.Controller
                     StatusPembayaran = false, 
                     JumlahPendaki = jumlahPendaki,
                     Kontak = nomorHP,
-                    Jalur = (int)jalur,  
+                    Jalur = jalur,  
                     IsCheckedIn = false,
                     DaftarPendaki = daftarPendaki.ToDictionary(
                     kvp => kvp.Key,

@@ -41,6 +41,7 @@ namespace HikepassLibrary.Controller
         }
 
 
+
         public void Selesaikan(Tiket tiket)
         {
             TampilkanDaftarTiket();
@@ -122,6 +123,7 @@ namespace HikepassLibrary.Controller
                             
                             ControllerReservasi.UpdatedPembayaran("http://localhost:5226/api/reservasi", idTiket);
                             selectedTiket.Status = StatusTiket.Dibayar;
+                            selectedTiket.StatusPembayaran = true;
                             Console.WriteLine("Pembayaran berhasil!");
 
                         }

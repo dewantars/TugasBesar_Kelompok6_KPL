@@ -49,18 +49,8 @@ namespace HikepassAPI.Controllers
             if (newReservasi.DaftarPendaki == null || !newReservasi.DaftarPendaki.Any())
                 return BadRequest("Daftar pendaki tidak boleh kosong.");
 
-            // Table-Driven Validation for JalurPendakian
-            Dictionary<int, JalurPendakian> jalurTabel = new Dictionary<int, JalurPendakian>
-            {
-                { 0, JalurPendakian.Panorama },
-                { 1, JalurPendakian.Cinyiruan }
-            };
-
-            if (!jalurTabel.ContainsKey((int)newReservasi.Jalur))
+            if (!Enum.IsDefined(typeof(JalurPendakian), newReservasi.Jalur))
                 return BadRequest("Jalur pendakian tidak valid.");
-
-            // Convert the numeric Jalur to the enum value
-            newReservasi.Jalur = jalurTabel[(int)newReservasi.Jalur];
 
             if (newReservasi.Tanggal == default)
                 return BadRequest("Tanggal pendakian harus diisi.");
