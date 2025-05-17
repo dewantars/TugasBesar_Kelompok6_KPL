@@ -6,7 +6,7 @@ using HikepassLibrary.Model;
 namespace HikepassLibrary.Tests
 {
     [TestClass]
-    public sealed class UnitTestInformasi
+    public class UnitTestInformasi
     {
         [TestMethod]
         public void BuatObjek_DenganDataValid_Berhasil()
