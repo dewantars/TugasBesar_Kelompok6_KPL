@@ -135,5 +135,10 @@ namespace HikepassAPI.Controllers
 
             return NoContent();
         }
+
+        public async Task BayarTiket(Tiket tiket)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
