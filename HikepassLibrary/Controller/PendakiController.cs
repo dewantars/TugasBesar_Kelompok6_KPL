@@ -36,9 +36,6 @@ namespace HikepassApp.Controller
                 Console.WriteLine("Anda belum memiliki tiket yang dibayar.");
             }
         }
-
-        
-
         
     }
 }
