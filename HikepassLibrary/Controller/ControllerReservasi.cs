@@ -72,8 +72,42 @@ namespace HikepassLibrary.Controller
                 pendaki.Usia = usiaPendakiInt;
                 
                 int id = reservasiList.Count == 0 ? 1 : reservasiList.Max(r => r.Id) + 1;
-                Console.Write("Jalur Pendakian (0 = Panorama/ 1 = Cinyiruan): ");
-                int jalur = int.Parse(Console.ReadLine());
+                Dictionary<int, Jarak> jarakTabel = new Dictionary<int, Jarak>
+                {
+                    { 0, Jarak.Pendek }, 
+                    { 1, Jarak.Sedang }  
+                };
+
+                Console.Write("Jarak Pendakian (0 = Panorama(pendek) / 1 = Cinyiruan(sedang): ");
+                int jarakInput = int.Parse(Console.ReadLine());
+
+                // Menentukan Jarak Pendakian menggunakan tabel
+                Jarak jarak;
+                if (jarakTabel.ContainsKey(jarakInput))
+                {
+                    jarak = jarakTabel[jarakInput];
+                }
+                else
+                {
+                    Console.WriteLine("Pilihan jarak tidak valid. Menggunakan default: Pendek.");
+                    jarak = Jarak.Pendek; 
+                }
+
+                
+                Tiket.JalurPendakian jalur;
+                if (jarak == Jarak.Pendek)
+                {
+                    jalur = Tiket.JalurPendakian.Panorama;  
+                }
+                else if (jarak == Jarak.Sedang)
+                {
+                    jalur = Tiket.JalurPendakian.Cinyiruan; 
+                }
+                else
+                {
+                    Console.WriteLine("Jalur tidak valid berdasarkan jarak.");
+                    jalur = Tiket.JalurPendakian.Panorama; 
+                }
                 Console.Write("Masukkan tanggal pendakian (format:YYYY-MM-DD): ");
                 DateTime tanggalPendakian;
                 while (!DateTime.TryParse(Console.ReadLine(), out tanggalPendakian))
@@ -123,7 +157,7 @@ namespace HikepassLibrary.Controller
                     StatusPembayaran = false, 
                     JumlahPendaki = jumlahPendaki,
                     Kontak = nomorHP,
-                    Jalur = (int)(Tiket.JalurPendakian)jalur,  
+                    Jalur = jalur,  
                     IsCheckedIn = false,
                     DaftarPendaki = daftarPendaki.ToDictionary(
                     kvp => kvp.Key,
@@ -141,7 +175,7 @@ namespace HikepassLibrary.Controller
                     StatusPembayaran = newReservasi.StatusPembayaran,
                     JumlahPendaki = newReservasi.JumlahPendaki,
                     Kontak = newReservasi.Kontak,
-                    Jalur = (Tiket.JalurPendakian)newReservasi.Jalur,
+                    Jalur = jalur,
                     IsCheckedIn = newReservasi.IsCheckedIn,
                     DaftarPendaki = newReservasi.DaftarPendaki,
                     Status = (Tiket.StatusTiket)newReservasi.Status,
@@ -354,12 +388,11 @@ namespace HikepassLibrary.Controller
                 {
                     tiketToUpdate.Status = Tiket.StatusTiket.Selesai;
                     tiketToUpdate.IsCheckedIn = false;
-
-                    
                 }
                 else
                 {
                     Console.WriteLine("Tiket belum dibayar. Silakan lakukan pembayaran terlebih dahulu.");
+                    Console.WriteLine("");
                     return;
                 }
 
@@ -393,11 +426,79 @@ namespace HikepassLibrary.Controller
 
                     if (response.IsSuccessStatusCode)
                     {
-                        Console.WriteLine("Reservasi berhasil diperbarui pada server!");
+                        Console.WriteLine("Tiket berhasil diperbarui pada server!");
                     }
                     else
                     {
                         Console.WriteLine($"Failed to update reservasi. Status code: {response.StatusCode}");
+                        var errorContent = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"Error details: {errorContent}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+        public static async Task RescheduleTanggalTiket(string baseUrl, int id, DateTime newTanggal)
+        {
+            try
+            {
+                Tiket tiketToReschedule = reservasiList.FirstOrDefault(t => t.Id == id);
+
+                if (tiketToReschedule == null)
+                {
+                    Console.WriteLine("Tiket dengan ID tersebut tidak ditemukan.");
+                    return;
+                }
+
+                // Memeriksa apakah tiket dapat diubah tanggalnya
+                if (tiketToReschedule.Status != Tiket.StatusTiket.BelumDibayar)
+                {
+                    Console.WriteLine("Tanggal tidak dapat diubah karena tiket sudah dibayar atau digunakan.");
+                    return;
+                }
+
+                // Mengubah tanggal tiket
+                tiketToReschedule.Tanggal = newTanggal;
+
+                // Membuat objek untuk dikirim ke server
+                var updatedReservasi = new
+                {
+                    Id = tiketToReschedule.Id,
+                    Tanggal = tiketToReschedule.Tanggal.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
+                    StatusPembayaran = tiketToReschedule.StatusPembayaran,
+                    JumlahPendaki = tiketToReschedule.JumlahPendaki,
+                    Kontak = tiketToReschedule.Kontak,
+                    Jalur = (int)tiketToReschedule.Jalur,
+                    IsCheckedIn = tiketToReschedule.IsCheckedIn,
+                    DaftarPendaki = tiketToReschedule.DaftarPendaki.ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
+                    Status = tiketToReschedule.Status,
+                    BarangBawaanSaatCheckin = tiketToReschedule.BarangBawaanSaatCheckin,
+                    BarangBawaanSaatCheckout = tiketToReschedule.BarangBawaanSaatCheckout,
+                    Keterangan = tiketToReschedule.Keterangan
+                };
+
+                // Menampilkan informasi tiket yang diperbarui
+                tiketToReschedule.ShowTiketInfo();
+
+                using (var client = new HttpClient())
+                {
+                    client.Timeout = TimeSpan.FromSeconds(30);
+                    var json = JsonSerializer.Serialize(updatedReservasi);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    var response = await client.PutAsync($"{baseUrl}/{id}", content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        Console.WriteLine("Tanggal tiket berhasil diperbarui pada server!");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Failed to update tiket. Status code: {response.StatusCode}");
                         var errorContent = await response.Content.ReadAsStringAsync();
                         Console.WriteLine($"Error details: {errorContent}");
                     }
@@ -505,23 +606,45 @@ namespace HikepassLibrary.Controller
             }
         }
 
-        public static async Task DeleteReservasi(string baseUrl)
+        public static async Task DeleteTiket(string baseUrl, int id)
         {
-            Console.Write("Enter Reservasi ID to delete: ");
-            int id = int.Parse(Console.ReadLine());
-            using (var client = new HttpClient())
+            try
             {
-                var response = await client.DeleteAsync($"{baseUrl}/{id}");
-                if (response.IsSuccessStatusCode)
+                // Cari tiket di dalam reservasiList
+                Tiket tiketToDelete = reservasiList.FirstOrDefault(t => t.Id == id);
+
+                if (tiketToDelete == null)
                 {
-                    Console.WriteLine("Reservasi deleted successfully!");
+                    Console.WriteLine("Tiket dengan ID tersebut tidak ditemukan.");
+                    return;
                 }
-                else
+
+                // Hapus dari server
+                using (var client = new HttpClient())
                 {
-                    Console.WriteLine($"Failed to delete reservasi. Status code: {response.StatusCode}");
+                    client.Timeout = TimeSpan.FromSeconds(30);
+                    var response = await client.DeleteAsync($"{baseUrl}/{id}");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Hapus dari daftar lokal
+                        reservasiList.Remove(tiketToDelete);
+                        Console.WriteLine("Tiket berhasil dihapus!");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Gagal menghapus tiket. Status code: {response.StatusCode}");
+                        var errorContent = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"Error details: {errorContent}");
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
         }
+
         public static async Task GetReservasiById(string baseUrl)
         {
             Console.Write("Enter Reservasi ID: ");
@@ -541,5 +664,6 @@ namespace HikepassLibrary.Controller
                 }
             }
         }
+
     }
 }

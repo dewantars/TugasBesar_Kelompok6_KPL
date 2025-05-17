@@ -7,8 +7,6 @@ using HikepassLibrary.Controller;
 using System.Text.Json;
 using System.Text;
 using System.Xml.Schema;
-
-using HikepassApp;
 using System.Threading.Tasks;
 using HikepassApp.Controller;
 
@@ -188,22 +186,20 @@ class Program
                                 {
                                     case 1:
                                         Console.WriteLine("Lihat Tiket:");
-                                        await ControllerReservasi.GetAllReservasi(baseUrl);
-                                        break;
+                                        tiketCtrl.TampilkanTiket();
+                                    break;
                                     case 2:
                                         Console.WriteLine("Bayar Tiket:");
                                         tiketCtrl.BayarTiket(tiket);
                                         break;
                                     case 3:
                                         Console.WriteLine("Reschedule Tiket:");
-                                        await ControllerReservasi.GetAllReservasi(baseUrl);
-                                        await ControllerReservasi.UpdateReservasi(baseUrl, loggedInPendaki);
-                                        break;
+                                        tiketCtrl.RescheduleTiket();
+                                    break;
                                     case 4:
                                         Console.WriteLine("Batalkan Tiket:");
-                                        await ControllerReservasi.GetAllReservasi(baseUrl);
-                                        await ControllerReservasi.DeleteReservasi(baseUrl);
-                                        break;
+                                        tiketCtrl.HapusTiket();
+                                    break;
                                     case 5:
                                         Console.WriteLine("Lihat Riwayat Pendakian:");
                                         riwayat.ShowRiwayat();
