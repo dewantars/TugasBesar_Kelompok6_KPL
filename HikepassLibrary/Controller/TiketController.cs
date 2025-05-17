@@ -8,6 +8,7 @@ using HikepassLibrary.Model;
 using HikepassLibrary.Service;
 using static HikepassLibrary.Model.Tiket;
 using HikepassApp;
+using System.Text.Json;
 
 namespace HikepassLibrary.Controller
 {
@@ -38,6 +39,7 @@ namespace HikepassLibrary.Controller
                 Console.WriteLine("----------------------------------------------------");
             }
         }
+
 
 
         public void Selesaikan(Tiket tiket)
@@ -120,6 +122,7 @@ namespace HikepassLibrary.Controller
                             
                             ControllerReservasi.UpdatedPembayaran("http://localhost:5226/api/reservasi", idTiket);
                             selectedTiket.Status = StatusTiket.Dibayar;
+                            selectedTiket.StatusPembayaran = true;
                             Console.WriteLine("Pembayaran berhasil!");
 
                             _monitoringService.AddToMonitoring(selectedTiket);
