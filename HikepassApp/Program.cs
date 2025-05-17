@@ -7,8 +7,6 @@ using HikepassLibrary.Controller;
 using System.Text.Json;
 using System.Text;
 using System.Xml.Schema;
-
-using HikepassApp;
 using System.Threading.Tasks;
 using HikepassApp.Controller;
 
