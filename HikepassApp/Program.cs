@@ -186,7 +186,7 @@ class Program
                                 {
                                     case 1:
                                         Console.WriteLine("Lihat Tiket:");
-                                        tiketCtrl.TampilkanTiket();
+                                        tiketCtrl.TampilkanDaftarTiket();
                                     break;
                                     case 2:
                                         Console.WriteLine("Bayar Tiket:");
