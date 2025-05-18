@@ -16,8 +16,9 @@ namespace HikepassLibrary.Controller
     {
         private readonly TiketService _tiketService;
         private readonly MonitoringService _monitoringService;
-        
-        public TiketController(){}
+        private readonly MonitoringController _monitoringController;
+
+        public TiketController() { }
         public TiketController(TiketService tiketService, MonitoringService monitoringService)
         {
             _tiketService = tiketService;
@@ -39,6 +40,7 @@ namespace HikepassLibrary.Controller
                 Console.WriteLine("----------------------------------------------------");
             }
         }
+
 
 
         public void Selesaikan(Tiket tiket)
@@ -97,7 +99,6 @@ namespace HikepassLibrary.Controller
             }
         }
 
-       
         public void BayarTiket(Tiket tiket)
         {
             TampilkanDaftarTiket();
@@ -122,7 +123,10 @@ namespace HikepassLibrary.Controller
                             
                             ControllerReservasi.UpdatedPembayaran("http://localhost:5226/api/reservasi", idTiket);
                             selectedTiket.Status = StatusTiket.Dibayar;
+                            selectedTiket.StatusPembayaran = true;
                             Console.WriteLine("Pembayaran berhasil!");
+
+                            _monitoringService.AddToMonitoring(selectedTiket);
 
                         }
                     }
@@ -177,6 +181,7 @@ namespace HikepassLibrary.Controller
                         string jawaban = Console.ReadLine();
                         if (jawaban.ToLower() == "y")
                         {
+                           
                             Console.WriteLine("Barang yang dibawa: ");
                             string InputBarangBawaan;
                             while (true)  
@@ -269,145 +274,7 @@ namespace HikepassLibrary.Controller
                 Console.WriteLine("ID Tiket tidak valid.");
             }
         }
-        public void RescheduleTiket()
-        {
-            TampilkanDaftarTiket();
-            Console.Write("Masukkan ID Tiket yang ingin diubah tanggalnya: ");
-            if (int.TryParse(Console.ReadLine(), out int idTiket))
-            {
-                if (idTiket == 0)
-                {
-                    return;
-                }
-                Tiket selectedTiket = ControllerReservasi.reservasiList.FirstOrDefault(t => t.Id == idTiket);
-                if (selectedTiket != null)
-                {
-                    if (selectedTiket.Status == StatusTiket.BelumDibayar)
-                    {
-                        Console.Write("Masukkan tanggal baru (yyyy-MM-dd): ");
-                        if (DateTime.TryParse(Console.ReadLine(), out DateTime newTanggal))
-                        {
-                            selectedTiket.Tanggal = newTanggal;
-                            Console.WriteLine("Tanggal tiket berhasil diubah.");
-                            ControllerReservasi.RescheduleTanggalTiket("http://localhost:5226/api/reservasi", idTiket, newTanggal);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Format tanggal tidak valid.");
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Tanggal hanya dapat diubah untuk tiket yang belum dibayar.");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("ID Tiket tidak valid.");
-                }
-            }
-            else
-            {
-                Console.WriteLine("ID Tiket tidak valid.");
-            }
-        }
-
-        public void HapusTiket()
-        {
-            TampilkanDaftarTiket();
-            Console.Write("Masukkan ID Tiket yang ingin dihapus: ");
-            if (int.TryParse(Console.ReadLine(), out int idTiket))
-            {
-                if (idTiket == 0)
-                {
-                    return;
-                }
-                Tiket selectedTiket = ControllerReservasi.reservasiList.FirstOrDefault(t => t.Id == idTiket);
-                if (selectedTiket != null)
-                {
-                    Console.Write("Apakah Anda yakin ingin menghapus tiket ini (y/n): ");
-                    string jawaban = Console.ReadLine();
-                    if (jawaban.ToLower() == "y")
-                    {
-                        ControllerReservasi.DeleteTiket("http://localhost:5226/api/reservasi", idTiket);
-                        ControllerReservasi.reservasiList.Remove(selectedTiket);
-                        Console.WriteLine("Tiket berhasil dihapus.");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Penghapusan tiket dibatalkan.");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("ID Tiket tidak valid.");
-                }
-            }
-            else
-            {
-                Console.WriteLine("ID Tiket tidak valid.");
-            }
-        }
-
-        public async Task TampilkanTiketAsync(string baseUrl)
-        {
-            try
-            {
-                // Mendapatkan data reservasi dari server
-                using (var client = new HttpClient())
-                {
-                    var response = await client.GetAsync(baseUrl);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var result = await response.Content.ReadAsStringAsync();
-                        var reservasiList = JsonSerializer.Deserialize<List<Tiket>>(result);
-
-                        if (reservasiList != null && reservasiList.Any())
-                        {
-                            Console.WriteLine("Tiket saya:");
-
-                            foreach (var tiket in reservasiList)
-                            {
-                                Console.WriteLine($"ID: {tiket.Id}");
-                                Console.WriteLine($"Tanggal: {tiket.Tanggal:yyyy-MM-dd}");
-                                Console.WriteLine($"Status: {tiket.Status}");
-                                Console.WriteLine($"Jumlah Pendaki: {tiket.JumlahPendaki}");
-                                Console.WriteLine($"Jalur: {tiket.Jalur}");
-                                Console.WriteLine("---------------------------------------------");
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine("Tidak ada tiket yang tersedia.");
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Failed to get reservasi. Status code: {response.StatusCode}");
-                    }
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                Console.WriteLine($"Request error: {ex.Message}");
-                if (ex.InnerException != null)
-                {
-                    Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
-                }
-            }
-            catch (TaskCanceledException ex)
-            {
-                Console.WriteLine($"Request timeout: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Unexpected error: {ex.Message}");
-            }
-        }
-
-
-
-
+        
     }
 }
 
