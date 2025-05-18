@@ -33,11 +33,10 @@ namespace HikepassLibrary.Controller
                 return;
             }
 
-            Console.WriteLine("==================== Daftar Tiket ====================");
+            Console.WriteLine("------------------------- Daftar Tiket --------------------------");
             foreach (var tiket in ControllerReservasi.reservasiList)
             {
-                tiket.ShowTiketInfo();  // Menampilkan informasi tiket
-                Console.WriteLine("----------------------------------------------------");
+                tiket.ShowTiketInfo(); 
             }
         }
 
@@ -46,6 +45,7 @@ namespace HikepassLibrary.Controller
         public void Selesaikan(Tiket tiket)
         {
             TampilkanDaftarTiket();
+            Console.WriteLine(" ");
             Console.Write("Masukkan ID Tiket yang ingin di selesaikan: ");
             if (int.TryParse(Console.ReadLine(), out int idTiket))
             {
@@ -102,6 +102,7 @@ namespace HikepassLibrary.Controller
         public void BayarTiket(Tiket tiket)
         {
             TampilkanDaftarTiket();
+            Console.WriteLine(" ");
             Console.Write("Masukkan ID Tiket yang ingin di bayar: ");
             if (int.TryParse(Console.ReadLine(), out int idTiket))
             {
@@ -117,6 +118,7 @@ namespace HikepassLibrary.Controller
                     {
                         Console.Write("Apakah Anda ingin melanjutkan pembayaran dengan qris? (y/n): ");
                         string jawaban = Console.ReadLine();
+                        Console.WriteLine();
                         if (jawaban.ToLower() == "y")
                         {
                             
@@ -163,6 +165,7 @@ namespace HikepassLibrary.Controller
         public void KonfirmasiTiket(Pendaki pendaki, MonitoringController monitoring)
         {
             TampilkanDaftarTiket();
+            Console.WriteLine(" ");
             Console.Write("Masukkan ID Tiket yang ingin di Check-in/Check-out (0 untuk kembali): ");
             if (int.TryParse(Console.ReadLine(), out int idTiket))
             {
@@ -209,8 +212,6 @@ namespace HikepassLibrary.Controller
                             selectedTiket.Status = StatusTiket.Checkin;
                             monitoring.AddPendakiToMonitoring(selectedTiket);
                             Console.WriteLine("Check-in berhasil!");
-                            
-
                         }
                     }
                     else if (selectedTiket.Status == StatusTiket.Checkin)
@@ -247,8 +248,6 @@ namespace HikepassLibrary.Controller
                             selectedTiket.Status = StatusTiket.Checkout;
                             monitoring.RemovePendakiFromMonitoring(selectedTiket);
                             Console.WriteLine("Check-out berhasil!");
-                            
-
                         }
                         else
                         {
@@ -307,8 +306,6 @@ namespace HikepassLibrary.Controller
 
             await ControllerReservasi.RescheduleTanggalTiket(baseUrl, idTiket, tanggalBaru);
         }
-
-
     }
 }
 
