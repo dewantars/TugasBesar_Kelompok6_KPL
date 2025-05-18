@@ -189,7 +189,7 @@ namespace HikepassLibrary.Controller
                             string InputBarangBawaan;
                             while (true)  
                             {
-                                Console.WriteLine("Masukkan nama barang (atau ketik '0' atau 'selesai' untuk selesai): ");
+                                Console.Write("Masukkan nama barang (atau ketik '0' atau 'selesai' untuk selesai): ");
                                 InputBarangBawaan = Console.ReadLine();  
 
                                 if (InputBarangBawaan.ToLower() == "selesai" || InputBarangBawaan == "0")
@@ -220,7 +220,8 @@ namespace HikepassLibrary.Controller
                         string jawab = Console.ReadLine();
                         if (jawab.ToLower() == "y")
                         {
-                            
+
+                            Console.WriteLine("Barang yang dibawa: ");
                             string InputBarangBawaan;
                             while (true)  
                             {
@@ -304,6 +305,7 @@ namespace HikepassLibrary.Controller
                 return;
             }
 
+            Console.WriteLine();
             await ControllerReservasi.RescheduleTanggalTiket(baseUrl, idTiket, tanggalBaru);
         }
     }

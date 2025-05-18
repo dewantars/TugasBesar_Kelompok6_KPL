@@ -72,7 +72,7 @@ namespace HikepassLibrary.Model
             Console.WriteLine("Daftar Jalur:");
             Console.WriteLine("1. Puncak Besar Malabar Via Cinyiruan(Sedang) 50k/orang");
             Console.WriteLine("2. Puncak Besar Malabar Via Panorama(Pendek) 20k/orang");
-            Console.WriteLine("Lanjutkan reservasi y/n?");
+            Console.Write("Lanjutkan reservasi y/n?: ");
         }   
     }
 }
