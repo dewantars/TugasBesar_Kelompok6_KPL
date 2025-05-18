@@ -34,18 +34,17 @@ namespace HikepassLibrary.Model
 
         public void TampilkanInformasi()
         {
-            Console.WriteLine("\n------------------- Informasi -------------------");
+            Console.WriteLine("--------------------------- Informasi ---------------------------");
             Console.WriteLine("ID Informasi   : " + IdInformasi);
             Console.WriteLine("Kategori       : " + Kategori);
             Console.WriteLine("Judul          : " + Judul);
             Console.WriteLine("Isi            : " + Isi);
             Console.WriteLine("Tanggal Dibuat : " + TanggalDibuat.ToString("dd/MM/yyyy HH:mm:ss"));
-            Console.WriteLine();
         }
 
         public static Informasi<T> EditInformasi()
         {
-            Console.WriteLine("------------- Edit Informasi Pendakian -------------");
+            Console.WriteLine("-------------------- Edit Informasi Pendakian -------------------");
 
             DateTime tanggal = DateTime.Now;
             string idOtomatis = "INF" + tanggal.ToString("yyyyMMddHHmmss");

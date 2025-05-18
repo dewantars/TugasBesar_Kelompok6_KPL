@@ -29,7 +29,7 @@ namespace HikepassLibrary.Model
 
             foreach (var tiket in riwayatList)
             {
-                Console.WriteLine("==================================");
+                Console.WriteLine("---------------------- Riwayat Pendakian ------------------------");
                 tiket.ShowTiketInfo();
                 Console.WriteLine("Barang Bawaan Saat Check-In: " + string.Join(", ", tiket.BarangBawaanSaatCheckin));
                 Console.WriteLine("Barang Bawaan Saat Check-Out: " + string.Join(", ", tiket.BarangBawaanSaatCheckout));
