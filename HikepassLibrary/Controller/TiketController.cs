@@ -274,7 +274,41 @@ namespace HikepassLibrary.Controller
                 Console.WriteLine("ID Tiket tidak valid.");
             }
         }
-        
+
+        public async Task HapusTiketAsync(string baseUrl)
+        {
+            Console.Write("Masukkan ID tiket yang ingin dihapus: ");
+            if (int.TryParse(Console.ReadLine(), out int idTiket))
+            {
+                await ControllerReservasi.DeleteTiket(baseUrl, idTiket);
+            }
+            else
+            {
+                Console.WriteLine("Input ID tidak valid.");
+            }
+        }
+
+        // Meminta input ID dan tanggal baru lalu memanggil RescheduleTanggalTiket
+        public async Task UbahTanggalTiketAsync(string baseUrl)
+        {
+            Console.Write("Masukkan ID tiket yang ingin diubah tanggalnya: ");
+            if (!int.TryParse(Console.ReadLine(), out int idTiket))
+            {
+                Console.WriteLine("Input ID tidak valid.");
+                return;
+            }
+
+            Console.Write("Masukkan tanggal baru (format YYYY-MM-DD): ");
+            if (!DateTime.TryParse(Console.ReadLine(), out DateTime tanggalBaru))
+            {
+                Console.WriteLine("Format tanggal tidak valid.");
+                return;
+            }
+
+            await ControllerReservasi.RescheduleTanggalTiket(baseUrl, idTiket, tanggalBaru);
+        }
+
+
     }
 }
 

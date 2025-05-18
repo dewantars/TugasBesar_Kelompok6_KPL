@@ -196,11 +196,11 @@ class Program
                                         break;
                                     case 3:
                                         Console.WriteLine("Reschedule Tiket:");
-                                        //tiketCtrl.RescheduleTiket();
+                                        await tiketCtrl.UbahTanggalTiketAsync(baseUrl);
                                     break;
                                     case 4:
                                         Console.WriteLine("Batalkan Tiket:");
-                                        //tiketCtrl.HapusTiket();
+                                        await tiketCtrl.HapusTiketAsync(baseUrl);
                                     break;
                                     case 5:
                                         Console.WriteLine("Lihat Riwayat Pendakian:");
