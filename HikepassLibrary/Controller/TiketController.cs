@@ -62,12 +62,13 @@ namespace HikepassLibrary.Controller
                         string jawaban = Console.ReadLine();
                         if (jawaban.ToLower() == "y")
                         {
-                            selectedTiket.Status = StatusTiket.Selesai;
+                            
                             selectedTiket.IsCheckedIn = false;
-                            Console.WriteLine("Pendakian Berakhir!");
                             ControllerReservasi.Selesaikan("http://localhost:5226/api/reservasi", idTiket, true);
+                            selectedTiket.Status = StatusTiket.Selesai;
+                            Console.WriteLine("\nPendakian Berakhir!");
 
-                            RiwayatPendakian.riwayatList.Add(selectedTiket);
+                            //RiwayatPendakian.riwayatList.Add(selectedTiket);
                         }
                     }
                     else if (selectedTiket.Status == StatusTiket.BelumDibayar)
@@ -259,9 +260,13 @@ namespace HikepassLibrary.Controller
                     {
                         Console.WriteLine("Tiket ini sudah Check-out sebelumnya.");
                     }
+                    else if(selectedTiket.Status == StatusTiket.Dibayar || selectedTiket.Status == StatusTiket.BelumDibayar)
+                    {
+                        Console.WriteLine("Tiket sedang tidak di masa Check-out.");
+                    }
                     else
                     {
-                        Console.WriteLine("Tiket belum dibayar. Silakan lakukan pembayaran terlebih dahulu.");
+                        Console.WriteLine("ID Tiket tidak valid.");
                     }
                 }
                 else
