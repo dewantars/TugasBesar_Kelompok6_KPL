@@ -177,7 +177,7 @@ namespace HikepassLibrary.Controller
                     Kontak = newReservasi.Kontak,
                     Jalur = jalur,
                     IsCheckedIn = newReservasi.IsCheckedIn,
-                    DaftarPendaki = newReservasi.DaftarPendaki, 
+                    DaftarPendaki = newReservasi.DaftarPendaki,
                     Status = (Tiket.StatusTiket)newReservasi.Status,
                     BarangBawaanSaatCheckin = newReservasi.BarangBawaanSaatCheckin,
                     BarangBawaanSaatCheckout = newReservasi.BarangBawaanSaatCheckout,
@@ -313,12 +313,14 @@ namespace HikepassLibrary.Controller
                     tiketToUpdate.Status = Tiket.StatusTiket.Checkin;
                     tiketToUpdate.IsCheckedIn = true; // Menandakan bahwa sudah check-in
                     Console.WriteLine("Pendakian berhasil Check-in!");
+                    Console.WriteLine();
                 }
                 else if(tiketToUpdate.Status == Tiket.StatusTiket.Checkin)
                 {
                     tiketToUpdate.Status = Tiket.StatusTiket.Checkout;
                     tiketToUpdate.IsCheckedIn = false; // Menandakan bahwa sudah check-out
                     Console.WriteLine("Pendakian berhasil Check-out!");
+                    Console.WriteLine();
                 }
                 else
                 {
@@ -392,7 +394,6 @@ namespace HikepassLibrary.Controller
                 else
                 {
                     Console.WriteLine("Tiket belum dibayar. Silakan lakukan pembayaran terlebih dahulu.");
-                    Console.WriteLine("");
                     return;
                 }
 

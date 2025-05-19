@@ -6,7 +6,7 @@ using HikepassLibrary.Model;
 namespace HikepassTestProject
 {
     [TestClass]
-    public sealed class UnitTestLaporan
+    public class UnitTestLaporan
     {
         [TestMethod]
         public void Laporan_Constructor_ValidInput_ShouldSucceed()
