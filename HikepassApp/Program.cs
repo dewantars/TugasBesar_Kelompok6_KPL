@@ -153,8 +153,8 @@ class Program
                     }
                     else if (loggedInPendaki != null)
                     {
-                        // Menu untuk Pendaki
-
+                    // Menu untuk Pendaki
+                    
                         Menu.menuUser();
                         string pilihan = Console.ReadLine();
                         Console.WriteLine();
@@ -187,6 +187,7 @@ class Program
                                 break;
 
                             case "2":
+
                                 Menu.menuTiketSaya();
                                 int pilihanTiket = int.Parse(Console.ReadLine());
                                 switch (pilihanTiket)
@@ -225,6 +226,9 @@ class Program
                                         Console.WriteLine();
                                         tiketCtrl.Selesaikan(tiket);
                                         Console.WriteLine("-----------------------------------------------------------------");
+                                        break;
+                                    case 8:
+                                        Console.WriteLine("Kembali ke menu utama");
                                         break;
                                     default:
                                         Console.WriteLine("Pilihan tidak valid. Silakan coba lagi.\n");
