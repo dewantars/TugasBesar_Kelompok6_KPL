@@ -38,7 +38,6 @@ namespace HikepassLibrary.Model
             Console.WriteLine("Deskripsi Laporan : " + Deskripsi);
             Console.WriteLine("Lokasi            : " + TitikLokasi);
             Console.WriteLine("Keparahan         : " + TingkatKeparahan);
-            Console.WriteLine();
         }
 
         public static Laporan<T> InputLaporan()
