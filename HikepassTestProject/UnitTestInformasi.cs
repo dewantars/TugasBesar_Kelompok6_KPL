@@ -5,6 +5,7 @@ using HikepassLibrary.Model;
 
 namespace HikepassLibrary.Tests
 {
+
     [TestClass]
     public class UnitTestInformasi
     {
