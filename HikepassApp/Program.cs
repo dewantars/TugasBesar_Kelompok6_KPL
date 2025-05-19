@@ -225,6 +225,7 @@ class Program
                                     case 7:
                                         Console.WriteLine();
                                         tiketCtrl.Selesaikan(tiket);
+                                        riwayat.SaveRiwayat();
                                         Console.WriteLine("-----------------------------------------------------------------");
                                         break;
                                     case 8:
