@@ -68,7 +68,7 @@ namespace HikepassLibrary.Controller
                             selectedTiket.Status = StatusTiket.Selesai;
                             Console.WriteLine("\nPendakian Berakhir!");
 
-                            //RiwayatPendakian.riwayatList.Add(selectedTiket);
+                            RiwayatPendakian.riwayatList.Add(selectedTiket);
                         }
                     }
                     else if (selectedTiket.Status == StatusTiket.BelumDibayar)
