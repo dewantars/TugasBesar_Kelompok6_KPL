@@ -30,7 +30,7 @@ namespace HikepassLibrary.Service
                 };
                 string jsonString = JsonSerializer.Serialize(riwayatList, options);
                 File.WriteAllText(_filePath, jsonString);
-                //Console.WriteLine("Riwayat berhasil disimpan ke file");
+                Console.WriteLine("Riwayat berhasil disimpan ke file");
             }
             catch (Exception ex)
             {

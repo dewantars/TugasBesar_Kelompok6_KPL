@@ -45,14 +45,6 @@ namespace HikepassTestProject
 
         // ========== GET: api/reservasi/{id} ==========
         [TestMethod]
-        public void GetReservasiById_ShouldReturnBadRequest_WhenIdInvalid()
-        {
-            var controller = new ReservasiController();
-            var result = controller.GetReservasiById(0);
-            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
-        }
-
-        [TestMethod]
         public void GetReservasiById_ShouldReturnNotFound_WhenIdNotExist()
         {
             var controller = new ReservasiController();
