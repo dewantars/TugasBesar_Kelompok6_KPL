@@ -26,24 +26,18 @@ namespace HikepassLibrary.Model
                 Trigger = trigger;
             }
         }
-        // Daftar transisi
-        private Transition[] transitions =
+        private readonly Dictionary<(State, Trigger), State> transitions = new()
         {
-            new Transition(State.Basecamp, State.Pos1, Trigger.NaikPos),
-            new Transition(State.Pos1, State.Pos2, Trigger.NaikPos),
-            new Transition(State.Pos2, State.Puncak, Trigger.CapaiPuncak),
-            new Transition(State.Puncak, State.Turun, Trigger.TurunGunung),
-            new Transition(State.Turun, State.Selesai, Trigger.SelesaiPendakian),
+            {(State.Basecamp, Trigger.NaikPos), State.Pos1},
+            {(State.Pos1, Trigger.NaikPos), State.Pos2},
+            {(State.Pos2, Trigger.CapaiPuncak), State.Puncak},
+            {(State.Puncak, Trigger.TurunGunung), State.Turun},
+            {(State.Turun, Trigger.SelesaiPendakian), State.Selesai},
         };
 
         public State GetNext(State from, Trigger trigger)
         {
-            foreach (var t in transitions)
-            {
-                if (t.From == from && t.Trigger == trigger)
-                    return t.To;
-            }
-            return from; // Tidak berubah jika tidak cocok
+            return transitions.TryGetValue((from, trigger), out var to) ? to : from;
         }
 
         private void TriggerAction(Trigger trigger)
