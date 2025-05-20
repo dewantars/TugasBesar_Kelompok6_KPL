@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,18 +17,24 @@ namespace HikepassLibrary.Model
 
         public Laporan(string id, string deskripsi, string lokasi, DateTime waktu, T keparahan)
         {
-            // Defensive: validasi parameter konstruktor
+            // Defensive
             if (string.IsNullOrWhiteSpace(id)) throw new ArgumentException("ID tidak boleh kosong.");
             if (string.IsNullOrWhiteSpace(deskripsi)) throw new ArgumentException("Deskripsi tidak boleh kosong.");
             if (string.IsNullOrWhiteSpace(lokasi)) throw new ArgumentException("Titik lokasi tidak boleh kosong.");
             if (waktu == default) throw new ArgumentException("Waktu tidak valid.");
             if (keparahan == null) throw new ArgumentNullException(nameof(keparahan), "Tingkat keparahan tidak boleh null.");
 
+            // Design by Contract (preconditions)
+            Debug.Assert(id.StartsWith("LAP"), "ID laporan harus diawali dengan 'LAP'");
+
             IdLaporan = id;
             Deskripsi = deskripsi;
             TitikLokasi = lokasi;
             WaktuLaporan = waktu;
             TingkatKeparahan = keparahan;
+
+            // Design by Contract (postcondition)
+            Debug.Assert(!string.IsNullOrEmpty(IdLaporan), "ID tidak boleh kosong setelah konstruksi");
         }
 
         public void PrintLaporan()
@@ -38,14 +45,13 @@ namespace HikepassLibrary.Model
             Console.WriteLine("Deskripsi Laporan : " + Deskripsi);
             Console.WriteLine("Lokasi            : " + TitikLokasi);
             Console.WriteLine("Keparahan         : " + TingkatKeparahan);
-            Console.WriteLine();
         }
 
         public static Laporan<T> InputLaporan()
         {
             Console.WriteLine("----------------------- Input Data Laporan ----------------------");
 
-            // Validasi deskripsi
+            // Defensive + precondition
             string deskripsi;
             do
             {
@@ -55,7 +61,6 @@ namespace HikepassLibrary.Model
                     Console.WriteLine("Deskripsi tidak boleh kosong.");
             } while (string.IsNullOrWhiteSpace(deskripsi));
 
-            // Validasi lokasi
             string lokasi;
             do
             {
@@ -65,7 +70,6 @@ namespace HikepassLibrary.Model
                     Console.WriteLine("Titik lokasi tidak boleh kosong.");
             } while (string.IsNullOrWhiteSpace(lokasi));
 
-            // Input dan validasi tingkat keparahan
             T keparahan;
             if (typeof(T) == typeof(string))
             {
@@ -102,6 +106,8 @@ namespace HikepassLibrary.Model
             DateTime waktu = DateTime.Now;
             string idOtomatis = "LAP" + waktu.ToString("yyyyMMddHHmmss");
 
+            // Postcondition
+            Debug.Assert(!string.IsNullOrEmpty(idOtomatis), "ID tidak terbentuk dengan benar");
             return new Laporan<T>(idOtomatis, deskripsi, lokasi, waktu, keparahan);
         }
     }

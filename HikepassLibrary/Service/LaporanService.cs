@@ -18,9 +18,16 @@ namespace HikepassLibrary.Service
 
         public static void PrintLaporan()
         {
-            foreach (var laporan in listLaporan)
+            if (listLaporan.Count == 0)
             {
-                laporan.PrintLaporan();
+                Console.WriteLine("Belum ada laporan tersedia.");
+            }
+            else
+            {
+                foreach (var laporan in listLaporan)
+                {
+                    laporan.PrintLaporan();
+                }
             }
         }
         public static void PrintLaporanById(string id)
