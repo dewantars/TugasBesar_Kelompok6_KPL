@@ -128,9 +128,6 @@ namespace HikepassLibrary.Controller
                             selectedTiket.Status = StatusTiket.Dibayar;
                             selectedTiket.StatusPembayaran = true;
                             Console.WriteLine("Pembayaran berhasil!");
-
-                            
-
                         }
                     }
                     else if (selectedTiket.Status == StatusTiket.Dibayar)

@@ -113,28 +113,30 @@ class Program
                         switch (pilihan)
                         {
                             case "1":
-                            Console.WriteLine("Monitoring Pendaki");
+                            Console.WriteLine("---------------------- Monitoring Pendaki -----------------------");
                             monitoringService.ShowMonitoring();
 
                             Console.WriteLine();
                             monitoring.HandleStatusUpdate();
+                            Console.WriteLine("-----------------------------------------------------------------");
 
 
                             break;
 
                             case "2":
-                                Console.WriteLine("Edit Informasi:");
+                                Console.WriteLine("-------------------- Edit Informasi Pendakian -------------------");
                                 informasiService.TambahAtauEditInformasi();
+                                Console.WriteLine("-----------------------------------------------------------------");
                             break;
 
                             case "3":
-                                Console.WriteLine("Lihat Laporan:");
                                 LaporanService.PrintLaporan();
+                                Console.WriteLine("-----------------------------------------------------------------");
                             break;
                             case "4":
-                                Console.WriteLine("Lihat Riwayat Pendakian:");
                                 riwayat.SaveRiwayat();
                                 riwayat.ShowRiwayat();
+                                Console.WriteLine("-----------------------------------------------------------------");
                             break;
                             case "5":
                                 Console.WriteLine("Terima kasih telah menggunakan Hikepass. Sampai jumpa!");
@@ -223,6 +225,7 @@ class Program
                                     case 7:
                                         Console.WriteLine();
                                         tiketCtrl.Selesaikan(tiket);
+                                        riwayat.SaveRiwayat();
                                         Console.WriteLine("-----------------------------------------------------------------");
                                         break;
                                     case 8:
@@ -235,6 +238,7 @@ class Program
                                 break;
 
                             case "3":
+                                Console.WriteLine("--------------------------- Informasi ---------------------------");
                                 informasiService.TampilkanInformasi();
                                 Console.WriteLine("-----------------------------------------------------------------");
                             break;
@@ -266,5 +270,4 @@ class Program
             
         }
     }
-
 }

@@ -41,25 +41,10 @@ namespace HikepassLibrary.Service
 
             try
             {
-                daftarInformasi = Informasi<string>.BacaDariFileJson<string>(filePath);
-            }
-            catch (FileNotFoundException)
-            {
-                daftarInformasi = new List<Informasi<string>>();
-            }
+                informasi.TampilkanInformasi();
 
-            Console.WriteLine("\n===== Daftar Informasi Saat Ini =====");
-            for (int i = 0; i < daftarInformasi.Count; i++)
-            {
-                Console.WriteLine($"\n[{i + 1}]");
-                daftarInformasi[i].TampilkanInformasi();
-            }
-
-            Console.WriteLine("\nIngin menambahkan informasi baru atau mengedit yang lama?");
-            Console.WriteLine("[1] Tambah baru");
-            Console.WriteLine("[2] Edit informasi lama");
-            Console.Write("Pilihan Anda: ");
-            var input = Console.ReadLine();
+                Console.Write("\nApakah Anda ingin mengedit informasi ini? (y/n): ");
+                var pilihan = Console.ReadLine()?.Trim().ToLower();
 
             if (input == "1")
             {

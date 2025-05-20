@@ -34,7 +34,6 @@ namespace HikepassLibrary.Model
 
         public void TampilkanInformasi()
         {
-            Console.WriteLine("--------------------------- Informasi ---------------------------");
             Console.WriteLine("ID Informasi   : " + IdInformasi);
             Console.WriteLine("Kategori       : " + Kategori);
             Console.WriteLine("Judul          : " + Judul);
@@ -44,8 +43,6 @@ namespace HikepassLibrary.Model
 
         public static Informasi<T> EditInformasi()
         {
-            Console.WriteLine("-------------------- Edit Informasi Pendakian -------------------");
-
             DateTime tanggal = DateTime.Now;
             string idOtomatis = "INF" + tanggal.ToString("yyyyMMddHHmmss");
 
