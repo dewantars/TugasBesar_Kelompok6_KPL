@@ -125,7 +125,7 @@ class Program
 
                             case "2":
                                 Console.WriteLine("-------------------- Edit Informasi Pendakian -------------------");
-                                informasiService.TambahAtauEditInformasi();
+                                informasiService.EditInformasi();
                                 Console.WriteLine("-----------------------------------------------------------------");
                             break;
 
