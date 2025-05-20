@@ -30,11 +30,9 @@ namespace HikepassLibrary.Service
             var informasi = Informasi<string>.BacaDariFileJson(filePath);
             try
             {
-                
-                Console.WriteLine("\nInformasi yang ada:");
                 informasi.TampilkanInformasi();
 
-                Console.WriteLine("\nApakah Anda ingin mengedit informasi ini? (y/n)");
+                Console.Write("\nApakah Anda ingin mengedit informasi ini? (y/n): ");
                 var pilihan = Console.ReadLine()?.Trim().ToLower();
 
                 if (pilihan == "y")

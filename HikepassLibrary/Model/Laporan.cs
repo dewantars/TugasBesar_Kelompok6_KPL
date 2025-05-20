@@ -32,18 +32,17 @@ namespace HikepassLibrary.Model
 
         public void PrintLaporan()
         {
-            Console.WriteLine("\n---------------------- Laporan ----------------------");
+            Console.WriteLine("---------------------------- Laporan ----------------------------");
             Console.WriteLine("ID                : " + IdLaporan);
             Console.WriteLine("Waktu             : " + WaktuLaporan.ToString("dd/MM/yyyy HH:mm:ss"));
             Console.WriteLine("Deskripsi Laporan : " + Deskripsi);
             Console.WriteLine("Lokasi            : " + TitikLokasi);
             Console.WriteLine("Keparahan         : " + TingkatKeparahan);
-            Console.WriteLine();
         }
 
         public static Laporan<T> InputLaporan()
         {
-            Console.WriteLine("----------------- Input Data Laporan ----------------");
+            Console.WriteLine("----------------------- Input Data Laporan ----------------------");
 
             // Validasi deskripsi
             string deskripsi;
