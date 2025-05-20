@@ -16,49 +16,85 @@ namespace HikepassLibrary.Service
         {
             try
             {
-                var informasi = Informasi<string>.BacaDariFileJson(filePath);
-                informasi.TampilkanInformasi();
+                List<Informasi<string>> daftarInformasi = Informasi<string>.BacaDariFileJson<string>(filePath);
+
+                Console.WriteLine("\n===== Daftar Informasi Pendakian =====");
+                foreach (var info in daftarInformasi)
+                {
+                    info.TampilkanInformasi();
+                    Console.WriteLine();
+                }
             }
             catch (FileNotFoundException)
             {
                 Console.WriteLine("Belum ada informasi yang tersedia.");
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Terjadi kesalahan saat membaca informasi: " + ex.Message);
+            }
         }
 
         public void TambahAtauEditInformasi()
         {
-            var informasi = Informasi<string>.BacaDariFileJson(filePath);
+            List<Informasi<string>> daftarInformasi;
+
             try
             {
-                
-                Console.WriteLine("\nInformasi yang ada:");
-                informasi.TampilkanInformasi();
-
-                Console.WriteLine("\nApakah Anda ingin mengedit informasi ini? (y/n)");
-                var pilihan = Console.ReadLine()?.Trim().ToLower();
-
-                if (pilihan == "y")
-                {
-                    informasi = Informasi<string>.EditInformasi();
-                }
-                else
-                {
-                    Console.WriteLine("Tidak ada perubahan yang dilakukan.");
-                    return;
-                }
+                daftarInformasi = Informasi<string>.BacaDariFileJson<string>(filePath);
             }
             catch (FileNotFoundException)
             {
-                Console.WriteLine("\nBelum ada informasi yang tersedia. Membuat informasi baru.");
-                informasi = Informasi<string>.EditInformasi();
-                informasi.TulisKeFileJson(filePath);
-                Console.WriteLine("\nInformasi baru telah disimpan.");
+                daftarInformasi = new List<Informasi<string>>();
+            }
+
+            Console.WriteLine("\n===== Daftar Informasi Saat Ini =====");
+            for (int i = 0; i < daftarInformasi.Count; i++)
+            {
+                Console.WriteLine($"\n[{i + 1}]");
+                daftarInformasi[i].TampilkanInformasi();
+            }
+
+            Console.WriteLine("\nIngin menambahkan informasi baru atau mengedit yang lama?");
+            Console.WriteLine("[1] Tambah baru");
+            Console.WriteLine("[2] Edit informasi lama");
+            Console.Write("Pilihan Anda: ");
+            var input = Console.ReadLine();
+
+            if (input == "1")
+            {
+                var infoBaru = Informasi<string>.EditInformasi();
+                daftarInformasi.Add(infoBaru);
+                Console.WriteLine("\nInformasi baru ditambahkan.");
+            }
+            else if (input == "2" && daftarInformasi.Count > 0)
+            {
+                Console.Write("Pilih nomor informasi yang ingin diedit: ");
+                if (int.TryParse(Console.ReadLine(), out int index) &&
+                    index >= 1 && index <= daftarInformasi.Count)
+                {
+                    var infoBaru = Informasi<string>.EditInformasi();
+                    daftarInformasi[index - 1] = infoBaru;
+                    Console.WriteLine("\nInformasi berhasil diperbarui.");
+                }
+                else
+                {
+                    Console.WriteLine("Nomor tidak valid.");
+                    return;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Pilihan tidak valid atau belum ada data.");
                 return;
             }
 
-            // Menyimpan informasi setelah diedit
-            informasi.TulisKeFileJson(filePath);
-            Console.WriteLine("\nInformasi telah diperbarui.");
+            // Simpan kembali seluruh daftar informasi ke file
+            string jsonString = System.Text.Json.JsonSerializer.Serialize(daftarInformasi, new System.Text.Json.JsonSerializerOptions
+            {
+                WriteIndented = true
+            });
+            File.WriteAllText(filePath, jsonString);
         }
     }
 }

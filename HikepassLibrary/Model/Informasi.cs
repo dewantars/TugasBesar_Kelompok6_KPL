@@ -110,27 +110,34 @@ namespace HikepassLibrary.Model
             File.WriteAllText(filePath, jsonString);
         }
 
-        public static Informasi<T> BacaDariFileJson(string filePath)
+        public static List<Informasi<T>> BacaDariFileJson<T>(string filePath)
         {
             if (!File.Exists(filePath))
                 throw new FileNotFoundException("File tidak ditemukan: " + filePath);
 
             string jsonString = File.ReadAllText(filePath);
-            var informasi = JsonSerializer.Deserialize<Informasi<T>>(jsonString);
+            var daftarInformasi = JsonSerializer.Deserialize<List<Informasi<T>>>(jsonString);
 
-            if (informasi == null)
+            if (daftarInformasi == null || daftarInformasi.Count == 0)
                 throw new InvalidOperationException("Gagal membaca data Informasi.");
 
-            if (string.IsNullOrWhiteSpace(informasi.IdInformasi) ||
-                informasi.Kategori == null ||
-                string.IsNullOrWhiteSpace(informasi.Judul) ||
-                string.IsNullOrWhiteSpace(informasi.Isi) ||
-                informasi.TanggalDibuat == default)
+            foreach (var informasi in daftarInformasi)
             {
-                throw new InvalidOperationException("Data Informasi dari file tidak lengkap atau salah.");
+                if (string.IsNullOrWhiteSpace(informasi.IdInformasi) ||
+                    informasi.Kategori == null ||
+                    string.IsNullOrWhiteSpace(informasi.Judul) ||
+                    string.IsNullOrWhiteSpace(informasi.Isi) ||
+                    informasi.TanggalDibuat == default)
+                {
+                    throw new InvalidOperationException("Data Informasi dari file tidak lengkap atau salah.");
+                }
+
+                informasi.TampilkanInformasi(); // ✅ panggil method untuk tampilkan
+                Console.WriteLine(); // newline antar informasi
             }
 
-            return informasi;
+            return daftarInformasi;
         }
+
     }
 }

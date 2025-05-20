@@ -55,31 +55,7 @@ namespace HikepassLibrary.Model
             Status = StatusTiket.BelumDibayar;
             Keterangan = Keterangan;
         }
-        // Menyiapkan tabel keputusan
-        private void InitializeTabelKeputusan()
-        {
-            tabelKeputusan = new Dictionary<Tuple<JalurPendakian, Jarak>, string>()
-            {
-                { new Tuple<JalurPendakian, Jarak>(JalurPendakian.Panorama, Jarak.Pendek), "Jalur Panorama (Pendek)" },
-                { new Tuple<JalurPendakian, Jarak>(JalurPendakian.Panorama, Jarak.Sedang), "Jalur Panorama (Sedang)" },
-                { new Tuple<JalurPendakian, Jarak>(JalurPendakian.Cinyiruan, Jarak.Pendek), "Jalur Cinyiruan (Pendek)" },
-                { new Tuple<JalurPendakian, Jarak>(JalurPendakian.Cinyiruan, Jarak.Sedang), "Jalur Cinyiruan (Sedang)" }
-            };
-        }
-
        
-        public string PilihJalur(JalurPendakian jalur, Jarak jarak)
-        {
-            var kunci = new Tuple<JalurPendakian, Jarak>(jalur, jarak);
-            if (tabelKeputusan.ContainsKey(kunci))
-            {
-                return tabelKeputusan[kunci];
-            }
-            else
-            {
-                return "Tidak ada jalur yang cocok untuk kombinasi ini.";
-            }
-        }
         public void ShowTiketInfo()
         {
             Console.WriteLine($"ID Tiket: {Id}");
