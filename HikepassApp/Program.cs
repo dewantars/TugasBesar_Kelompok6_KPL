@@ -51,12 +51,12 @@ class Program
         while (running1)
         {
             Console.Clear();
-            Console.WriteLine("=== Selamat Datang di Hikepass ===");
             Menu.SwitchUser();
             int userType = int.Parse(Console.ReadLine());
             if (userType == 1)
             {
-                Console.WriteLine("=== Masuk sebagai Pengelola ===");
+                Console.WriteLine(" ");
+                Console.WriteLine("----------- Masuk sebagai Pengelola -----------");
                 while (loggedInPengelola == null)
                 {
                     Console.Write("Masukkan Username: ");
@@ -77,7 +77,8 @@ class Program
             }
             else if (userType == 2)
             {
-                Console.WriteLine("=== Masuk sebagai Pendaki ===");
+                Console.WriteLine(" ");
+                Console.WriteLine("------------ Masuk sebagai Pendaki ------------");
                 while (loggedInPendaki == null)
                 {
                     Console.Write("Masukkan Username: ");
@@ -112,28 +113,30 @@ class Program
                         switch (pilihan)
                         {
                             case "1":
-                            Console.WriteLine("Monitoring Pendaki");
+                            Console.WriteLine("---------------------- Monitoring Pendaki -----------------------");
                             monitoringService.ShowMonitoring();
 
                             Console.WriteLine();
                             monitoring.HandleStatusUpdate();
+                            Console.WriteLine("-----------------------------------------------------------------");
 
 
                             break;
 
                             case "2":
-                                Console.WriteLine("Edit Informasi:");
+                                Console.WriteLine("-------------------- Edit Informasi Pendakian -------------------");
                                 informasiService.TambahAtauEditInformasi();
+                                Console.WriteLine("-----------------------------------------------------------------");
                             break;
 
                             case "3":
-                                Console.WriteLine("Lihat Laporan:");
                                 LaporanService.PrintLaporan();
+                                Console.WriteLine("-----------------------------------------------------------------");
                             break;
                             case "4":
-                                Console.WriteLine("Lihat Riwayat Pendakian:");
                                 riwayat.SaveRiwayat();
                                 riwayat.ShowRiwayat();
+                                Console.WriteLine("-----------------------------------------------------------------");
                             break;
                             case "5":
                                 Console.WriteLine("Terima kasih telah menggunakan Hikepass. Sampai jumpa!");
@@ -150,8 +153,8 @@ class Program
                     }
                     else if (loggedInPendaki != null)
                     {
-                        // Menu untuk Pendaki
-
+                    // Menu untuk Pendaki
+                    
                         Menu.menuUser();
                         string pilihan = Console.ReadLine();
                         Console.WriteLine();
@@ -165,9 +168,11 @@ class Program
                                     lanjutkan = Console.ReadLine();
                                     if (lanjutkan.ToLower() == "y")
                                     {
+                                        Console.WriteLine();
                                         Console.WriteLine("Reservasi Tiket:");
                                         await ControllerReservasi.CreateReservasi(baseUrl, loggedInPendaki);
-                                    }
+                                        Console.WriteLine("-----------------------------------------------------------------");
+                                }
                                     else if (lanjutkan.ToLower() == "n")
                                     {
                                         Console.WriteLine("Reservasi dibatalkan.");
@@ -182,37 +187,48 @@ class Program
                                 break;
 
                             case "2":
+
                                 Menu.menuTiketSaya();
                                 int pilihanTiket = int.Parse(Console.ReadLine());
                                 switch (pilihanTiket)
                                 {
                                     case 1:
-                                        Console.WriteLine("Lihat Tiket:");
+                                        Console.WriteLine();
                                         tiketCtrl.TampilkanDaftarTiket();
-                                    break;
+                                        Console.WriteLine("-----------------------------------------------------------------");
+                                        break;
                                     case 2:
-                                        Console.WriteLine("Bayar Tiket:");
+                                        Console.WriteLine();
                                         tiketCtrl.BayarTiket(tiket);
+                                        Console.WriteLine("-----------------------------------------------------------------");
                                         break;
                                     case 3:
-                                        Console.WriteLine("Reschedule Tiket:");
+                                        Console.WriteLine();
                                         await tiketCtrl.UbahTanggalTiketAsync(baseUrl);
+                                        Console.WriteLine("-----------------------------------------------------------------");
                                     break;
                                     case 4:
-                                        Console.WriteLine("Batalkan Tiket:");
+                                        Console.WriteLine();
                                         await tiketCtrl.HapusTiketAsync(baseUrl);
+                                        Console.WriteLine("-----------------------------------------------------------------");
                                     break;
                                     case 5:
-                                        Console.WriteLine("Lihat Riwayat Pendakian:");
+                                        Console.WriteLine();
                                         riwayat.ShowRiwayat();
+                                        Console.WriteLine("-----------------------------------------------------------------");
                                     break;
                                     case 6:
-                                        Console.WriteLine("Check-in/Check-out Tiket:");
+                                        Console.WriteLine();
                                         tiketCtrl.KonfirmasiTiket(loggedInPendaki, monitoring);
+                                        Console.WriteLine("-----------------------------------------------------------------");
                                         break;
                                     case 7:
-                                        Console.WriteLine("Selesaikan Pendakian");
+                                        Console.WriteLine();
                                         tiketCtrl.Selesaikan(tiket);
+                                        Console.WriteLine("-----------------------------------------------------------------");
+                                        break;
+                                    case 8:
+                                        Console.WriteLine("Kembali ke menu utama");
                                         break;
                                     default:
                                         Console.WriteLine("Pilihan tidak valid. Silakan coba lagi.\n");
@@ -221,18 +237,20 @@ class Program
                                 break;
 
                             case "3":
-                                Console.WriteLine("Lihat Informasi:");
-                                informasiService.TampilkanInformasi(); 
+                                Console.WriteLine("--------------------------- Informasi ---------------------------");
+                                informasiService.TampilkanInformasi();
+                                Console.WriteLine("-----------------------------------------------------------------");
                             break;
 
                             case "4":
-                                Console.WriteLine("Laporan:");
                                 LaporanService.inputLaporan();
+                                Console.WriteLine("-----------------------------------------------------------------");
                             break;
                             
                             case "5":
                                 Console.WriteLine("Edit Profil:");
-                                // pendakiController.EditProfil(loggedInPendaki);  // Implement profile editing logic here
+                            // pendakiController.EditProfil(loggedInPendaki);  // Implement profile editing logic here
+                                Console.WriteLine("-----------------------------------------------------------------");
                             break;
                             case "6":
                                 Console.WriteLine("Terima kasih telah menggunakan Hikepass. Sampai jumpa!");
@@ -251,5 +269,4 @@ class Program
             
         }
     }
-
 }

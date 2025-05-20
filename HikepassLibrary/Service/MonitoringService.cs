@@ -192,8 +192,6 @@ namespace HikepassLibrary.Service
                 {
                     Console.WriteLine("  [x] Tidak ada data FSM untuk tiket ini.");
                 }
-
-                Console.WriteLine(new string('-', 30));
             }
 
         }
