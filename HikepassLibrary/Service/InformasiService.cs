@@ -46,6 +46,7 @@ namespace HikepassLibrary.Service
 
         public void TambahAtauEditInformasi()
         {
+
             var semuaInformasi = GetAllInformasi();
 
             Console.Write("Masukkan kategori yang ingin diedit (Peraturan/Tips/Umum): ");

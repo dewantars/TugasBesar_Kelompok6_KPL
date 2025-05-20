@@ -62,10 +62,11 @@ namespace HikepassLibrary.Controller
                         string jawaban = Console.ReadLine();
                         if (jawaban.ToLower() == "y")
                         {
-                            selectedTiket.Status = StatusTiket.Selesai;
+                            
                             selectedTiket.IsCheckedIn = false;
-                            Console.WriteLine("Pendakian Berakhir!");
                             ControllerReservasi.Selesaikan("http://localhost:5226/api/reservasi", idTiket, true);
+                            selectedTiket.Status = StatusTiket.Selesai;
+                            Console.WriteLine("\nPendakian Berakhir!");
 
                             RiwayatPendakian.riwayatList.Add(selectedTiket);
                         }
@@ -127,9 +128,6 @@ namespace HikepassLibrary.Controller
                             selectedTiket.Status = StatusTiket.Dibayar;
                             selectedTiket.StatusPembayaran = true;
                             Console.WriteLine("Pembayaran berhasil!");
-
-                            _monitoringService.AddToMonitoring(selectedTiket);
-
                         }
                     }
                     else if (selectedTiket.Status == StatusTiket.Dibayar)
@@ -211,6 +209,7 @@ namespace HikepassLibrary.Controller
                             ControllerReservasi.UpdatedCheckInCheckOut("http://localhost:5226/api/reservasi", selectedTiket.Id);
                             selectedTiket.Status = StatusTiket.Checkin;
                             monitoring.AddPendakiToMonitoring(selectedTiket);
+                            _monitoringService.AddToMonitoring(selectedTiket);
                             Console.WriteLine("Check-in berhasil!");
                         }
                     }
@@ -259,9 +258,13 @@ namespace HikepassLibrary.Controller
                     {
                         Console.WriteLine("Tiket ini sudah Check-out sebelumnya.");
                     }
+                    else if(selectedTiket.Status == StatusTiket.Dibayar || selectedTiket.Status == StatusTiket.BelumDibayar)
+                    {
+                        Console.WriteLine("Tiket sedang tidak di masa Check-out.");
+                    }
                     else
                     {
-                        Console.WriteLine("Tiket belum dibayar. Silakan lakukan pembayaran terlebih dahulu.");
+                        Console.WriteLine("ID Tiket tidak valid.");
                     }
                 }
                 else
