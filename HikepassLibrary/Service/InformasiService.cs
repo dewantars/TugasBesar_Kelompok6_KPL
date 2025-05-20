@@ -44,7 +44,7 @@ namespace HikepassLibrary.Service
             }
         }
 
-        public void TambahAtauEditInformasi()
+        public void EditInformasi()
         {
 
             var semuaInformasi = GetAllInformasi();
@@ -68,7 +68,7 @@ namespace HikepassLibrary.Service
                 Console.WriteLine("\nBelum ada informasi pada kategori ini.");
             }
 
-            Console.Write("\nApakah Anda ingin menambahkan atau mengganti informasi kategori ini? (y/n): ");
+            Console.Write("\nApakah Anda ingin mengedit informasi kategori ini? (y/n): ");
             var konfirmasi = Console.ReadLine()?.Trim().ToLower();
             if (konfirmasi == "y")
             {
