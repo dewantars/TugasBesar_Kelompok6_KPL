@@ -1,4 +1,4 @@
-﻿using HikepassLibrary.Model;
+using HikepassLibrary.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
