@@ -1,7 +1,9 @@
 ﻿using HikepassLibrary.Model;
 using HikepassLibrary.Service;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,14 +11,14 @@ using System.Threading.Tasks;
 namespace HikepassTestProject
 {
     [TestClass]
-    public class RiwayatServiceTests
+    public class UnitTsetRiwayat
     {
-        private const string TestFilePath = "TestRiwayatPendakian.json";
+        private string TestFilePath;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            // Hapus file test jika ada
+            TestFilePath = Path.Combine(Path.GetTempPath(), "TestRiwayatPendakian.json");
             if (File.Exists(TestFilePath))
                 File.Delete(TestFilePath);
         }
@@ -153,7 +155,7 @@ namespace HikepassTestProject
                 Assert.IsTrue(output.Contains("Jane Doe"), "Output tidak berisi nama pendaki yang sesuai.");
                 Assert.IsTrue(output.Contains("Pendakian terganggu oleh cuaca"), "Output tidak berisi keterangan yang sesuai.");
             }
-        }
+    }
 
         [TestMethod]
         public void SaveRiwayat_ShouldPersistData()

@@ -125,7 +125,7 @@ class Program
 
                             case "2":
                                 Console.WriteLine("-------------------- Edit Informasi Pendakian -------------------");
-                                informasiService.TambahAtauEditInformasi();
+                                informasiService.EditInformasi();
                                 Console.WriteLine("-----------------------------------------------------------------");
                             break;
 
@@ -225,6 +225,7 @@ class Program
                                     case 7:
                                         Console.WriteLine();
                                         tiketCtrl.Selesaikan(tiket);
+                                        riwayat.SaveRiwayat();
                                         Console.WriteLine("-----------------------------------------------------------------");
                                         break;
                                     case 8:

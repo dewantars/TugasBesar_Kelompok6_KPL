@@ -5,6 +5,7 @@ using System.Linq;
 using HikepassLibrary.Model;
 using static HikepassLibrary.Model.Tiket;
 using HikepassLibrary.Controller;
+using System.Diagnostics;
 
 namespace HikepassAPI.Controllers
 {
@@ -16,11 +17,18 @@ namespace HikepassAPI.Controllers
         [HttpGet]
         public IActionResult GetAllReservasi()
         {
+            // Design by Contract - Precondition
+            Debug.Assert(ControllerReservasi.reservasiList != null, "List reservasi tidak boleh null sebelum diproses.");
+
+            // Defensive
             if (ControllerReservasi.reservasiList == null)
                 return StatusCode(500, "Data reservasi tidak tersedia.");
 
             if (!ControllerReservasi.reservasiList.Any())
                 return NotFound("Tidak ada data reservasi.");
+
+            // Design by Contract - Postcondition
+            Debug.Assert(ControllerReservasi.reservasiList.Count > 0, "List reservasi seharusnya tidak kosong.");
 
             return Ok(ControllerReservasi.reservasiList);
         }
@@ -29,12 +37,20 @@ namespace HikepassAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult GetReservasiById(int id)
         {
+            // Design by Contract - Precondition
+            Debug.Assert(id > 0, "ID harus lebih besar dari 0.");
+
+            // Defensive
             if (id <= 0)
                 return BadRequest("ID tidak valid.");
 
             var reservasi = ControllerReservasi.reservasiList.FirstOrDefault(r => r.Id == id);
             if (reservasi == null)
                 return NotFound("Reservasi tidak ditemukan.");
+
+            // Design by Contract - Postcondition
+            // Pastikan kalau data ada, id-nya sesuai
+            Debug.Assert(reservasi.Id == id, "ID reservasi harus sesuai dengan yang diminta.");
 
             return Ok(reservasi);
         }
@@ -43,6 +59,13 @@ namespace HikepassAPI.Controllers
         [HttpPost]
         public IActionResult CreateReservasi([FromBody] Tiket newReservasi)
         {
+            // Design by Contract - Precondition
+            Debug.Assert(newReservasi != null, "Data reservasi harus disediakan.");
+            Debug.Assert(newReservasi.Tanggal != default, "Tanggal tidak boleh default.");
+            Debug.Assert(newReservasi.JumlahPendaki > 0, "Jumlah pendaki harus lebih dari 0.");
+            Debug.Assert(Enum.IsDefined(typeof(JalurPendakian), newReservasi.Jalur), "Jalur pendakian harus valid.");
+
+            // Defensive
             if (newReservasi == null)
                 return BadRequest("Data reservasi tidak boleh kosong.");
 
@@ -66,13 +89,26 @@ namespace HikepassAPI.Controllers
 
             ControllerReservasi.reservasiList.Add(newReservasi);
 
-            return CreatedAtAction(nameof(GetReservasiById), new { id = newReservasi.Id }, newReservasi);
+            // Design by Contract - Postcondition
+            Debug.Assert(newReservasi.Id > 0, "ID reservasi harus terbentuk.");
+            Debug.Assert(newReservasi.Status == StatusTiket.BelumDibayar, "Status awal harus BelumDibayar.");
+
+            return CreatedAtAction(nameof(GetReservasiById), new { id = newReservasi.Id }, newReservasi); 
         }
 
         // PUT: api/reservasi/{id}
         [HttpPut("{id}")]
         public IActionResult UpdateReservasi(int id, [FromBody] Tiket updatedReservasi)
         {
+            // Design by Contract - Precondition
+            Debug.Assert(id > 0, "ID harus valid.");
+            Debug.Assert(updatedReservasi != null, "Data input tidak boleh null.");
+            Debug.Assert(updatedReservasi.DaftarPendaki != null && updatedReservasi.DaftarPendaki.Any(), "Daftar pendaki harus ada.");
+            Debug.Assert(Enum.IsDefined(typeof(JalurPendakian), updatedReservasi.Jalur), "Jalur pendakian tidak valid.");
+            Debug.Assert(updatedReservasi.Tanggal != default, "Tanggal tidak valid.");
+            Debug.Assert(updatedReservasi.JumlahPendaki > 0, "Jumlah pendaki harus lebih dari 0.");
+
+            // Defensive
             if (id <= 0)
                 return BadRequest("ID tidak valid.");
 
@@ -107,6 +143,10 @@ namespace HikepassAPI.Controllers
             reservasi.BarangBawaanSaatCheckout = updatedReservasi.BarangBawaanSaatCheckout;
             reservasi.Status = updatedReservasi.Status;
 
+            // Design by Contract - Postcondition
+            Debug.Assert(reservasi.Id == id, "ID tidak boleh berubah setelah update.");
+            Debug.Assert(reservasi.DaftarPendaki.Count == updatedReservasi.DaftarPendaki.Count, "Jumlah pendaki harus terupdate.");
+
             return Ok(reservasi);
         }
 
@@ -114,6 +154,10 @@ namespace HikepassAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteReservasi(int id)
         {
+            // Design by Contract - Precondition
+            Debug.Assert(id > 0, "ID harus lebih besar dari 0.");
+
+            // Defensive
             if (id <= 0)
                 return BadRequest("ID tidak valid.");
 
@@ -122,6 +166,9 @@ namespace HikepassAPI.Controllers
                 return NotFound("Reservasi tidak ditemukan.");
 
             ControllerReservasi.reservasiList.Remove(reservasi);
+
+            // Design by Contract - Postcondition
+            Debug.Assert(!ControllerReservasi.reservasiList.Any(r => r.Id == id), "Reservasi masih ada setelah dihapus.");
 
             return NoContent();
         }

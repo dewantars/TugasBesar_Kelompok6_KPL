@@ -68,7 +68,7 @@ namespace HikepassLibrary.Controller
                             selectedTiket.Status = StatusTiket.Selesai;
                             Console.WriteLine("\nPendakian Berakhir!");
 
-                            //RiwayatPendakian.riwayatList.Add(selectedTiket);
+                            RiwayatPendakian.riwayatList.Add(selectedTiket);
                         }
                     }
                     else if (selectedTiket.Status == StatusTiket.BelumDibayar)
@@ -212,6 +212,7 @@ namespace HikepassLibrary.Controller
                             ControllerReservasi.UpdatedCheckInCheckOut("http://localhost:5226/api/reservasi", selectedTiket.Id);
                             selectedTiket.Status = StatusTiket.Checkin;
                             monitoring.AddPendakiToMonitoring(selectedTiket);
+                            _monitoringService.AddToMonitoring(selectedTiket);
                             Console.WriteLine("Check-in berhasil!");
                         }
                     }
