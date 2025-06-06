@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace HikepassForm
 {
-    public partial class Dashboard: UserControl
+    public partial class DashboardPendaki: UserControl
     {
-        public Dashboard()
+        public DashboardPendaki()
         {
             InitializeComponent();
         }

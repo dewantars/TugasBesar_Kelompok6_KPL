@@ -2,8 +2,8 @@ namespace HikepassForm
 {
     public partial class Main : Form
     {
-        private Dashboard dashboard;
-        
+        private DashboardPendaki dashboard;
+
         public Main()
         {
             InitializeComponent();
@@ -17,13 +17,18 @@ namespace HikepassForm
         {
             this.Controls.Clear(); // Hapus konten sebelumnya
             page.Dock = DockStyle.Fill;
-            this.Controls.Add(page); 
+            this.Controls.Add(page);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var dashboard = new Dashboard();
+            var dashboard = new DashboardPendaki();
             LoadPage(dashboard);
+        }
+
+        private void signin_Click(object sender, EventArgs e)
+        {
+
         }
     }
 

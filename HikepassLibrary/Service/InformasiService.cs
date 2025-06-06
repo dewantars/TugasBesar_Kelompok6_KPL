@@ -83,7 +83,7 @@ namespace HikepassLibrary.Service
                 File.WriteAllText(filePath, JsonSerializer.Serialize(semuaInformasi, options));
 
             // Menyimpan informasi setelah diedit
-            informasi.TulisKeFileJson(filePath);
+                //Informasi<>.TulisKeFileJson(filePath);
                 Console.WriteLine("\nInformasi telah diperbarui.");
             }
             else
