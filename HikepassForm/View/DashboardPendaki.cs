@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace HikepassForm
 {
-    public partial class DashboardPendaki: UserControl
+    public partial class DashboardPendaki : UserControl
     {
         public DashboardPendaki()
         {
@@ -27,5 +27,10 @@ namespace HikepassForm
             this.Controls.Clear(); // Hapus konten sebelumnya
         }
 
+        private void btnRsv_Click(object sender, EventArgs e)
+        {
+            var halamanReservasi = new View.Reservasi();
+            LoadPage(halamanReservasi);
+        }
     }
 }
