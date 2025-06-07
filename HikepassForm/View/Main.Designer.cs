@@ -70,7 +70,7 @@
             // 
             // btnlogin
             // 
-            btnlogin.Location = new Point(254, 231);
+            btnlogin.Location = new Point(293, 256);
             btnlogin.Name = "btnlogin";
             btnlogin.Size = new Size(94, 29);
             btnlogin.TabIndex = 8;
@@ -82,7 +82,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("BD Cartoon Shout", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label3.Location = new Point(293, 22);
+            label3.Location = new Point(304, 22);
             label3.Name = "label3";
             label3.Size = new Size(196, 33);
             label3.TabIndex = 7;
@@ -92,7 +92,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(254, 163);
+            label2.Location = new Point(293, 188);
             label2.Name = "label2";
             label2.Size = new Size(72, 20);
             label2.TabIndex = 4;
@@ -100,17 +100,17 @@
             // 
             // txtPw
             // 
-            txtPw.Location = new Point(254, 186);
+            txtPw.Location = new Point(293, 211);
             txtPw.Name = "txtPw";
             txtPw.Size = new Size(276, 27);
             txtPw.TabIndex = 3;
-            txtPw.TextChanged += this.txtPw_TextChanged;
-            txtPw.UseSystemPasswordChar = true; // Set to true to hide password input
+            txtPw.UseSystemPasswordChar = true;
+            txtPw.TextChanged += txtPw_TextChanged;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(254, 105);
+            label1.Location = new Point(293, 130);
             label1.Name = "label1";
             label1.Size = new Size(73, 20);
             label1.TabIndex = 2;
@@ -118,7 +118,7 @@
             // 
             // txtUn
             // 
-            txtUn.Location = new Point(254, 128);
+            txtUn.Location = new Point(293, 153);
             txtUn.Name = "txtUn";
             txtUn.Size = new Size(276, 27);
             txtUn.TabIndex = 1;
@@ -127,11 +127,12 @@
             // 
             signin.AutoSize = true;
             signin.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            signin.Location = new Point(94, 145);
+            signin.Location = new Point(133, 170);
             signin.Name = "signin";
-            signin.Size = new Size(109, 38);
+            signin.Size = new Size(99, 38);
             signin.TabIndex = 0;
-            signin.Text = "Sign In";
+            signin.Text = "Log In";
+            signin.Click += signin_Click;
             // 
             // Main
             // 

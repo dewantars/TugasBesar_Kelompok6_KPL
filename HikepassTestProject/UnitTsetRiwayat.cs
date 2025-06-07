@@ -1,4 +1,4 @@
-﻿using HikepassLibrary.Model;
+using HikepassLibrary.Model;
 using HikepassLibrary.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
