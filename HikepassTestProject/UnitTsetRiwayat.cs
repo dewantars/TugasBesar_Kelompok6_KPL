@@ -1,4 +1,4 @@
-﻿using HikepassLibrary.Model;
+using HikepassLibrary.Model;
 using HikepassLibrary.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -139,6 +139,7 @@ namespace HikepassTestProject
                 Assert.IsTrue(output.Contains("Jane Doe"), "Output tidak berisi nama pendaki yang sesuai.");
                 Assert.IsTrue(output.Contains("Pendakian terganggu oleh cuaca"), "Output tidak berisi keterangan yang sesuai.");
             }
-    }
+        }
 
+    }
 }
