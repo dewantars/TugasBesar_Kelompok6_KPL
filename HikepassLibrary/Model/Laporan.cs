@@ -61,7 +61,6 @@ namespace HikepassLibrary.Model
                     Console.WriteLine("Deskripsi tidak boleh kosong.");
             } while (string.IsNullOrWhiteSpace(deskripsi));
 
-            // Validasi lokasi
             string lokasi;
             do
             {
@@ -71,7 +70,6 @@ namespace HikepassLibrary.Model
                     Console.WriteLine("Titik lokasi tidak boleh kosong.");
             } while (string.IsNullOrWhiteSpace(lokasi));
 
-            // Input dan validasi tingkat keparahan
             T keparahan;
             if (typeof(T) == typeof(string))
             {

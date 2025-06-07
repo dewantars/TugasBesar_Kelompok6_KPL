@@ -1,4 +1,4 @@
-﻿using HikepassLibrary.Model;
+using HikepassLibrary.Model;
 using System;
 using System.Text.Json;
 
@@ -46,60 +46,51 @@ namespace HikepassLibrary.Service
 
         public void EditInformasi()
         {
-            var informasi = Informasi<string>.BacaDariFileJson(filePath);
-            try
+
+            var semuaInformasi = GetAllInformasi();
+
+            Console.Write("Masukkan kategori yang ingin diedit (Peraturan/Tips/Umum): ");
+            string kategori = Console.ReadLine()?.Trim();
+
+            var daftarKategori = semuaInformasi.FindAll(info =>
+                info.Kategori.Equals(kategori, StringComparison.OrdinalIgnoreCase));
+
+            if (daftarKategori.Count > 0)
             {
-                informasi.TampilkanInformasi();
-
-                var semuaInformasi = GetAllInformasi();
-
-                Console.Write("Masukkan kategori yang ingin diedit (Peraturan/Tips/Umum): ");
-                string kategori = Console.ReadLine()?.Trim();
-
-                var daftarKategori = semuaInformasi.FindAll(info =>
-                    info.Kategori.Equals(kategori, StringComparison.OrdinalIgnoreCase));
-
-                if (daftarKategori.Count > 0)
+                Console.WriteLine("\nInformasi yang sudah ada:");
+                foreach (var info in daftarKategori)
                 {
-                    Console.WriteLine("\nInformasi yang sudah ada:");
-                    foreach (var info in daftarKategori)
-                    {
-                        info.TampilkanInformasi();
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("\nBelum ada informasi pada kategori ini.");
-                }
-
-                Console.Write("\nApakah Anda ingin mengedit informasi kategori ini? (y/n): ");
-                var konfirmasi = Console.ReadLine()?.Trim().ToLower();
-                if (konfirmasi == "y")
-                {
-                    var infoBaru = Informasi<string>.EditInformasi();
-
-                    // Hapus yang lama & tambahkan yang baru
-                    semuaInformasi.RemoveAll(info => info.Kategori.Equals(kategori, StringComparison.OrdinalIgnoreCase));
-                    semuaInformasi.Add(infoBaru);
-
-                    // Simpan ulang
-                    var options = new JsonSerializerOptions { WriteIndented = true };
-                    File.WriteAllText(filePath, JsonSerializer.Serialize(semuaInformasi, options));
-
-                    // Menyimpan informasi setelah diedit
-                    informasi.TulisKeFileJson(filePath);
-                    Console.WriteLine("\nInformasi telah diperbarui.");
-                }
-                else
-                {
-                    Console.WriteLine("Tidak ada perubahan yang dilakukan.");
+                    info.TampilkanInformasi();
                 }
             }
-            finally
+            else
             {
-
+                Console.WriteLine("\nBelum ada informasi pada kategori ini.");
             }
 
-    }
+            Console.Write("\nApakah Anda ingin mengedit informasi kategori ini? (y/n): ");
+            var konfirmasi = Console.ReadLine()?.Trim().ToLower();
+            if (konfirmasi == "y")
+            {
+                var infoBaru = Informasi<string>.EditInformasi();
+
+                // Hapus yang lama & tambahkan yang baru
+                semuaInformasi.RemoveAll(info => info.Kategori.Equals(kategori, StringComparison.OrdinalIgnoreCase));
+                semuaInformasi.Add(infoBaru);
+
+                // Simpan ulang
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                File.WriteAllText(filePath, JsonSerializer.Serialize(semuaInformasi, options));
+
+            // Menyimpan informasi setelah diedit
+                //Informasi.TulisKeFileJson(filePath);
+                Console.WriteLine("\nInformasi telah diperbarui.");
+            }
+            else
+            {
+                Console.WriteLine("Tidak ada perubahan yang dilakukan.");
+            }
+        }
+
     }
 }
