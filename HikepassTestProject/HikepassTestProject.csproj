@@ -13,6 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\HikepassAPI\HikepassAPI.csproj" />
+    <ProjectReference Include="..\HikepassApp\HikepassApp.csproj" />
     <ProjectReference Include="..\HikepassLibrary\HikepassLibrary.csproj" />
   </ItemGroup>
 

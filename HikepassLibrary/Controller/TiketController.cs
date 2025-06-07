@@ -8,6 +8,7 @@ using HikepassLibrary.Model;
 using HikepassLibrary.Service;
 using static HikepassLibrary.Model.Tiket;
 using HikepassApp;
+using System.Text.Json;
 
 namespace HikepassLibrary.Controller
 {
@@ -15,9 +16,9 @@ namespace HikepassLibrary.Controller
     {
         private readonly TiketService _tiketService;
         private readonly MonitoringService _monitoringService;
-        
+        private readonly MonitoringController _monitoringController;
 
-        public TiketController(){}
+        public TiketController() { }
         public TiketController(TiketService tiketService, MonitoringService monitoringService)
         {
             _tiketService = tiketService;
@@ -39,6 +40,7 @@ namespace HikepassLibrary.Controller
                 Console.WriteLine("----------------------------------------------------");
             }
         }
+
 
 
         public void Selesaikan(Tiket tiket)
@@ -97,7 +99,6 @@ namespace HikepassLibrary.Controller
             }
         }
 
-       
         public void BayarTiket(Tiket tiket)
         {
             TampilkanDaftarTiket();
@@ -122,8 +123,8 @@ namespace HikepassLibrary.Controller
                             
                             ControllerReservasi.UpdatedPembayaran("http://localhost:5226/api/reservasi", idTiket);
                             selectedTiket.Status = StatusTiket.Dibayar;
+                            selectedTiket.StatusPembayaran = true;
                             Console.WriteLine("Pembayaran berhasil!");
-
                         }
                     }
                     else if (selectedTiket.Status == StatusTiket.Dibayar)
@@ -177,9 +178,6 @@ namespace HikepassLibrary.Controller
                         string jawaban = Console.ReadLine();
                         if (jawaban.ToLower() == "y")
                         {
-                            
-                            // Panggil metode UpdateCheckInCheckOut untuk melakukan Check-in
-                              // true untuk Check-in
                            
                             Console.WriteLine("Barang yang dibawa: ");
                             string InputBarangBawaan;
@@ -207,6 +205,7 @@ namespace HikepassLibrary.Controller
                             ControllerReservasi.UpdatedCheckInCheckOut("http://localhost:5226/api/reservasi", selectedTiket.Id);
                             selectedTiket.Status = StatusTiket.Checkin;
                             monitoring.AddPendakiToMonitoring(selectedTiket);
+                            _monitoringService.AddToMonitoring(selectedTiket);
                             Console.WriteLine("Check-in berhasil!");
                             
 
@@ -273,9 +272,41 @@ namespace HikepassLibrary.Controller
                 Console.WriteLine("ID Tiket tidak valid.");
             }
         }
-        
 
-        
+        public async Task HapusTiketAsync(string baseUrl)
+        {
+            Console.Write("Masukkan ID tiket yang ingin dihapus: ");
+            if (int.TryParse(Console.ReadLine(), out int idTiket))
+            {
+                await ControllerReservasi.DeleteTiket(baseUrl, idTiket);
+            }
+            else
+            {
+                Console.WriteLine("Input ID tidak valid.");
+            }
+        }
+
+        // Meminta input ID dan tanggal baru lalu memanggil RescheduleTanggalTiket
+        public async Task UbahTanggalTiketAsync(string baseUrl)
+        {
+            Console.Write("Masukkan ID tiket yang ingin diubah tanggalnya: ");
+            if (!int.TryParse(Console.ReadLine(), out int idTiket))
+            {
+                Console.WriteLine("Input ID tidak valid.");
+                return;
+            }
+
+            Console.Write("Masukkan tanggal baru (format YYYY-MM-DD): ");
+            if (!DateTime.TryParse(Console.ReadLine(), out DateTime tanggalBaru))
+            {
+                Console.WriteLine("Format tanggal tidak valid.");
+                return;
+            }
+
+            await ControllerReservasi.RescheduleTanggalTiket(baseUrl, idTiket, tanggalBaru);
+        }
+
+
     }
 }
 

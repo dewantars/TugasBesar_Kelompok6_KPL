@@ -6,7 +6,7 @@ using HikepassLibrary.Model;
 namespace HikepassTestProject
 {
     [TestClass]
-    public sealed class UnitTestLaporan
+    public class UnitTestLaporan
     {
         [TestMethod]
         public void Laporan_Constructor_ValidInput_ShouldSucceed()
@@ -55,7 +55,7 @@ namespace HikepassTestProject
             laporan.PrintLaporan();
             string result = sw.ToString();
 
-            // Assert (cek isi sebagian output)
+            // Assert
             Assert.IsTrue(result.Contains("LAP004"));
             Assert.IsTrue(result.Contains("Test output"));
             Assert.IsTrue(result.Contains("Pos 4"));

@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace HikepassLibrary.Model
 {
-    class Informasi<T>
+    public class Informasi<T>
     {
         public string IdInformasi { get; set; }
         public T Kategori { get; set; }
@@ -14,6 +14,17 @@ namespace HikepassLibrary.Model
         public Informasi() { }
         public Informasi(string id, T kategori, string judul, string isi, DateTime tanggal)
         {
+            if (string.IsNullOrWhiteSpace(id))
+                throw new ArgumentException("ID Informasi tidak boleh kosong.", nameof(id));
+            if (kategori == null)
+                throw new ArgumentNullException(nameof(kategori), "Kategori tidak boleh kosong.");
+            if (string.IsNullOrWhiteSpace(judul))
+                throw new ArgumentException("Judul tidak boleh kosong.", nameof(judul));
+            if (string.IsNullOrWhiteSpace(isi))
+                throw new ArgumentException("Isi tidak boleh kosong.", nameof(isi));
+            if (tanggal == default)
+                throw new ArgumentException("Tanggal dibuat tidak valid.", nameof(tanggal));
+
             IdInformasi = id;
             Kategori = kategori;
             Judul = judul;
@@ -39,26 +50,31 @@ namespace HikepassLibrary.Model
             DateTime tanggal = DateTime.Now;
             string idOtomatis = "INF" + tanggal.ToString("yyyyMMddHHmmss");
 
-            string inputKategori;
             T kategori;
-
             if (typeof(T) == typeof(string))
             {
-                Console.Write("Kategori (misalnya: Peraturan, Tips, Umum): ");
-                inputKategori = Console.ReadLine().Trim();
+                string inputKategori;
+                do
+                {
+                    Console.Write("Kategori (contoh: Peraturan, Tips, Umum): ");
+                    inputKategori = Console.ReadLine()?.Trim();
+                    if (string.IsNullOrWhiteSpace(inputKategori))
+                        Console.WriteLine("Kategori tidak boleh kosong.");
+                } while (string.IsNullOrWhiteSpace(inputKategori));
+
                 kategori = (T)(object)inputKategori;
             }
             else if (typeof(T) == typeof(int))
             {
-                Console.Write("Kategori (1 = Peraturan, 2 = Tips, 3 = Umum): ");
-                string input = Console.ReadLine();
-
                 int value;
-                while (!int.TryParse(input, out value) || value < 1 || value > 3)
+                string input;
+                do
                 {
-                    Console.Write("Input tidak valid! Masukkan angka 1-3: ");
+                    Console.Write("Kategori (1 = Peraturan, 2 = Tips, 3 = Umum): ");
                     input = Console.ReadLine();
-                }
+                    if (!int.TryParse(input, out value) || value < 1 || value > 3)
+                        Console.WriteLine("Input salah! Tolong masukkan angka antara 1 - 3.");
+                } while (!int.TryParse(input, out value) || value < 1 || value > 3);
 
                 kategori = (T)(object)value;
             }
@@ -67,11 +83,23 @@ namespace HikepassLibrary.Model
                 throw new InvalidOperationException("Tipe kategori tidak didukung.");
             }
 
-            Console.Write("Judul Informasi  : ");
-            string judul = Console.ReadLine();
+            string judul;
+            do
+            {
+                Console.Write("Judul Informasi  : ");
+                judul = Console.ReadLine()?.Trim();
+                if (string.IsNullOrWhiteSpace(judul))
+                    Console.WriteLine("Judul tidak boleh kosong.");
+            } while (string.IsNullOrWhiteSpace(judul));
 
-            Console.Write("Isi Informasi    : ");
-            string isi = Console.ReadLine();
+            string isi;
+            do
+            {
+                Console.Write("Isi Informasi    : ");
+                isi = Console.ReadLine()?.Trim();
+                if (string.IsNullOrWhiteSpace(isi))
+                    Console.WriteLine("Isi tidak boleh kosong.");
+            } while (string.IsNullOrWhiteSpace(isi));
 
             return new Informasi<T>(idOtomatis, kategori, judul, isi, tanggal);
         }
@@ -86,12 +114,24 @@ namespace HikepassLibrary.Model
         public static Informasi<T> BacaDariFileJson(string filePath)
         {
             if (!File.Exists(filePath))
-            {
                 throw new FileNotFoundException("File tidak ditemukan: " + filePath);
-            }
 
             string jsonString = File.ReadAllText(filePath);
-            return JsonSerializer.Deserialize<Informasi<T>>(jsonString);
+            var informasi = JsonSerializer.Deserialize<Informasi<T>>(jsonString);
+
+            if (informasi == null)
+                throw new InvalidOperationException("Gagal membaca data Informasi.");
+
+            if (string.IsNullOrWhiteSpace(informasi.IdInformasi) ||
+                informasi.Kategori == null ||
+                string.IsNullOrWhiteSpace(informasi.Judul) ||
+                string.IsNullOrWhiteSpace(informasi.Isi) ||
+                informasi.TanggalDibuat == default)
+            {
+                throw new InvalidOperationException("Data Informasi dari file tidak lengkap atau salah.");
+            }
+
+            return informasi;
         }
     }
 }
