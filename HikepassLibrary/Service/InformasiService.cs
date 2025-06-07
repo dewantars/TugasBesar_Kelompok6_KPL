@@ -82,6 +82,8 @@ namespace HikepassLibrary.Service
                 var options = new JsonSerializerOptions { WriteIndented = true };
                 File.WriteAllText(filePath, JsonSerializer.Serialize(semuaInformasi, options));
 
+            // Menyimpan informasi setelah diedit
+            //informasi.TulisKeFileJson(filePath);
                 Console.WriteLine("\nInformasi telah diperbarui.");
             }
             else

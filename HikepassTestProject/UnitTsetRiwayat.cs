@@ -92,4 +92,80 @@ namespace HikepassTestProject
         }
     }
 
+<<<<<<< HEAD
+=======
+    [TestClass]
+    public class RiwayatPendakianTests
+    {
+        private const string TestFilePath = "TestRiwayatPendakian.json";
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            if (File.Exists(TestFilePath))
+                File.Delete(TestFilePath);
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            if (File.Exists(TestFilePath))
+                File.Delete(TestFilePath);
+        }
+
+        [TestMethod]
+        public void ShowRiwayat_ShouldDisplayCorrectData()
+        {
+            var riwayatPendakian = new RiwayatPendakian(TestFilePath);
+            RiwayatPendakian.riwayatList.Add(new Tiket
+            {
+                Id = 1,
+                Tanggal = new DateTime(2025, 5, 17),
+                Jalur = Tiket.JalurPendakian.Cinyiruan,
+                JumlahPendaki = 3,
+                DaftarPendaki = new Dictionary<string, string> { { "987654321", "Jane Doe" } },
+                BarangBawaanSaatCheckin = new List<string> { "Kompor", "Gas" },
+                BarangBawaanSaatCheckout = new List<string> { "Kompor" },
+                Keterangan = "Pendakian terganggu oleh cuaca",
+                StatusPembayaran = true,
+                Status = Tiket.StatusTiket.Checkout
+            });
+
+            using (var sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+                riwayatPendakian.ShowRiwayat();
+                var output = sw.ToString();
+
+                Assert.IsTrue(output.Contains("Jane Doe"), "Output tidak berisi nama pendaki yang sesuai.");
+                Assert.IsTrue(output.Contains("Pendakian terganggu oleh cuaca"), "Output tidak berisi keterangan yang sesuai.");
+            }
+    }
+
+        [TestMethod]
+        public void SaveRiwayat_ShouldPersistData()
+        {
+            var riwayatPendakian = new RiwayatPendakian(TestFilePath);
+            RiwayatPendakian.riwayatList.Add(new Tiket
+            {
+                Id = 2,
+                Tanggal = new DateTime(2025, 5, 18),
+                Jalur = Tiket.JalurPendakian.Panorama,
+                JumlahPendaki = 4,
+                DaftarPendaki = new Dictionary<string, string> { { "456789123", "Michael Smith" } },
+                BarangBawaanSaatCheckin = new List<string> { "Tenda", "Kompor" },
+                BarangBawaanSaatCheckout = new List<string> { "Tenda" },
+                Keterangan = "Pendakian sukses tanpa kendala",
+                StatusPembayaran = true,
+                Status = Tiket.StatusTiket.Selesai
+            });
+
+            riwayatPendakian.SaveRiwayat();
+            var loadedData = new RiwayatPendakian(TestFilePath);
+
+            Assert.AreEqual(1, RiwayatPendakian.riwayatList.Count, "Jumlah data dalam riwayat tidak sesuai setelah penyimpanan.");
+            Assert.AreEqual("Michael Smith", RiwayatPendakian.riwayatList.First().DaftarPendaki["456789123"], "Nama pendaki tidak sesuai setelah penyimpanan.");
+        }
+    }
+>>>>>>> e970323718d55310359f5b180e6227bd72f4050b
 }
