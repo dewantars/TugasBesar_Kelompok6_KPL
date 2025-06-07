@@ -1,6 +1,6 @@
 ﻿namespace HikepassForm
 {
-    partial class Dashboard
+    partial class DashboardPendaki
     {
         /// <summary> 
         /// Required designer variable.
@@ -19,7 +19,7 @@
             }
             base.Dispose(disposing);
         }
-        
+
         #region Component Designer generated code
 
         /// <summary> 
@@ -33,8 +33,8 @@
             btnRsv = new Button();
             btnTkt = new Button();
             btnInf = new Button();
-            btnEdit = new Button();
             btnLogout = new Button();
+            btnLaporan = new Button();
             SuspendLayout();
             // 
             // label3
@@ -67,7 +67,7 @@
             // 
             // btnTkt
             // 
-            btnTkt.Location = new Point(229, 158);
+            btnTkt.Location = new Point(41, 234);
             btnTkt.Name = "btnTkt";
             btnTkt.Size = new Size(171, 50);
             btnTkt.TabIndex = 11;
@@ -76,21 +76,12 @@
             // 
             // btnInf
             // 
-            btnInf.Location = new Point(426, 158);
+            btnInf.Location = new Point(248, 158);
             btnInf.Name = "btnInf";
             btnInf.Size = new Size(171, 50);
             btnInf.TabIndex = 12;
-            btnInf.Text = "Informasi Pendakian";
+            btnInf.Text = "Lihat Informasi";
             btnInf.UseVisualStyleBackColor = true;
-            // 
-            // btnEdit
-            // 
-            btnEdit.Location = new Point(625, 158);
-            btnEdit.Name = "btnEdit";
-            btnEdit.Size = new Size(171, 50);
-            btnEdit.TabIndex = 13;
-            btnEdit.Text = "Edit Profil";
-            btnEdit.UseVisualStyleBackColor = true;
             // 
             // btnLogout
             // 
@@ -100,20 +91,29 @@
             btnLogout.TabIndex = 14;
             btnLogout.Text = "Log Out";
             btnLogout.UseVisualStyleBackColor = true;
-            btnLogout.Click += this.btnLogout_Click;
+            btnLogout.Click += btnLogout_Click;
             // 
-            // Dashboard
+            // btnLaporan
+            // 
+            btnLaporan.Location = new Point(248, 234);
+            btnLaporan.Name = "btnLaporan";
+            btnLaporan.Size = new Size(171, 50);
+            btnLaporan.TabIndex = 15;
+            btnLaporan.Text = "Input Laporan";
+            btnLaporan.UseVisualStyleBackColor = true;
+            // 
+            // DashboardPendaki
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(btnLaporan);
             Controls.Add(btnLogout);
-            Controls.Add(btnEdit);
             Controls.Add(btnInf);
             Controls.Add(btnTkt);
             Controls.Add(btnRsv);
             Controls.Add(label1);
             Controls.Add(label3);
-            Name = "Dashboard";
+            Name = "DashboardPendaki";
             Size = new Size(852, 494);
             ResumeLayout(false);
             PerformLayout();
@@ -126,7 +126,7 @@
         private Button btnRsv;
         private Button btnTkt;
         private Button btnInf;
-        private Button btnEdit;
         private Button btnLogout;
+        private Button btnLaporan;
     }
 }

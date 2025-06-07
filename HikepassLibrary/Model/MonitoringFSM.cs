@@ -11,7 +11,7 @@ namespace HikepassLibrary.Model
         public enum State { Basecamp, Pos1, Pos2, Puncak, Turun, Selesai }
         public enum Trigger { MulaiPendakian, NaikPos, CapaiPuncak, TurunGunung, SelesaiPendakian }
 
-        public State current = State.Basecamp;
+        public State current { get; private set; } = State.Basecamp;
 
         public class Transition
         {
@@ -26,6 +26,15 @@ namespace HikepassLibrary.Model
                 Trigger = trigger;
             }
         }
+
+        public List<Trigger> GetAvailableTriggers()
+        {
+            return transitions
+                .Where(t => t.Key.Item1 == current)
+                .Select(t => t.Key.Item2)
+                .ToList();
+        }
+
         private readonly Dictionary<(State, Trigger), State> transitions = new()
         {
             {(State.Basecamp, Trigger.NaikPos), State.Pos1},

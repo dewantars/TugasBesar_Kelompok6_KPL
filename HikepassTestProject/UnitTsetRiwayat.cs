@@ -1,4 +1,4 @@
-﻿using HikepassLibrary.Model;
+using HikepassLibrary.Model;
 using HikepassLibrary.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -90,10 +90,9 @@ namespace HikepassTestProject
             var loadedList = service.LoadRiwayat();
             Assert.AreEqual(0, loadedList.Count, "Riwayat tidak kosong meskipun file tidak ada.");
         }
+
     }
 
-<<<<<<< HEAD
-=======
     [TestClass]
     public class RiwayatPendakianTests
     {
@@ -140,32 +139,7 @@ namespace HikepassTestProject
                 Assert.IsTrue(output.Contains("Jane Doe"), "Output tidak berisi nama pendaki yang sesuai.");
                 Assert.IsTrue(output.Contains("Pendakian terganggu oleh cuaca"), "Output tidak berisi keterangan yang sesuai.");
             }
-    }
-
-        [TestMethod]
-        public void SaveRiwayat_ShouldPersistData()
-        {
-            var riwayatPendakian = new RiwayatPendakian(TestFilePath);
-            RiwayatPendakian.riwayatList.Add(new Tiket
-            {
-                Id = 2,
-                Tanggal = new DateTime(2025, 5, 18),
-                Jalur = Tiket.JalurPendakian.Panorama,
-                JumlahPendaki = 4,
-                DaftarPendaki = new Dictionary<string, string> { { "456789123", "Michael Smith" } },
-                BarangBawaanSaatCheckin = new List<string> { "Tenda", "Kompor" },
-                BarangBawaanSaatCheckout = new List<string> { "Tenda" },
-                Keterangan = "Pendakian sukses tanpa kendala",
-                StatusPembayaran = true,
-                Status = Tiket.StatusTiket.Selesai
-            });
-
-            riwayatPendakian.SaveRiwayat();
-            var loadedData = new RiwayatPendakian(TestFilePath);
-
-            Assert.AreEqual(1, RiwayatPendakian.riwayatList.Count, "Jumlah data dalam riwayat tidak sesuai setelah penyimpanan.");
-            Assert.AreEqual("Michael Smith", RiwayatPendakian.riwayatList.First().DaftarPendaki["456789123"], "Nama pendaki tidak sesuai setelah penyimpanan.");
         }
+
     }
->>>>>>> e970323718d55310359f5b180e6227bd72f4050b
 }
