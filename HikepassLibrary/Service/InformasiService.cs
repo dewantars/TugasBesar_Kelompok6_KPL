@@ -1,4 +1,4 @@
-﻿using HikepassLibrary.Model;
+using HikepassLibrary.Model;
 using System;
 using System.Text.Json;
 
@@ -83,7 +83,7 @@ namespace HikepassLibrary.Service
                 File.WriteAllText(filePath, JsonSerializer.Serialize(semuaInformasi, options));
 
             // Menyimpan informasi setelah diedit
-                //Informasi<>.TulisKeFileJson(filePath);
+                //Informasi.TulisKeFileJson(filePath);
                 Console.WriteLine("\nInformasi telah diperbarui.");
             }
             else
