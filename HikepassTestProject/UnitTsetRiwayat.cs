@@ -139,6 +139,7 @@ namespace HikepassTestProject
                 Assert.IsTrue(output.Contains("Jane Doe"), "Output tidak berisi nama pendaki yang sesuai.");
                 Assert.IsTrue(output.Contains("Pendakian terganggu oleh cuaca"), "Output tidak berisi keterangan yang sesuai.");
             }
-    }
+        }
 
+    }
 }
