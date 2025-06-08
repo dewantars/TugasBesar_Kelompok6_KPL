@@ -35,35 +35,34 @@
             btnInf = new Button();
             btnLogout = new Button();
             btnLaporan = new Button();
+            reservasi1 = new HikepassForm.View.Reservasi();
             SuspendLayout();
             // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label3.Location = new Point(51, 56);
-            label3.Margin = new Padding(4, 0, 4, 0);
+            label3.Location = new Point(36, 34);
             label3.Name = "label3";
-            label3.Size = new Size(169, 40);
+            label3.Size = new Size(115, 29);
             label3.TabIndex = 8;
             label3.Text = "HikePass";
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(61, 116);
-            label1.Margin = new Padding(4, 0, 4, 0);
+            label1.Location = new Point(43, 70);
             label1.Name = "label1";
-            label1.Size = new Size(187, 25);
+            label1.Size = new Size(122, 15);
             label1.TabIndex = 9;
             label1.Text = "Selamat Datang, User!";
             // 
             // btnRsv
             // 
-            btnRsv.Location = new Point(51, 198);
-            btnRsv.Margin = new Padding(4, 4, 4, 4);
+            btnRsv.Location = new Point(36, 119);
+            btnRsv.Margin = new Padding(3, 2, 3, 2);
             btnRsv.Name = "btnRsv";
-            btnRsv.Size = new Size(214, 62);
+            btnRsv.Size = new Size(150, 37);
             btnRsv.TabIndex = 10;
             btnRsv.Text = "Reservasi";
             btnRsv.UseVisualStyleBackColor = true;
@@ -71,30 +70,30 @@
             // 
             // btnTkt
             // 
-            btnTkt.Location = new Point(51, 292);
-            btnTkt.Margin = new Padding(4, 4, 4, 4);
+            btnTkt.Location = new Point(36, 175);
+            btnTkt.Margin = new Padding(3, 2, 3, 2);
             btnTkt.Name = "btnTkt";
-            btnTkt.Size = new Size(214, 62);
+            btnTkt.Size = new Size(150, 37);
             btnTkt.TabIndex = 11;
             btnTkt.Text = "Tiket Saya";
             btnTkt.UseVisualStyleBackColor = true;
             // 
             // btnInf
             // 
-            btnInf.Location = new Point(310, 198);
-            btnInf.Margin = new Padding(4, 4, 4, 4);
+            btnInf.Location = new Point(217, 119);
+            btnInf.Margin = new Padding(3, 2, 3, 2);
             btnInf.Name = "btnInf";
-            btnInf.Size = new Size(214, 62);
+            btnInf.Size = new Size(150, 37);
             btnInf.TabIndex = 12;
             btnInf.Text = "Lihat Informasi";
             btnInf.UseVisualStyleBackColor = true;
             // 
             // btnLogout
             // 
-            btnLogout.Location = new Point(928, 18);
-            btnLogout.Margin = new Padding(4, 4, 4, 4);
+            btnLogout.Location = new Point(650, 11);
+            btnLogout.Margin = new Padding(3, 2, 3, 2);
             btnLogout.Name = "btnLogout";
-            btnLogout.Size = new Size(118, 36);
+            btnLogout.Size = new Size(83, 22);
             btnLogout.TabIndex = 14;
             btnLogout.Text = "Log Out";
             btnLogout.UseVisualStyleBackColor = true;
@@ -102,18 +101,27 @@
             // 
             // btnLaporan
             // 
-            btnLaporan.Location = new Point(310, 292);
-            btnLaporan.Margin = new Padding(4, 4, 4, 4);
+            btnLaporan.Location = new Point(217, 175);
+            btnLaporan.Margin = new Padding(3, 2, 3, 2);
             btnLaporan.Name = "btnLaporan";
-            btnLaporan.Size = new Size(214, 62);
+            btnLaporan.Size = new Size(150, 37);
             btnLaporan.TabIndex = 15;
             btnLaporan.Text = "Input Laporan";
             btnLaporan.UseVisualStyleBackColor = true;
             // 
+            // reservasi1
+            // 
+            reservasi1.Location = new Point(0, 0);
+            reservasi1.Margin = new Padding(3, 2, 3, 2);
+            reservasi1.Name = "reservasi1";
+            reservasi1.Size = new Size(596, 312);
+            reservasi1.TabIndex = 16;
+            // 
             // DashboardPendaki
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(reservasi1);
             Controls.Add(btnLaporan);
             Controls.Add(btnLogout);
             Controls.Add(btnInf);
@@ -121,9 +129,9 @@
             Controls.Add(btnRsv);
             Controls.Add(label1);
             Controls.Add(label3);
-            Margin = new Padding(4, 4, 4, 4);
+            Margin = new Padding(3, 2, 3, 2);
             Name = "DashboardPendaki";
-            Size = new Size(852, 520);
+            Size = new Size(596, 312);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -137,5 +145,6 @@
         private Button btnInf;
         private Button btnLogout;
         private Button btnLaporan;
+        private View.Reservasi reservasi1;
     }
 }
