@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HikepassLibrary.Model;
+using HikepassLibrary.Controller;
 
 namespace HikepassForm.View
 {
@@ -159,6 +160,7 @@ namespace HikepassForm.View
                 };
 
                 var response = await client.PostAsJsonAsync("http://localhost:5226/api/reservasi", tiket);
+                ControllerReservasi.reservasiList.Add(tiket);
 
                 if (response.IsSuccessStatusCode)
                 {

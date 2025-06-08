@@ -1,6 +1,6 @@
 ﻿namespace HikepassForm.View
 {
-    partial class Pembayaran
+    partial class CheckinDanCheckout
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            lblJudul = new Label();
+            label1 = new Label();
             dataGridView1 = new DataGridView();
             idDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             tanggalDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
@@ -39,38 +39,43 @@
             daftarPendakiDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             statusDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             keteranganDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            checkBox = new DataGridViewCheckBoxColumn();
+            Pilih = new DataGridViewCheckBoxColumn();
             tiketBindingSource = new BindingSource(components);
+            tiketControllerBindingSource = new BindingSource(components);
+            gboxBarang = new GroupBox();
+            btnTambahBarang = new Button();
+            txtBoxInputBarang = new TextBox();
+            listBoxBarang = new ListBox();
+            btnCheckIn = new Button();
+            btnCheckOut = new Button();
             btnKembali = new Button();
-            btnBayar = new Button();
-            lblStatus = new Label();
-            lblStatusInfo = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)tiketBindingSource).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)tiketControllerBindingSource).BeginInit();
+            gboxBarang.SuspendLayout();
             SuspendLayout();
             // 
-            // lblJudul
+            // label1
             // 
-            lblJudul.AutoSize = true;
-            lblJudul.Font = new Font("Segoe UI Semibold", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblJudul.Location = new Point(461, 20);
-            lblJudul.Name = "lblJudul";
-            lblJudul.Size = new Size(149, 32);
-            lblJudul.TabIndex = 0;
-            lblJudul.Text = "Pembayaran";
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI Semibold", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Location = new Point(432, 28);
+            label1.Name = "label1";
+            label1.Size = new Size(263, 32);
+            label1.TabIndex = 0;
+            label1.Text = "CheckIn dan CheckOut";
             // 
             // dataGridView1
             // 
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToOrderColumns = true;
             dataGridView1.AutoGenerateColumns = false;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { idDataGridViewTextBoxColumn, tanggalDataGridViewTextBoxColumn, jumlahPendakiDataGridViewTextBoxColumn, kontakDataGridViewTextBoxColumn, jalurDataGridViewTextBoxColumn, daftarPendakiDataGridViewTextBoxColumn, statusDataGridViewTextBoxColumn, keteranganDataGridViewTextBoxColumn, checkBox });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { idDataGridViewTextBoxColumn, tanggalDataGridViewTextBoxColumn, jumlahPendakiDataGridViewTextBoxColumn, kontakDataGridViewTextBoxColumn, jalurDataGridViewTextBoxColumn, daftarPendakiDataGridViewTextBoxColumn, statusDataGridViewTextBoxColumn, keteranganDataGridViewTextBoxColumn, Pilih });
             dataGridView1.DataSource = tiketBindingSource;
-            dataGridView1.Location = new Point(12, 68);
+            dataGridView1.Location = new Point(83, 87);
             dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(943, 220);
+            dataGridView1.Size = new Size(942, 181);
             dataGridView1.TabIndex = 1;
+            dataGridView1.CellContentClick += dataGridView1_CellContentClick;
             // 
             // idDataGridViewTextBoxColumn
             // 
@@ -120,82 +125,116 @@
             keteranganDataGridViewTextBoxColumn.HeaderText = "Keterangan";
             keteranganDataGridViewTextBoxColumn.Name = "keteranganDataGridViewTextBoxColumn";
             // 
-            // checkBox
+            // Pilih
             // 
-            checkBox.DataPropertyName = "StatusPembayaran";
-            checkBox.FalseValue = false;
-            checkBox.HeaderText = "Pilih Tiket";
-            checkBox.Name = "checkBox";
-            checkBox.TrueValue = true;
+            Pilih.DataPropertyName = "Id";
+            Pilih.HeaderText = "Pilih";
+            Pilih.Name = "Pilih";
             // 
             // tiketBindingSource
             // 
             tiketBindingSource.DataSource = typeof(HikepassLibrary.Model.Tiket);
             // 
+            // tiketControllerBindingSource
+            // 
+            tiketControllerBindingSource.DataSource = typeof(HikepassLibrary.Controller.TiketController);
+            // 
+            // gboxBarang
+            // 
+            gboxBarang.Controls.Add(btnTambahBarang);
+            gboxBarang.Controls.Add(txtBoxInputBarang);
+            gboxBarang.Controls.Add(listBoxBarang);
+            gboxBarang.Location = new Point(83, 294);
+            gboxBarang.Name = "gboxBarang";
+            gboxBarang.Size = new Size(360, 182);
+            gboxBarang.TabIndex = 2;
+            gboxBarang.TabStop = false;
+            gboxBarang.Text = "Barang Bawaan (wajib diisi)";
+            // 
+            // btnTambahBarang
+            // 
+            btnTambahBarang.Location = new Point(10, 126);
+            btnTambahBarang.Name = "btnTambahBarang";
+            btnTambahBarang.Size = new Size(82, 42);
+            btnTambahBarang.TabIndex = 2;
+            btnTambahBarang.Text = "Tambah Barang";
+            btnTambahBarang.UseVisualStyleBackColor = true;
+            btnTambahBarang.Click += btnTambahBarang_Click;
+            // 
+            // txtBoxInputBarang
+            // 
+            txtBoxInputBarang.Location = new Point(10, 92);
+            txtBoxInputBarang.Name = "txtBoxInputBarang";
+            txtBoxInputBarang.Size = new Size(233, 23);
+            txtBoxInputBarang.TabIndex = 1;
+            txtBoxInputBarang.TextChanged += txtBoxInputBarang_TextChanged;
+            // 
+            // listBoxBarang
+            // 
+            listBoxBarang.FormattingEnabled = true;
+            listBoxBarang.ItemHeight = 15;
+            listBoxBarang.Location = new Point(10, 21);
+            listBoxBarang.Name = "listBoxBarang";
+            listBoxBarang.Size = new Size(230, 64);
+            listBoxBarang.TabIndex = 0;
+            listBoxBarang.SelectedIndexChanged += listBoxBarang_SelectedIndexChanged;
+            // 
+            // btnCheckIn
+            // 
+            btnCheckIn.Location = new Point(568, 346);
+            btnCheckIn.Name = "btnCheckIn";
+            btnCheckIn.Size = new Size(140, 40);
+            btnCheckIn.TabIndex = 3;
+            btnCheckIn.Text = "CheckIn";
+            btnCheckIn.UseVisualStyleBackColor = true;
+            btnCheckIn.Click += btnCheckIn_Click;
+            // 
+            // btnCheckOut
+            // 
+            btnCheckOut.Location = new Point(736, 346);
+            btnCheckOut.Name = "btnCheckOut";
+            btnCheckOut.Size = new Size(140, 40);
+            btnCheckOut.TabIndex = 4;
+            btnCheckOut.Text = "CheckOut";
+            btnCheckOut.UseVisualStyleBackColor = true;
+            btnCheckOut.Click += btnCheckOut_Click;
+            // 
             // btnKembali
             // 
-            btnKembali.Location = new Point(413, 398);
+            btnKembali.Location = new Point(981, 13);
             btnKembali.Name = "btnKembali";
-            btnKembali.Size = new Size(124, 36);
-            btnKembali.TabIndex = 2;
+            btnKembali.Size = new Size(110, 27);
+            btnKembali.TabIndex = 5;
             btnKembali.Text = "Kembali";
             btnKembali.UseVisualStyleBackColor = true;
             btnKembali.Click += btnKembali_Click;
             // 
-            // btnBayar
-            // 
-            btnBayar.Location = new Point(594, 398);
-            btnBayar.Name = "btnBayar";
-            btnBayar.Size = new Size(124, 36);
-            btnBayar.TabIndex = 3;
-            btnBayar.Text = "Bayar";
-            btnBayar.UseVisualStyleBackColor = true;
-            btnBayar.Click += btnBayar_Click;
-            // 
-            // lblStatus
-            // 
-            lblStatus.AutoSize = true;
-            lblStatus.Location = new Point(485, 369);
-            lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(45, 15);
-            lblStatus.TabIndex = 4;
-            lblStatus.Text = "Status :";
-            // 
-            // lblStatusInfo
-            // 
-            lblStatusInfo.Location = new Point(536, 366);
-            lblStatusInfo.Name = "lblStatusInfo";
-            lblStatusInfo.Size = new Size(385, 18);
-            lblStatusInfo.TabIndex = 5;
-            // 
-            // Pembayaran
+            // CheckinDanCheckout
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(lblStatusInfo);
-            Controls.Add(lblStatus);
-            Controls.Add(btnBayar);
             Controls.Add(btnKembali);
+            Controls.Add(btnCheckOut);
+            Controls.Add(btnCheckIn);
+            Controls.Add(gboxBarang);
             Controls.Add(dataGridView1);
-            Controls.Add(lblJudul);
-            Name = "Pembayaran";
-            Size = new Size(973, 522);
-            Load += Pembayaran_Load;
+            Controls.Add(label1);
+            Name = "CheckinDanCheckout";
+            Size = new Size(1111, 538);
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)tiketBindingSource).EndInit();
+            ((System.ComponentModel.ISupportInitialize)tiketControllerBindingSource).EndInit();
+            gboxBarang.ResumeLayout(false);
+            gboxBarang.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private Label lblJudul;
+        private Label label1;
         private DataGridView dataGridView1;
-        private BindingSource tiketBindingSource;
-        private Button btnKembali;
-        private Button btnBayar;
-        private Label lblStatus;
-        private Label lblStatusInfo;
+        private BindingSource tiketControllerBindingSource;
         private DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn tanggalDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn jumlahPendakiDataGridViewTextBoxColumn;
@@ -204,6 +243,14 @@
         private DataGridViewTextBoxColumn daftarPendakiDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn statusDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn keteranganDataGridViewTextBoxColumn;
-        private DataGridViewCheckBoxColumn checkBox;
+        private DataGridViewCheckBoxColumn Pilih;
+        private BindingSource tiketBindingSource;
+        private GroupBox gboxBarang;
+        private Button btnTambahBarang;
+        private TextBox txtBoxInputBarang;
+        private ListBox listBoxBarang;
+        private Button btnCheckIn;
+        private Button btnCheckOut;
+        private Button btnKembali;
     }
 }

@@ -42,7 +42,7 @@ namespace HikepassLibrary.Model
         public List<string> BarangBawaanSaatCheckout { get; set; } = new List<string>();
         public string Keterangan { get; set; }
 
-
+       
         public Tiket() { }
         public Tiket(int id, DateTime tanggalPendakian, JalurPendakian jalur, int jumlahPendaki, String keterangan)
         {

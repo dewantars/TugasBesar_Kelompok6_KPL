@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using HikepassLibrary.Model;
+using HikepassLibrary.Controller;
 using static HikepassLibrary.Model.Tiket;
 
 namespace HikepassLibrary.Controller

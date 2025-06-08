@@ -35,7 +35,7 @@
             btnInf = new Button();
             btnLogout = new Button();
             btnLaporan = new Button();
-            reservasi1 = new HikepassForm.View.Reservasi();
+            btnCheckIndanCheckOut = new Button();
             SuspendLayout();
             // 
             // label3
@@ -77,6 +77,7 @@
             btnTkt.TabIndex = 11;
             btnTkt.Text = "Tiket Saya";
             btnTkt.UseVisualStyleBackColor = true;
+            btnTkt.Click += btnTkt_Click;
             // 
             // btnInf
             // 
@@ -109,19 +110,21 @@
             btnLaporan.Text = "Input Laporan";
             btnLaporan.UseVisualStyleBackColor = true;
             // 
-            // reservasi1
+            // btnCheckIndanCheckOut
             // 
-            reservasi1.Location = new Point(0, 0);
-            reservasi1.Margin = new Padding(3, 2, 3, 2);
-            reservasi1.Name = "reservasi1";
-            reservasi1.Size = new Size(596, 312);
-            reservasi1.TabIndex = 16;
+            btnCheckIndanCheckOut.Location = new Point(53, 356);
+            btnCheckIndanCheckOut.Name = "btnCheckIndanCheckOut";
+            btnCheckIndanCheckOut.Size = new Size(148, 58);
+            btnCheckIndanCheckOut.TabIndex = 16;
+            btnCheckIndanCheckOut.Text = "Checkin dan Checkout";
+            btnCheckIndanCheckOut.UseVisualStyleBackColor = true;
+            btnCheckIndanCheckOut.Click += btnCheckIndanCheckOut_Click;
             // 
             // DashboardPendaki
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(reservasi1);
+            Controls.Add(btnCheckIndanCheckOut);
             Controls.Add(btnLaporan);
             Controls.Add(btnLogout);
             Controls.Add(btnInf);
@@ -131,7 +134,7 @@
             Controls.Add(label3);
             Margin = new Padding(4);
             Name = "DashboardPendaki";
-            Size = new Size(852, 520);
+            Size = new Size(1050, 625);
             Load += DashboardPendaki_Load;
             ResumeLayout(false);
             PerformLayout();
@@ -146,6 +149,6 @@
         private Button btnInf;
         private Button btnLogout;
         private Button btnLaporan;
-        private View.Reservasi reservasi1;
+        private Button btnCheckIndanCheckOut;
     }
 }
