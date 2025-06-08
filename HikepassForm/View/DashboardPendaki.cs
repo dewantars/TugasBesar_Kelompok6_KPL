@@ -32,5 +32,10 @@ namespace HikepassForm
             var halamanReservasi = new View.Reservasi();
             LoadPage(halamanReservasi);
         }
+
+        private void DashboardPendaki_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
