@@ -59,6 +59,7 @@
             listViewLaporan.TabIndex = 1;
             listViewLaporan.UseCompatibleStateImageBehavior = false;
             listViewLaporan.View = System.Windows.Forms.View.Details;
+            listViewLaporan.SelectedIndexChanged += listViewLaporan_SelectedIndexChanged;
             // 
             // columnID
             // 
