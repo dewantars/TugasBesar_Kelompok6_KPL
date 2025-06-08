@@ -16,10 +16,30 @@ namespace HikepassForm.View
         {
             InitializeComponent();
         }
+        public void LoadPage(UserControl page)
+        {
+            this.Controls.Clear(); // Hapus konten sebelumnya
+            page.Dock = DockStyle.Fill;
+            this.Controls.Add(page);
+        }
+        private void DashboardPengelola_Load(object sender, EventArgs e)
+        {
 
+        }
         private void label1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnLhtLaporan_Click(object sender, EventArgs e)
+        {
+            var halamanLaporan = new View.LaporanPengelola();
+            LoadPage(halamanLaporan);
+        }
+        public void PindahKeDashboard()
+        {
+            var dashboardPengelola = new DashboardPengelola();
+            LoadPage(dashboardPengelola);
         }
     }
 }

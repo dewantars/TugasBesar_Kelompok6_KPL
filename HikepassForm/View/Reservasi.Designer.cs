@@ -19,7 +19,6 @@ namespace HikepassForm.View
 
         private void InitializeComponent()
         {
-            label3 = new Label();
             radioButton1 = new RadioButton();
             radioButton2 = new RadioButton();
             label1 = new Label();
@@ -42,18 +41,8 @@ namespace HikepassForm.View
             buttonPlus = new Button();
             buttonTambahPendaki = new Button();
             buttonBack = new Button();
+            labelJudul = new Label();
             SuspendLayout();
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Microsoft Sans Serif", 18F);
-            label3.Location = new Point(333, 13);
-            label3.Name = "label3";
-            label3.Size = new Size(177, 40);
-            label3.TabIndex = 0;
-            label3.Text = "Reservasi";
-            label3.Click += label3_Click;
             // 
             // radioButton1
             // 
@@ -182,6 +171,7 @@ namespace HikepassForm.View
             // 
             // buttonSubmit
             // 
+            buttonSubmit.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
             buttonSubmit.Location = new Point(333, 456);
             buttonSubmit.Name = "buttonSubmit";
             buttonSubmit.Size = new Size(180, 46);
@@ -222,7 +212,7 @@ namespace HikepassForm.View
             // 
             // buttonTambahPendaki
             // 
-            buttonTambahPendaki.Font = new Font("Microsoft Sans Serif", 9F);
+            buttonTambahPendaki.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
             buttonTambahPendaki.Location = new Point(312, 213);
             buttonTambahPendaki.Name = "buttonTambahPendaki";
             buttonTambahPendaki.Size = new Size(170, 30);
@@ -233,7 +223,8 @@ namespace HikepassForm.View
             // 
             // buttonBack
             // 
-            buttonBack.Font = new Font("Microsoft Sans Serif", 9F);
+            buttonBack.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+            buttonBack.ForeColor = SystemColors.ActiveCaptionText;
             buttonBack.Location = new Point(18, 23);
             buttonBack.Name = "buttonBack";
             buttonBack.Size = new Size(100, 30);
@@ -241,9 +232,20 @@ namespace HikepassForm.View
             buttonBack.Text = "Kembali";
             buttonBack.Click += buttonBack_Click;
             // 
+            // labelJudul
+            // 
+            labelJudul.AutoSize = true;
+            labelJudul.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            labelJudul.Location = new Point(356, 6);
+            labelJudul.Name = "labelJudul";
+            labelJudul.Size = new Size(176, 48);
+            labelJudul.TabIndex = 23;
+            labelJudul.Text = "Reservasi";
+            labelJudul.Click += labelJudul_Click;
+            // 
             // Reservasi
             // 
-            Controls.Add(label3);
+            Controls.Add(labelJudul);
             Controls.Add(labelNama);
             Controls.Add(textBoxNama);
             Controls.Add(labelNIK);
@@ -280,7 +282,6 @@ namespace HikepassForm.View
         private Button buttonPlus;
         private Label labelJumlah;
         private Button buttonTambahPendaki;
-        private Label label3;
         private RadioButton radioButton1;
         private RadioButton radioButton2;
         private Label label1;
@@ -299,5 +300,6 @@ namespace HikepassForm.View
         private TextBox textBoxKeterangan;
         private Button buttonSubmit;
         private Button buttonBack;
+        private Label labelJudul;
     }
 }
