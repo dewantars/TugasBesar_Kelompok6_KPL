@@ -37,5 +37,21 @@ namespace HikepassForm
         {
 
         }
+
+        private void btnLaporan_Click(object sender, EventArgs e)
+        {
+            var halamanLaporan = new View.LaporanPendaki();
+            LoadPage(halamanLaporan);
+        }
+        public void PindahKeDashboard()
+        {
+            var dashboardPendaki = new DashboardPendaki();
+            LoadPage(dashboardPendaki);
+        }
+
+        private void btnInf_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
