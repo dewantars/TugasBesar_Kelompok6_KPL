@@ -70,17 +70,42 @@ namespace HikepassForm.View
         {
             try
             {
-                string nama = textBoxNama.Text;
-                string nik = textBoxNIK.Text;
-                string kontak = textBoxKontak.Text;
-                int usia = int.Parse(textBoxUsia.Text);
-                int jumlahPendaki = int.Parse(textBoxJumlahPendaki.Text);
+                string nama = textBoxNama.Text.Trim();
+                string nik = textBoxNIK.Text.Trim();
+                string kontak = textBoxKontak.Text.Trim();
+                string usiaText = textBoxUsia.Text.Trim();
+                string jumlahPendakiText = textBoxJumlahPendaki.Text.Trim();
                 DateTime tanggal = dateTimePickerTanggal.Value;
-                string keterangan = textBoxKeterangan.Text;
+                string keterangan = textBoxKeterangan.Text.Trim();
+
+                // Validasi awal
+                if (string.IsNullOrWhiteSpace(nama) || string.IsNullOrWhiteSpace(nik))
+                {
+                    MessageBox.Show("Nama dan NIK pendaki utama tidak boleh kosong.");
+                    return;
+                }
+
+                if (!int.TryParse(usiaText, out int usia))
+                {
+                    MessageBox.Show("Usia pendaki utama harus berupa angka.");
+                    return;
+                }
+
+                if (!int.TryParse(jumlahPendakiText, out int jumlahPendaki) || jumlahPendaki <= 0)
+                {
+                    MessageBox.Show("Jumlah pendaki harus berupa angka dan minimal 1.");
+                    return;
+                }
 
                 if (!radioButton1.Checked && !radioButton2.Checked)
                 {
                     MessageBox.Show("Silakan pilih jalur pendakian terlebih dahulu!");
+                    return;
+                }
+
+                if (tanggal.Date < DateTime.Today)
+                {
+                    MessageBox.Show("Tanggal pendakian tidak boleh di masa lalu.");
                     return;
                 }
 
@@ -89,20 +114,37 @@ namespace HikepassForm.View
                     : Tiket.JalurPendakian.Panorama;
 
                 var daftarPendaki = new Dictionary<string, string>
-                {
-                    { nik, nama + " - Usia " + usia + ", Kontak: " + kontak }
-                };
+        {
+            { nik, $"{nama} - Usia {usia}, Kontak: {kontak}" }
+        };
 
-                if (jumlahPendaki > 1)
+                // Jika jumlah pendaki lebih dari 1, minta input tambahan
+                for (int i = 2; i <= jumlahPendaki; i++)
                 {
-                    for (int i = 2; i <= jumlahPendaki; i++)
+                    string inputNama = Microsoft.VisualBasic.Interaction.InputBox("Masukkan nama pendaki ke-" + i, "Input Nama");
+                    if (string.IsNullOrWhiteSpace(inputNama))
                     {
-                        string inputNama = Microsoft.VisualBasic.Interaction.InputBox("Masukkan nama pendaki ke-" + i, "Input Nama");
-                        string inputNIK = Microsoft.VisualBasic.Interaction.InputBox("Masukkan NIK pendaki ke-" + i, "Input NIK");
-                        string inputKontak = Microsoft.VisualBasic.Interaction.InputBox("Masukkan kontak pendaki ke-" + i, "Input Kontak");
-                        string inputUsia = Microsoft.VisualBasic.Interaction.InputBox("Masukkan usia pendaki ke-" + i, "Input Usia");
-                        daftarPendaki.Add(inputNIK, inputNama + " - Usia " + inputUsia + ", Kontak: " + inputKontak);
+                        MessageBox.Show($"Nama pendaki ke-{i} tidak boleh kosong.");
+                        return;
                     }
+
+                    string inputNIK = Microsoft.VisualBasic.Interaction.InputBox("Masukkan NIK pendaki ke-" + i, "Input NIK");
+                    if (string.IsNullOrWhiteSpace(inputNIK))
+                    {
+                        MessageBox.Show($"NIK pendaki ke-{i} tidak boleh kosong.");
+                        return;
+                    }
+
+                    string inputKontak = Microsoft.VisualBasic.Interaction.InputBox("Masukkan kontak pendaki ke-" + i, "Input Kontak");
+                    string inputUsiaText = Microsoft.VisualBasic.Interaction.InputBox("Masukkan usia pendaki ke-" + i, "Input Usia");
+
+                    if (!int.TryParse(inputUsiaText, out int inputUsia))
+                    {
+                        MessageBox.Show($"Usia pendaki ke-{i} harus berupa angka.");
+                        return;
+                    }
+
+                    daftarPendaki.Add(inputNIK, $"{inputNama} - Usia {inputUsia}, Kontak: {inputKontak}");
                 }
 
                 var tiket = new Tiket
@@ -113,11 +155,9 @@ namespace HikepassForm.View
                     DaftarPendaki = daftarPendaki,
                     Keterangan = keterangan,
                     StatusPembayaran = false,
-                    Status = Tiket.StatusTiket.BelumDibayar
+                    Status = Tiket.StatusTiket.BelumDibayar,
+                    Kontak = kontak 
                 };
-
-                var jsonPreview = System.Text.Json.JsonSerializer.Serialize(tiket);
-                Console.WriteLine(jsonPreview);
 
                 var response = await client.PostAsJsonAsync("http://localhost:5226/api/reservasi", tiket);
 
