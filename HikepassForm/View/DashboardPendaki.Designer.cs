@@ -59,8 +59,8 @@
             // 
             // btnRsv
             // 
-            btnRsv.Location = new Point(36, 119);
-            btnRsv.Margin = new Padding(3, 2, 3, 2);
+            btnRsv.Location = new Point(51, 198);
+            btnRsv.Margin = new Padding(4);
             btnRsv.Name = "btnRsv";
             btnRsv.Size = new Size(150, 37);
             btnRsv.TabIndex = 10;
@@ -70,8 +70,8 @@
             // 
             // btnTkt
             // 
-            btnTkt.Location = new Point(36, 175);
-            btnTkt.Margin = new Padding(3, 2, 3, 2);
+            btnTkt.Location = new Point(51, 292);
+            btnTkt.Margin = new Padding(4);
             btnTkt.Name = "btnTkt";
             btnTkt.Size = new Size(150, 37);
             btnTkt.TabIndex = 11;
@@ -80,8 +80,8 @@
             // 
             // btnInf
             // 
-            btnInf.Location = new Point(217, 119);
-            btnInf.Margin = new Padding(3, 2, 3, 2);
+            btnInf.Location = new Point(310, 198);
+            btnInf.Margin = new Padding(4);
             btnInf.Name = "btnInf";
             btnInf.Size = new Size(150, 37);
             btnInf.TabIndex = 12;
@@ -90,8 +90,8 @@
             // 
             // btnLogout
             // 
-            btnLogout.Location = new Point(650, 11);
-            btnLogout.Margin = new Padding(3, 2, 3, 2);
+            btnLogout.Location = new Point(928, 18);
+            btnLogout.Margin = new Padding(4);
             btnLogout.Name = "btnLogout";
             btnLogout.Size = new Size(83, 22);
             btnLogout.TabIndex = 14;
@@ -101,8 +101,8 @@
             // 
             // btnLaporan
             // 
-            btnLaporan.Location = new Point(217, 175);
-            btnLaporan.Margin = new Padding(3, 2, 3, 2);
+            btnLaporan.Location = new Point(310, 292);
+            btnLaporan.Margin = new Padding(4);
             btnLaporan.Name = "btnLaporan";
             btnLaporan.Size = new Size(150, 37);
             btnLaporan.TabIndex = 15;
@@ -129,9 +129,10 @@
             Controls.Add(btnRsv);
             Controls.Add(label1);
             Controls.Add(label3);
-            Margin = new Padding(3, 2, 3, 2);
+            Margin = new Padding(4);
             Name = "DashboardPendaki";
-            Size = new Size(596, 312);
+            Size = new Size(852, 520);
+            Load += DashboardPendaki_Load;
             ResumeLayout(false);
             PerformLayout();
         }
