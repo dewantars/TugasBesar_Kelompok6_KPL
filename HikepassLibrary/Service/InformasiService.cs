@@ -16,29 +16,18 @@ namespace HikepassLibrary.Service
         {
             try
             {
-                List<Informasi<string>> daftarInformasi = Informasi<string>.BacaDariFileJson<string>(filePath);
-
-                Console.WriteLine("\n===== Daftar Informasi Pendakian =====");
-                foreach (var info in daftarInformasi)
-                {
-                    info.TampilkanInformasi();
-                    Console.WriteLine();
-                }
+                var informasi = Informasi<string>.BacaDariFileJson(filePath);
+                informasi.TampilkanInformasi();
             }
             catch (FileNotFoundException)
             {
                 Console.WriteLine("Belum ada informasi yang tersedia.");
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Terjadi kesalahan saat membaca informasi: " + ex.Message);
-            }
         }
 
         public void TambahAtauEditInformasi()
         {
-            List<Informasi<string>> daftarInformasi;
-
+            var informasi = Informasi<string>.BacaDariFileJson(filePath);
             try
             {
                 informasi.TampilkanInformasi();
@@ -46,47 +35,28 @@ namespace HikepassLibrary.Service
                 Console.Write("\nApakah Anda ingin mengedit informasi ini? (y/n): ");
                 var pilihan = Console.ReadLine()?.Trim().ToLower();
 
-                if (input == "1")
+                if (pilihan == "y")
                 {
-                    var infoBaru = Informasi<string>.EditInformasi();
-                    daftarInformasi.Add(infoBaru);
-                    Console.WriteLine("\nInformasi baru ditambahkan.");
-                }
-                else if (input == "2" && daftarInformasi.Count > 0)
-                {
-                    Console.Write("Pilih nomor informasi yang ingin diedit: ");
-                    if (int.TryParse(Console.ReadLine(), out int index) &&
-                        index >= 1 && index <= daftarInformasi.Count)
-                    {
-                        var infoBaru = Informasi<string>.EditInformasi();
-                        daftarInformasi[index - 1] = infoBaru;
-                        Console.WriteLine("\nInformasi berhasil diperbarui.");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Nomor tidak valid.");
-                        return;
-                    }
+                    informasi = Informasi<string>.EditInformasi();
                 }
                 else
                 {
-                    Console.WriteLine("Pilihan tidak valid atau belum ada data.");
+                    Console.WriteLine("Tidak ada perubahan yang dilakukan.");
                     return;
                 }
-
-                // Simpan kembali seluruh daftar informasi ke file
-                string jsonString = System.Text.Json.JsonSerializer.Serialize(daftarInformasi, new System.Text.Json.JsonSerializerOptions
-                {
-                    WriteIndented = true
-                });
-                File.WriteAllText(filePath, jsonString);
             }
-            catch (Exception ex) {
-                Console.WriteLine("");
-                    }
-    }
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("\nBelum ada informasi yang tersedia. Membuat informasi baru.");
+                informasi = Informasi<string>.EditInformasi();
+                informasi.TulisKeFileJson(filePath);
+                Console.WriteLine("\nInformasi baru telah disimpan.");
+                return;
+            }
 
-
+            // Menyimpan informasi setelah diedit
+            informasi.TulisKeFileJson(filePath);
+            Console.WriteLine("\nInformasi telah diperbarui.");
+        }
     }
 }
-
