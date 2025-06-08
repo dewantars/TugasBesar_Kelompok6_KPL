@@ -7,6 +7,7 @@ using HikepassLibrary.Model;
 
 using System;
 using System.Collections.Generic;
+using static HikepassLibrary.Model.MonitoringFSM;
 
 namespace HikepassLibrary.Service
 {
@@ -52,18 +53,18 @@ namespace HikepassLibrary.Service
 
 
         public void RemoveFromMonitoring(Tiket tiket)
-{
-    if (_monitoredTikets.ContainsKey(tiket.Id))
-    {
-        _monitoredTikets.Remove(tiket.Id);
-        _pendakiStates.Remove(tiket.Id);
-        Console.WriteLine($"[-] Tiket ID {tiket.Id} dihapus dari daftar monitoring.");
-    }
-    else
-    {
-        Console.WriteLine($"[x] Tiket ID {tiket.Id} tidak ditemukan di monitoring.");
-    }
-}
+        {
+            if (_monitoredTikets.ContainsKey(tiket.Id))
+            {
+                _monitoredTikets.Remove(tiket.Id);
+                _pendakiStates.Remove(tiket.Id);
+                Console.WriteLine($"[-] Tiket ID {tiket.Id} dihapus dari daftar monitoring.");
+            }
+            else
+            {
+                Console.WriteLine($"[x] Tiket ID {tiket.Id} tidak ditemukan di monitoring.");
+            }
+        }
 
         public void RemoveFromMonitoring(int id)
         {
@@ -76,39 +77,7 @@ namespace HikepassLibrary.Service
                 Console.WriteLine($"[x] Tiket ID {id} tidak ditemukan saat ingin dihapus dari monitoring.");
             }
         }
-            
-
-        // Lanjutkan status FSM pendaki berdasarkan ID
-        public string LanjutkanPendakian(int tiketId, string namaPendaki)
-        {
-            if (!_pendakiStates.ContainsKey(tiketId))
-                return $"[x] Tiket ID {tiketId} belum dimonitoring.";
-
-            var fsmDict = _pendakiStates[tiketId];
-
-            if (!fsmDict.ContainsKey(namaPendaki))
-                return $"[x] Pendaki '{namaPendaki}' tidak ditemukan dalam tiket {tiketId}.";
-
-            var fsm = fsmDict[namaPendaki];
-
-            switch (fsm.current)
-            {
-                case MonitoringFSM.State.Basecamp:
-                case MonitoringFSM.State.Pos1:
-                    fsm.NaikPos(); break;
-                case MonitoringFSM.State.Pos2:
-                    fsm.CapaiPuncak(); break;
-                case MonitoringFSM.State.Puncak:
-                    fsm.TurunGunung(); break;
-                case MonitoringFSM.State.Turun:
-                    fsm.SelesaiPendakian(); break;
-                case MonitoringFSM.State.Selesai:
-                    return $"✓ Pendaki {namaPendaki} telah menyelesaikan pendakian.";
-            }
-
-            return $"→ Pendaki {namaPendaki} sekarang di tahap: {fsm.current}";
-        }
-
+       
         public void HandleStatusUpdate()
         {
             Console.Write("Ingin mengubah status pendaki? (y/n): ");
@@ -123,45 +92,78 @@ namespace HikepassLibrary.Service
             }
 
             Console.Write("Masukkan Nama Pendaki: ");
-            string namaPendaki = Console.ReadLine()?.Trim();
+            string? namaPendaki = Console.ReadLine()?.Trim();
+            if (string.IsNullOrEmpty(namaPendaki))
+            {
+                Console.WriteLine("[x] Nama pendaki tidak boleh kosong.");
+                return;
+            }
 
-            Console.Write("Naik ke mana? [pos1/pos2/puncak/turun]: ");
-            string tujuan = Console.ReadLine()?.Trim().ToLower();
+            if (!_pendakiStates.TryGetValue(tiketId, out var fsmDict) || !fsmDict.TryGetValue(namaPendaki, out var fsm))
+            {
+                Console.WriteLine($"[x] Data pendaki '{namaPendaki}' di tiket ID {tiketId} tidak ditemukan.");
+                return;
+            }
 
-            string result = UpdateStatus(tiketId, namaPendaki, tujuan);
+            Console.WriteLine($"-> Status saat ini untuk '{namaPendaki}' adalah: {fsm.current}");
+
+            var availableTriggers = fsm.GetAvailableTriggers();
+
+            if (availableTriggers.Count == 0)
+            {
+                Console.WriteLine("-> Tidak ada aksi selanjutnya yang tersedia untuk pendaki ini.");
+                return;
+            }
+
+            Console.WriteLine("\n[Aksi yang bisa dilakukan: " + string.Join(", ", availableTriggers)+"]");
+            Console.WriteLine();
+            Console.Write("Masukkan aksi yang akan dilakukan [NaikPos/CapaiPuncak/TurunGunung/SelesaiPendakian]: ");
+            var aksi = Console.ReadLine()?.Trim();
+
+            if (!Enum.TryParse<MonitoringFSM.Trigger>(aksi, out var trigger))
+            {
+                Console.WriteLine("[x] Input tujuan tidak dikenali. Gunakan: NaikPos, CapaiPuncak, TurunGunung, SelesaiPendakian.");
+                return;
+            }
+
+            var result = UpdateStatusWithTrigger(tiketId, namaPendaki, trigger);
             Console.WriteLine(result);
         }
 
-
-        public string UpdateStatus(int tiketId, string namaPendaki, string tujuan)
+        private string UpdateStatusWithTrigger(int tiketId, string namaPendaki, MonitoringFSM.Trigger trigger)
         {
-            if (!_pendakiStates.ContainsKey(tiketId))
-                return $"[x] Tiket ID {tiketId} belum dimonitoring.";
+            var fsm = _pendakiStates[tiketId][namaPendaki];
+            var before = fsm.current;
 
-            var fsmDict = _pendakiStates[tiketId];
-
-            if (!fsmDict.ContainsKey(namaPendaki))
-                return $"[x] Pendaki '{namaPendaki}' tidak ditemukan dalam tiket {tiketId}.";
-
-            var fsm = fsmDict[namaPendaki];
-
-            switch (tujuan)
+            switch (trigger)
             {
-                case "pos1":
-                case "pos2":
-                    fsm.NaikPos(); break;
-                case "puncak":
-                    fsm.CapaiPuncak(); break;
-                case "turun":
-                    fsm.TurunGunung(); break;
-                case "selesai":
-                    return $"[!] Selesaikan pendakian hanya bisa lewat proses checkout.";
-                default:
-                    return "[x] Input tujuan tidak dikenali. Gunakan: pos1, pos2, puncak, turun.";
+                case MonitoringFSM.Trigger.NaikPos: fsm.NaikPos(); break;
+                case MonitoringFSM.Trigger.CapaiPuncak: fsm.CapaiPuncak(); break;
+                case MonitoringFSM.Trigger.TurunGunung: fsm.TurunGunung(); break;
+                case MonitoringFSM.Trigger.SelesaiPendakian: fsm.SelesaiPendakian(); break;
             }
 
-            return $"→ Pendaki {namaPendaki} sekarang di tahap: {fsm.current}";
+            var after = fsm.current;
+            var sb = new StringBuilder();
+
+            sb.AppendLine($"\n[INFO] Tiket ID: {tiketId} | Pendaki: '{namaPendaki}'");
+            sb.AppendLine($"[AKSI] {trigger} diminta dari status {before}");
+
+            if (before == after)
+            {
+                sb.AppendLine($"[!] Aksi '{trigger}' tidak valid dari status '{before}'.");
+                sb.AppendLine("Transisi status harus dilakukan secara berurutan sesuai alur automata");
+            }
+            else
+            {
+                sb.AppendLine($"[✓] Status berhasil diperbarui: {before} → {after}");
+            }
+
+            sb.AppendLine("-------------------------------------------------------------");
+
+            return sb.ToString();
         }
+
         public void ShowMonitoring()
         {
             if (_monitoredTikets.Count == 0)

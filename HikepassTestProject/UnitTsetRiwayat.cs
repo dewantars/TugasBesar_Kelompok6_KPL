@@ -1,4 +1,4 @@
-﻿using HikepassLibrary.Model;
+using HikepassLibrary.Model;
 using HikepassLibrary.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -90,6 +90,56 @@ namespace HikepassTestProject
             var loadedList = service.LoadRiwayat();
             Assert.AreEqual(0, loadedList.Count, "Riwayat tidak kosong meskipun file tidak ada.");
         }
+
     }
 
+    [TestClass]
+    public class RiwayatPendakianTests
+    {
+        private const string TestFilePath = "TestRiwayatPendakian.json";
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            if (File.Exists(TestFilePath))
+                File.Delete(TestFilePath);
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            if (File.Exists(TestFilePath))
+                File.Delete(TestFilePath);
+        }
+
+        [TestMethod]
+        public void ShowRiwayat_ShouldDisplayCorrectData()
+        {
+            var riwayatPendakian = new RiwayatPendakian(TestFilePath);
+            RiwayatPendakian.riwayatList.Add(new Tiket
+            {
+                Id = 1,
+                Tanggal = new DateTime(2025, 5, 17),
+                Jalur = Tiket.JalurPendakian.Cinyiruan,
+                JumlahPendaki = 3,
+                DaftarPendaki = new Dictionary<string, string> { { "987654321", "Jane Doe" } },
+                BarangBawaanSaatCheckin = new List<string> { "Kompor", "Gas" },
+                BarangBawaanSaatCheckout = new List<string> { "Kompor" },
+                Keterangan = "Pendakian terganggu oleh cuaca",
+                StatusPembayaran = true,
+                Status = Tiket.StatusTiket.Checkout
+            });
+
+            using (var sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+                riwayatPendakian.ShowRiwayat();
+                var output = sw.ToString();
+
+                Assert.IsTrue(output.Contains("Jane Doe"), "Output tidak berisi nama pendaki yang sesuai.");
+                Assert.IsTrue(output.Contains("Pendakian terganggu oleh cuaca"), "Output tidak berisi keterangan yang sesuai.");
+            }
+        }
+
+    }
 }

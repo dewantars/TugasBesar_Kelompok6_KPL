@@ -1,5 +1,6 @@
-﻿using HikepassLibrary.Model;
+using HikepassLibrary.Model;
 using System;
+using System.Text.Json;
 
 namespace HikepassLibrary.Service
 {
@@ -12,51 +13,82 @@ namespace HikepassLibrary.Service
             this.filePath = filePath;
         }
 
-        public void TampilkanInformasi()
+        private List<Informasi<string>> GetAllInformasi()
         {
-            try
-            {
-                var informasi = Informasi<string>.BacaDariFileJson(filePath);
-                informasi.TampilkanInformasi();
-            }
-            catch (FileNotFoundException)
-            {
-                Console.WriteLine("Belum ada informasi yang tersedia.");
-            }
+            if (!File.Exists(filePath))
+                return new List<Informasi<string>>();
+
+            string jsonString = File.ReadAllText(filePath);
+            return JsonSerializer.Deserialize<List<Informasi<string>>>(jsonString)
+                   ?? new List<Informasi<string>>();
         }
 
-        public void TambahAtauEditInformasi()
+        public void TampilkanInformasi()
         {
-            var informasi = Informasi<string>.BacaDariFileJson(filePath);
-            try
-            {
-                informasi.TampilkanInformasi();
+            Console.Write("Masukkan kategori yang ingin dilihat (Peraturan/Tips/Umum): ");
+            string kategori = Console.ReadLine()?.Trim();
 
-                Console.Write("\nApakah Anda ingin mengedit informasi ini? (y/n): ");
-                var pilihan = Console.ReadLine()?.Trim().ToLower();
+            var daftarInformasi = GetAllInformasi()
+                                  .FindAll(info => info.Kategori.Equals(kategori, StringComparison.OrdinalIgnoreCase));
 
-                if (pilihan == "y")
-                {
-                    informasi = Informasi<string>.EditInformasi();
-                }
-                else
-                {
-                    Console.WriteLine("Tidak ada perubahan yang dilakukan.");
-                    return;
-                }
-            }
-            catch (FileNotFoundException)
+            if (daftarInformasi.Count == 0)
             {
-                Console.WriteLine("\nBelum ada informasi yang tersedia. Membuat informasi baru.");
-                informasi = Informasi<string>.EditInformasi();
-                informasi.TulisKeFileJson(filePath);
-                Console.WriteLine("\nInformasi baru telah disimpan.");
+                Console.WriteLine($"Tidak ada informasi pada kategori '{kategori}'.");
                 return;
             }
 
-            // Menyimpan informasi setelah diedit
-            informasi.TulisKeFileJson(filePath);
-            Console.WriteLine("\nInformasi telah diperbarui.");
+            foreach (var info in daftarInformasi)
+            {
+                Console.WriteLine();
+                info.TampilkanInformasi();
+            }
         }
+
+        public void EditInformasi()
+        {
+
+            var semuaInformasi = GetAllInformasi();
+
+            Console.Write("Masukkan kategori yang ingin diedit (Peraturan/Tips/Umum): ");
+            string kategori = Console.ReadLine()?.Trim();
+
+            var daftarKategori = semuaInformasi.FindAll(info =>
+                info.Kategori.Equals(kategori, StringComparison.OrdinalIgnoreCase));
+
+            if (daftarKategori.Count > 0)
+            {
+                Console.WriteLine("\nInformasi yang sudah ada:");
+                foreach (var info in daftarKategori)
+                {
+                    info.TampilkanInformasi();
+                }
+            }
+            else
+            {
+                Console.WriteLine("\nBelum ada informasi pada kategori ini.");
+            }
+
+            Console.Write("\nApakah Anda ingin mengedit informasi kategori ini? (y/n): ");
+            var konfirmasi = Console.ReadLine()?.Trim().ToLower();
+            if (konfirmasi == "y")
+            {
+                var infoBaru = Informasi<string>.EditInformasi();
+
+                // Hapus yang lama & tambahkan yang baru
+                semuaInformasi.RemoveAll(info => info.Kategori.Equals(kategori, StringComparison.OrdinalIgnoreCase));
+                semuaInformasi.Add(infoBaru);
+
+                // Simpan ulang
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                File.WriteAllText(filePath, JsonSerializer.Serialize(semuaInformasi, options));
+              
+                Console.WriteLine("\nInformasi telah diperbarui.");
+            }
+            else
+            {
+                Console.WriteLine("Tidak ada perubahan yang dilakukan.");
+            }
+        }
+
     }
 }

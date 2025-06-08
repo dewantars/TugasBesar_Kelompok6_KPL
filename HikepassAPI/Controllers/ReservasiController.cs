@@ -49,7 +49,8 @@ namespace HikepassAPI.Controllers
                 return NotFound("Reservasi tidak ditemukan.");
 
             // Design by Contract - Postcondition
-            Debug.Assert(reservasi != null, "Reservasi seharusnya ditemukan jika ID valid.");
+            // Pastikan kalau data ada, id-nya sesuai, bukan mengasumsikan data pasti ada
+            Debug.Assert(reservasi.Id == id, "ID reservasi harus sesuai dengan yang diminta.");
 
             return Ok(reservasi);
         }
