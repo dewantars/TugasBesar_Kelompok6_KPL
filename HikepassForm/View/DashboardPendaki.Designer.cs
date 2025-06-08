@@ -61,7 +61,7 @@
             // btnRsv
             // 
             btnRsv.Location = new Point(51, 198);
-            btnRsv.Margin = new Padding(4, 4, 4, 4);
+            btnRsv.Margin = new Padding(4);
             btnRsv.Name = "btnRsv";
             btnRsv.Size = new Size(214, 62);
             btnRsv.TabIndex = 10;
@@ -72,7 +72,7 @@
             // btnTkt
             // 
             btnTkt.Location = new Point(51, 292);
-            btnTkt.Margin = new Padding(4, 4, 4, 4);
+            btnTkt.Margin = new Padding(4);
             btnTkt.Name = "btnTkt";
             btnTkt.Size = new Size(214, 62);
             btnTkt.TabIndex = 11;
@@ -82,7 +82,7 @@
             // btnInf
             // 
             btnInf.Location = new Point(310, 198);
-            btnInf.Margin = new Padding(4, 4, 4, 4);
+            btnInf.Margin = new Padding(4);
             btnInf.Name = "btnInf";
             btnInf.Size = new Size(214, 62);
             btnInf.TabIndex = 12;
@@ -92,7 +92,7 @@
             // btnLogout
             // 
             btnLogout.Location = new Point(928, 18);
-            btnLogout.Margin = new Padding(4, 4, 4, 4);
+            btnLogout.Margin = new Padding(4);
             btnLogout.Name = "btnLogout";
             btnLogout.Size = new Size(118, 36);
             btnLogout.TabIndex = 14;
@@ -103,7 +103,7 @@
             // btnLaporan
             // 
             btnLaporan.Location = new Point(310, 292);
-            btnLaporan.Margin = new Padding(4, 4, 4, 4);
+            btnLaporan.Margin = new Padding(4);
             btnLaporan.Name = "btnLaporan";
             btnLaporan.Size = new Size(214, 62);
             btnLaporan.TabIndex = 15;
@@ -121,9 +121,10 @@
             Controls.Add(btnRsv);
             Controls.Add(label1);
             Controls.Add(label3);
-            Margin = new Padding(4, 4, 4, 4);
+            Margin = new Padding(4);
             Name = "DashboardPendaki";
             Size = new Size(852, 520);
+            Load += DashboardPendaki_Load;
             ResumeLayout(false);
             PerformLayout();
         }
