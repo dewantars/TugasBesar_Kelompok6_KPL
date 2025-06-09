@@ -8,11 +8,11 @@ namespace HikepassLibrary.Model
     // Kelas generik untuk menyimpan Informasi
     public class Informasi<T>
     {
-        public string IdInformasi { get; set; }              // ID unik untuk setiap informasi
-        public T Kategori { get; set; }                       // Kategori informasi (generic)
-        public string Judul { get; set; }                     // Judul informasi
-        public string Deskripsi { get; set; }                 // Isi atau uraian informasi
-        public DateTime TanggalDibuat { get; set; }           // Waktu saat informasi dibuat
+        public string IdInformasi { get; set; }      // ID unik untuk setiap Informasi
+        public T Kategori { get; set; }              // Kategori Informasi (generic)
+        public string Judul { get; set; }            // Judul Informasi
+        public string Deskripsi { get; set; }        // Deskripsi Informasi
+        public DateTime TanggalDibuat { get; set; }  // Waktu saat Informasi dibuat
 
         public Informasi() { }
 
