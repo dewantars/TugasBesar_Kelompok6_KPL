@@ -1,20 +1,25 @@
+// InformasiService.cs
 using HikepassLibrary.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text.Json;
 
 namespace HikepassLibrary.Service
 {
+    // Mengelola daftar Informasi dari dan ke file JSON
     public class InformasiService
     {
         private readonly string filePath;
 
+        // Konstruktor untuk menentukan lokasi file penyimpanan Informasi
         public InformasiService(string filePath = "informasi.json")
         {
             this.filePath = filePath;
         }
 
+        // Membaca objek Informasi dari file JSON
         private List<Informasi<string>> GetAllInformasi()
         {
             if (!File.Exists(filePath))
@@ -24,6 +29,7 @@ namespace HikepassLibrary.Service
             return JsonSerializer.Deserialize<List<Informasi<string>>>(json) ?? new List<Informasi<string>>();
         }
 
+        // Menampilkan Informasi dari kategori tertentu
         public void TampilkanInformasi()
         {
             string kategori = BacaKategoriDariUser();
@@ -44,6 +50,7 @@ namespace HikepassLibrary.Service
             }
         }
 
+        // Mengedit Informasi pada kategori tertentu oleh pengelola
         public void EditInformasi()
         {
             string kategori = BacaKategoriDariUser();
@@ -71,7 +78,6 @@ namespace HikepassLibrary.Service
                 if (konfirmasi == "y")
                 {
                     var infoBaru = Informasi<string>.EditInformasi();
-
                     semuaInformasi.RemoveAll(i =>
                         i.Kategori.Equals(kategori, StringComparison.OrdinalIgnoreCase));
                     semuaInformasi.Add(infoBaru);
@@ -92,12 +98,14 @@ namespace HikepassLibrary.Service
             } while (true);
         }
 
+        // Menyimpan Informasi ke file JSON, Secure coding: WriteIndented
         private void SimpanInformasi(List<Informasi<string>> data)
         {
             var options = new JsonSerializerOptions { WriteIndented = true };
             File.WriteAllText(filePath, JsonSerializer.Serialize(data, options));
         }
 
+        // Validasi input kategori dari pengelola/pendaki
         private string BacaKategoriDariUser()
         {
             while (true)
@@ -107,17 +115,15 @@ namespace HikepassLibrary.Service
 
                 return input switch
                 {
-                    "1" => "Peraturan",
-                    "2" => "Tips",
-                    "3" => "Umum",
-                    "peraturan" => "Peraturan",
-                    "tips" => "Tips",
-                    "umum" => "Umum",
+                    "1" or "peraturan" => "Peraturan",
+                    "2" or "tips" => "Tips",
+                    "3" or "umum" => "Umum",
                     _ => HandleInputInvalid(input)
                 };
             }
         }
 
+        // Secure coding: penanganan input tidak valid
         private string HandleInputInvalid(string input)
         {
             Console.WriteLine("Input tidak valid. Masukkan angka 1, 2, 3 atau nama kategori secara langsung.\n");
