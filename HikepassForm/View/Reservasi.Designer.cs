@@ -189,7 +189,6 @@ namespace HikepassForm.View
             buttonSubmit.Size = new Size(180, 46);
             buttonSubmit.TabIndex = 20;
             buttonSubmit.Text = "Simpan Reservasi";
-            buttonSubmit.Click += buttonSubmit_Click_1;
 
             // buttonTambahPendaki
             buttonTambahPendaki.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
@@ -199,7 +198,6 @@ namespace HikepassForm.View
             buttonTambahPendaki.TabIndex = 21;
             buttonTambahPendaki.Text = "Tambahkan Data Pendaki";
             buttonTambahPendaki.Visible = false;
-            buttonTambahPendaki.Click += buttonTambahPendaki_Click_1;
 
             // buttonBack
             buttonBack.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
