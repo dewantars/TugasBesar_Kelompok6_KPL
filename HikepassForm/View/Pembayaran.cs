@@ -25,6 +25,12 @@ namespace HikepassForm.View
             
             
         }
+        public void LoadPage(UserControl page)
+        {
+            this.Controls.Clear(); // Hapus isi panel konten saja
+            page.Dock = DockStyle.Fill;
+            this.Controls.Add(page);
+        }
 
         private void Pembayaran_Load(object sender, EventArgs e)
         {
@@ -112,8 +118,8 @@ namespace HikepassForm.View
 
         private void btnKembali_Click(object sender, EventArgs e)
         {
-            var tiketSaya = this.Parent as TiketSaya;
-            tiketSaya?.PindahKeTiketSaya();
+            var tiketSaya = new TiketSaya();
+            LoadPage(tiketSaya);
 
 
         }
