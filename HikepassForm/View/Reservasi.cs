@@ -16,16 +16,20 @@ namespace HikepassForm.View
 {
     public partial class Reservasi : UserControl
     {
+        // Clean Code: Menggunakan HttpClient sebagai field statis, efisien untuk reuse
         private static readonly HttpClient client = new HttpClient();
+
+        // Clean Code: Dictionary untuk menyimpan data pendaki tambahan
         private Dictionary<string, string> daftarPendakiTambahan = new Dictionary<string, string>();
 
         public Reservasi()
         {
             InitializeComponent();
             buttonTambahPendaki.Click += buttonTambahPendaki_Click_1;
-            buttonSubmit.Click += ButtonSubmit_Click;
+            buttonSubmit.Click += ButtonSubmit_Click; // Clean Code: Penamaan method PascalCase sesuai standar
         }
 
+        // Event handlers default - Clean Code: Dibiarkan kosong agar tidak error saat desain GUI
         private void labelJudul_Click(object sender, EventArgs e) { }
         private void Reservasi_Load(object sender, EventArgs e) { }
         private void radioButton1_CheckedChanged(object sender, EventArgs e) { }
@@ -50,6 +54,7 @@ namespace HikepassForm.View
 
         private void buttonMinus_Click(object sender, EventArgs e)
         {
+            // Clean Code: Kontrol jumlah minimum pendaki
             if (jumlahPendaki > 1)
             {
                 jumlahPendaki--;
@@ -75,6 +80,7 @@ namespace HikepassForm.View
         {
             try
             {
+                // Clean Code & Secure Coding: Validasi semua input user
                 string nama = textBoxNama.Text.Trim();
                 string nik = textBoxNIK.Text.Trim();
                 string kontak = textBoxKontak.Text.Trim();
@@ -121,6 +127,7 @@ namespace HikepassForm.View
                     { nik, $"{nama} - Usia {usia}, Kontak: {kontak}" }
                 };
 
+                // Clean Code: Looping untuk pendaki tambahan, aman terhadap input kosong
                 for (int i = 2; i <= jumlahPendaki; i++)
                 {
                     string inputNama = Microsoft.VisualBasic.Interaction.InputBox($"Masukkan nama pendaki ke-{i}", "Input Nama");
@@ -165,6 +172,7 @@ namespace HikepassForm.View
 
                 if (response.IsSuccessStatusCode)
                 {
+                    // Clean Code: Gunakan StringBuilder untuk efisiensi
                     StringBuilder sb = new StringBuilder();
                     sb.AppendLine("Reservasi berhasil disimpan!\n\nDaftar Pendaki:");
                     foreach (var pendaki in daftarPendaki)
@@ -214,7 +222,7 @@ namespace HikepassForm.View
                     if (dialogResult == DialogResult.Yes)
                     {
                         MessageBox.Show("Mengalihkan ke halaman pembayaran...");
-                        // LOGIKA DISINI JANNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+                        // Clean Code: Placeholder untuk navigasi pembayaran
                     }
 
                     ClearForm();
@@ -226,12 +234,14 @@ namespace HikepassForm.View
             }
             catch (Exception ex)
             {
+                // Secure Coding: Penanganan exception global
                 MessageBox.Show("Terjadi kesalahan: " + ex.Message);
             }
         }
 
         private void ClearForm()
         {
+            // Clean Code: Reset semua input ke default
             textBoxNama.Text = "";
             textBoxNIK.Text = "";
             textBoxKontak.Text = "";
@@ -247,8 +257,9 @@ namespace HikepassForm.View
 
         private void buttonTambahPendaki_Click_1(object sender, EventArgs e)
         {
+            // Clean Code & Secure: Validasi input format data tambahan
             daftarPendakiTambahan.Clear();
-            int jumlahDibutuhkan = jumlahPendaki - 1; // karena pendaki utama sudah diisi
+            int jumlahDibutuhkan = jumlahPendaki - 1; // pendaki utama sudah ada
             int pendakiKe = 2;
 
             while (daftarPendakiTambahan.Count < jumlahDibutuhkan)
@@ -302,11 +313,10 @@ namespace HikepassForm.View
             MessageBox.Show("Data pendaki tambahan berhasil dicatat.");
         }
 
-
         private void buttonBack_Click(object sender, EventArgs e)
         {
             var dashboard = this.Parent as DashboardPendaki;
-            dashboard?.PindahKeDashboard();
+            dashboard?.PindahKeDashboard(); // Clean Code: Navigasi antar kontrol
         }
     }
 }
