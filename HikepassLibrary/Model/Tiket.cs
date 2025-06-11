@@ -82,6 +82,23 @@ namespace HikepassLibrary.Model
                 }
             }
         }
+        public string BarangBawaanDisplay
+        {
+            get
+            {
+                // Menampilkan barang bawaan berdasarkan status tiket saat ini
+                if (this.Status == StatusTiket.Checkin && this.BarangBawaanSaatCheckin.Any())
+                {
+                    return string.Join(", ", this.BarangBawaanSaatCheckin);
+                }
+                if (this.Status == StatusTiket.Checkout && this.BarangBawaanSaatCheckout.Any())
+                {
+                    return string.Join(", ", this.BarangBawaanSaatCheckout);
+                }
+
+                return "-"; // Teks default jika tidak ada barang atau status tidak sesuai
+            }
+        }
 
     }
 }

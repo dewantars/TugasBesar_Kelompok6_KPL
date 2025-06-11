@@ -16,11 +16,14 @@ namespace HikepassForm.View
     public partial class Pembayaran : UserControl
     {
         private readonly List<Tiket> daftarTiket;
+        private DashboardPendaki parentDashboard;
 
-        public Pembayaran(List<Tiket> tiketList)
+        public Pembayaran(List<Tiket> tiketList, DashboardPendaki parent)
         {
             InitializeComponent();
             this.daftarTiket = tiketList;
+            this.parentDashboard = parent;
+            
         }
 
         private void Pembayaran_Load(object sender, EventArgs e)
@@ -51,9 +54,10 @@ namespace HikepassForm.View
 
         private async void btnBayar_Click(object sender, EventArgs e)
         {
-            // 1. DAPATKAN TIKET YANG DIPILIH
-            var tiketTerpilih = (tiketBindingSource.DataSource as List<Tiket>)?
-                                .Where(t => t.StatusPembayaran).ToList();
+            // Ambil dari list reservasiList di controller
+            var tiketTerpilih = ControllerReservasi.reservasiList
+                                .Where(t => t.StatusPembayaran) // yang dicentang
+                                .ToList();
 
             if (tiketTerpilih == null || !tiketTerpilih.Any())
             {
@@ -66,66 +70,50 @@ namespace HikepassForm.View
 
             try
             {
-
-                // panggil controller untuk setiap tiket.
-
                 foreach (Tiket tiket in tiketTerpilih)
                 {
-                    // Pastikan tiket ini memang belum dibayar sebelum diproses.
                     if (tiket.Status == Tiket.StatusTiket.BelumDibayar)
                     {
-                        // Panggil controller. `await` akan membuat kode ini menunggu sampai
+                        // Update status ke server
                         await ControllerReservasi.UpdatedPembayaran("http://localhost:5226/api/reservasi", tiket.Id);
+
+                        // Jika sukses, update juga status lokalnya di reservasiList
+                        var tiketDiList = ControllerReservasi.reservasiList.FirstOrDefault(t => t.Id == tiket.Id);
+                        if (tiketDiList != null)
+                        {
+                            tiketDiList.Status = Tiket.StatusTiket.Dibayar;
+                            tiketDiList.StatusPembayaran = false; // Uncheck lagi biar nggak keikut klik lagi
+                        }
                     }
                 }
 
+                // Refresh UI: hanya tampilkan tiket yang belum dibayar
+                var tiketSisa = ControllerReservasi.reservasiList
+                                    .Where(t => t.Status == Tiket.StatusTiket.BelumDibayar)
+                                    .ToList();
 
-                //refresh DataGridView untuk perubahan tersebut.
-
-                // Filter ulang daftar master. Tiket yang statusnya sudah diubah menjadi 'Dibayar' oleh controller tidak akan masuk lagi ke daftar ini.
-                var tiketSisa = this.daftarTiket.Where(t => t.Status == Tiket.StatusTiket.BelumDibayar).ToList();
-
-                // Set ulang data source untuk memaksa grid menggambar ulang isinya.
                 tiketBindingSource.DataSource = tiketSisa;
 
-                // Beri pesan sukses umum.
                 MessageBox.Show($"{tiketTerpilih.Count} tiket telah diproses untuk pembayaran.", "Proses Selesai", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                if (!tiketSisa.Any())
-                {
-                    lblStatusInfo.Text = "Semua tiket sudah lunas.";
-                }
-                else
-                {
-                    lblStatusInfo.Text = "Pembayaran selesai.";
-                }
-
+                lblStatusInfo.Text = tiketSisa.Any() ? "Pembayaran selesai." : "Semua tiket sudah lunas.";
             }
             catch (Exception ex)
             {
-                // Menangkap error tak terduga yang mungkin terjadi di sisi UI.
                 MessageBox.Show("Terjadi kesalahan teknis: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 lblStatusInfo.Text = "Terjadi kesalahan.";
             }
             finally
             {
-                // Aktifkan kembali tombol jika masih ada yang bisa dibayar.
-                if ((tiketBindingSource.DataSource as List<Tiket>)?.Any() == true)
-                {
-                    btnBayar.Enabled = true;
-                }
-                else
-                {
-                    btnBayar.Enabled = false;
-                }
+                btnBayar.Enabled = ControllerReservasi.reservasiList.Any(t => t.Status == Tiket.StatusTiket.BelumDibayar);
             }
         }
-        
+
 
         private void btnKembali_Click(object sender, EventArgs e)
         {
-            
-            
+            parentDashboard.back(); 
+
 
         }
     }

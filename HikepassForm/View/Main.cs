@@ -20,7 +20,7 @@ namespace HikepassForm
             this.Controls.Add(page);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnlogin_Click(object sender, EventArgs e)
         {
             var dashboard = new DashboardPendaki();
             LoadPage(dashboard);

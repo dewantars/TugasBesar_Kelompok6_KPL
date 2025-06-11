@@ -45,15 +45,17 @@
             btnBayar = new Button();
             lblStatus = new Label();
             lblStatusInfo = new Label();
+            reservasiControllerBindingSource = new BindingSource(components);
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)tiketBindingSource).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)reservasiControllerBindingSource).BeginInit();
             SuspendLayout();
             // 
             // lblJudul
             // 
             lblJudul.AutoSize = true;
             lblJudul.Font = new Font("Segoe UI Semibold", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblJudul.Location = new Point(461, 20);
+            lblJudul.Location = new Point(446, 20);
             lblJudul.Name = "lblJudul";
             lblJudul.Size = new Size(149, 32);
             lblJudul.TabIndex = 0;
@@ -134,7 +136,7 @@
             // 
             // btnKembali
             // 
-            btnKembali.Location = new Point(413, 398);
+            btnKembali.Location = new Point(367, 398);
             btnKembali.Name = "btnKembali";
             btnKembali.Size = new Size(124, 36);
             btnKembali.TabIndex = 2;
@@ -144,7 +146,7 @@
             // 
             // btnBayar
             // 
-            btnBayar.Location = new Point(594, 398);
+            btnBayar.Location = new Point(548, 398);
             btnBayar.Name = "btnBayar";
             btnBayar.Size = new Size(124, 36);
             btnBayar.TabIndex = 3;
@@ -155,7 +157,7 @@
             // lblStatus
             // 
             lblStatus.AutoSize = true;
-            lblStatus.Location = new Point(485, 369);
+            lblStatus.Location = new Point(439, 369);
             lblStatus.Name = "lblStatus";
             lblStatus.Size = new Size(45, 15);
             lblStatus.TabIndex = 4;
@@ -163,10 +165,14 @@
             // 
             // lblStatusInfo
             // 
-            lblStatusInfo.Location = new Point(536, 366);
+            lblStatusInfo.Location = new Point(490, 366);
             lblStatusInfo.Name = "lblStatusInfo";
             lblStatusInfo.Size = new Size(385, 18);
             lblStatusInfo.TabIndex = 5;
+            // 
+            // reservasiControllerBindingSource
+            // 
+            reservasiControllerBindingSource.DataSource = typeof(HikepassAPI.Controllers.ReservasiController);
             // 
             // Pembayaran
             // 
@@ -183,6 +189,7 @@
             Load += Pembayaran_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)tiketBindingSource).EndInit();
+            ((System.ComponentModel.ISupportInitialize)reservasiControllerBindingSource).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -196,6 +203,7 @@
         private Button btnBayar;
         private Label lblStatus;
         private Label lblStatusInfo;
+        private BindingSource reservasiControllerBindingSource;
         private DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn tanggalDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn jumlahPendakiDataGridViewTextBoxColumn;

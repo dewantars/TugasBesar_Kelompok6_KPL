@@ -15,10 +15,11 @@ namespace HikepassForm
 {
     public partial class DashboardPendaki : UserControl
     {
-        
+
         public DashboardPendaki()
         {
             InitializeComponent();
+ 
         }
         public void LoadPage(UserControl page)
         {
@@ -29,6 +30,12 @@ namespace HikepassForm
         public void btnLogout_Click(object sender, EventArgs e)
         {
             this.Controls.Clear(); // Hapus konten sebelumnya
+        }
+        
+        public void back()
+        {
+            this.Controls.Clear();
+            InitializeComponent();
         }
 
         private void btnRsv_Click(object sender, EventArgs e)
@@ -95,27 +102,27 @@ namespace HikepassForm
             }
 
 
-            Pembayaran halamanPembayaran = new Pembayaran(ControllerReservasi.reservasiList);
+            Pembayaran halamanPembayaran = new Pembayaran(ControllerReservasi.reservasiList, this);
             LoadPage(halamanPembayaran);
-            
+
+
         }
         private void btnCheckIndanCheckOut_Click(object sender, EventArgs e)
         {
 
             if (ControllerReservasi.reservasiList.Count == 0)
             {
-                // memanggil btnTkt_Click untuk memicu pembuatan data dummy, atau salin logika data dummy ke sini jika ingin terpisah.
+               
 
                 btnTkt_Click(sender, e); 
                 this.Controls.Clear();  
             }
 
-            var halamanCheckin = new CheckinDanCheckout(ControllerReservasi.reservasiList);
+            var halamanCheckin = new CheckinDanCheckout(ControllerReservasi.reservasiList,this);
 
 
             LoadPage(halamanCheckin);
-            //halamanCheckin.Show();
-            //this.Hide();
+            
         }
 
 

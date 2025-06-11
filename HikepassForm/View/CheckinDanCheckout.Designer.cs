@@ -31,15 +31,6 @@
             components = new System.ComponentModel.Container();
             label1 = new Label();
             dataGridView1 = new DataGridView();
-            idDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            tanggalDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            jumlahPendakiDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            kontakDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            jalurDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            daftarPendakiDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            statusDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            keteranganDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            Pilih = new DataGridViewCheckBoxColumn();
             tiketBindingSource = new BindingSource(components);
             tiketControllerBindingSource = new BindingSource(components);
             gboxBarang = new GroupBox();
@@ -49,6 +40,16 @@
             btnCheckIn = new Button();
             btnCheckOut = new Button();
             btnKembali = new Button();
+            idDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            tanggalDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            jumlahPendakiDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            kontakDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            jalurDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            daftarPendakiDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            statusDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            keteranganDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            BarangBawaanColumn = new DataGridViewTextBoxColumn();
+            Pilih = new DataGridViewCheckBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)tiketBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)tiketControllerBindingSource).BeginInit();
@@ -59,7 +60,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI Semibold", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(432, 28);
+            label1.Location = new Point(444, 28);
             label1.Name = "label1";
             label1.Size = new Size(263, 32);
             label1.TabIndex = 0;
@@ -67,69 +68,17 @@
             // 
             // dataGridView1
             // 
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AllowUserToOrderColumns = true;
             dataGridView1.AutoGenerateColumns = false;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { idDataGridViewTextBoxColumn, tanggalDataGridViewTextBoxColumn, jumlahPendakiDataGridViewTextBoxColumn, kontakDataGridViewTextBoxColumn, jalurDataGridViewTextBoxColumn, daftarPendakiDataGridViewTextBoxColumn, statusDataGridViewTextBoxColumn, keteranganDataGridViewTextBoxColumn, Pilih });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { idDataGridViewTextBoxColumn, tanggalDataGridViewTextBoxColumn, jumlahPendakiDataGridViewTextBoxColumn, kontakDataGridViewTextBoxColumn, jalurDataGridViewTextBoxColumn, daftarPendakiDataGridViewTextBoxColumn, statusDataGridViewTextBoxColumn, keteranganDataGridViewTextBoxColumn, BarangBawaanColumn, Pilih });
             dataGridView1.DataSource = tiketBindingSource;
             dataGridView1.Location = new Point(83, 87);
             dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(942, 181);
+            dataGridView1.Size = new Size(1043, 181);
             dataGridView1.TabIndex = 1;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick;
-            // 
-            // idDataGridViewTextBoxColumn
-            // 
-            idDataGridViewTextBoxColumn.DataPropertyName = "Id";
-            idDataGridViewTextBoxColumn.HeaderText = "Id";
-            idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
-            // 
-            // tanggalDataGridViewTextBoxColumn
-            // 
-            tanggalDataGridViewTextBoxColumn.DataPropertyName = "Tanggal";
-            tanggalDataGridViewTextBoxColumn.HeaderText = "Tanggal";
-            tanggalDataGridViewTextBoxColumn.Name = "tanggalDataGridViewTextBoxColumn";
-            // 
-            // jumlahPendakiDataGridViewTextBoxColumn
-            // 
-            jumlahPendakiDataGridViewTextBoxColumn.DataPropertyName = "JumlahPendaki";
-            jumlahPendakiDataGridViewTextBoxColumn.HeaderText = "JumlahPendaki";
-            jumlahPendakiDataGridViewTextBoxColumn.Name = "jumlahPendakiDataGridViewTextBoxColumn";
-            // 
-            // kontakDataGridViewTextBoxColumn
-            // 
-            kontakDataGridViewTextBoxColumn.DataPropertyName = "Kontak";
-            kontakDataGridViewTextBoxColumn.HeaderText = "Kontak";
-            kontakDataGridViewTextBoxColumn.Name = "kontakDataGridViewTextBoxColumn";
-            // 
-            // jalurDataGridViewTextBoxColumn
-            // 
-            jalurDataGridViewTextBoxColumn.DataPropertyName = "Jalur";
-            jalurDataGridViewTextBoxColumn.HeaderText = "Jalur";
-            jalurDataGridViewTextBoxColumn.Name = "jalurDataGridViewTextBoxColumn";
-            // 
-            // daftarPendakiDataGridViewTextBoxColumn
-            // 
-            daftarPendakiDataGridViewTextBoxColumn.DataPropertyName = "DaftarPendaki";
-            daftarPendakiDataGridViewTextBoxColumn.HeaderText = "DaftarPendaki";
-            daftarPendakiDataGridViewTextBoxColumn.Name = "daftarPendakiDataGridViewTextBoxColumn";
-            // 
-            // statusDataGridViewTextBoxColumn
-            // 
-            statusDataGridViewTextBoxColumn.DataPropertyName = "Status";
-            statusDataGridViewTextBoxColumn.HeaderText = "Status";
-            statusDataGridViewTextBoxColumn.Name = "statusDataGridViewTextBoxColumn";
-            // 
-            // keteranganDataGridViewTextBoxColumn
-            // 
-            keteranganDataGridViewTextBoxColumn.DataPropertyName = "Keterangan";
-            keteranganDataGridViewTextBoxColumn.HeaderText = "Keterangan";
-            keteranganDataGridViewTextBoxColumn.Name = "keteranganDataGridViewTextBoxColumn";
-            // 
-            // Pilih
-            // 
-            Pilih.DataPropertyName = "Id";
-            Pilih.HeaderText = "Pilih";
-            Pilih.Name = "Pilih";
             // 
             // tiketBindingSource
             // 
@@ -209,6 +158,67 @@
             btnKembali.UseVisualStyleBackColor = true;
             btnKembali.Click += btnKembali_Click;
             // 
+            // idDataGridViewTextBoxColumn
+            // 
+            idDataGridViewTextBoxColumn.DataPropertyName = "Id";
+            idDataGridViewTextBoxColumn.HeaderText = "Id";
+            idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
+            // 
+            // tanggalDataGridViewTextBoxColumn
+            // 
+            tanggalDataGridViewTextBoxColumn.DataPropertyName = "Tanggal";
+            tanggalDataGridViewTextBoxColumn.HeaderText = "Tanggal";
+            tanggalDataGridViewTextBoxColumn.Name = "tanggalDataGridViewTextBoxColumn";
+            // 
+            // jumlahPendakiDataGridViewTextBoxColumn
+            // 
+            jumlahPendakiDataGridViewTextBoxColumn.DataPropertyName = "JumlahPendaki";
+            jumlahPendakiDataGridViewTextBoxColumn.HeaderText = "JumlahPendaki";
+            jumlahPendakiDataGridViewTextBoxColumn.Name = "jumlahPendakiDataGridViewTextBoxColumn";
+            // 
+            // kontakDataGridViewTextBoxColumn
+            // 
+            kontakDataGridViewTextBoxColumn.DataPropertyName = "Kontak";
+            kontakDataGridViewTextBoxColumn.HeaderText = "Kontak";
+            kontakDataGridViewTextBoxColumn.Name = "kontakDataGridViewTextBoxColumn";
+            // 
+            // jalurDataGridViewTextBoxColumn
+            // 
+            jalurDataGridViewTextBoxColumn.DataPropertyName = "Jalur";
+            jalurDataGridViewTextBoxColumn.HeaderText = "Jalur";
+            jalurDataGridViewTextBoxColumn.Name = "jalurDataGridViewTextBoxColumn";
+            // 
+            // daftarPendakiDataGridViewTextBoxColumn
+            // 
+            daftarPendakiDataGridViewTextBoxColumn.DataPropertyName = "DaftarPendaki";
+            daftarPendakiDataGridViewTextBoxColumn.HeaderText = "DaftarPendaki";
+            daftarPendakiDataGridViewTextBoxColumn.Name = "daftarPendakiDataGridViewTextBoxColumn";
+            // 
+            // statusDataGridViewTextBoxColumn
+            // 
+            statusDataGridViewTextBoxColumn.DataPropertyName = "Status";
+            statusDataGridViewTextBoxColumn.HeaderText = "Status";
+            statusDataGridViewTextBoxColumn.Name = "statusDataGridViewTextBoxColumn";
+            // 
+            // keteranganDataGridViewTextBoxColumn
+            // 
+            keteranganDataGridViewTextBoxColumn.DataPropertyName = "Keterangan";
+            keteranganDataGridViewTextBoxColumn.HeaderText = "Keterangan";
+            keteranganDataGridViewTextBoxColumn.Name = "keteranganDataGridViewTextBoxColumn";
+            // 
+            // BarangBawaanColumn
+            // 
+            BarangBawaanColumn.DataPropertyName = "BarangBawaanDisplay";
+            BarangBawaanColumn.HeaderText = "Barang Bawaan";
+            BarangBawaanColumn.Name = "BarangBawaanColumn";
+            // 
+            // Pilih
+            // 
+            Pilih.FalseValue = false;
+            Pilih.HeaderText = "Pilih Tiket";
+            Pilih.Name = "Pilih";
+            Pilih.TrueValue = true;
+            // 
             // CheckinDanCheckout
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -220,7 +230,8 @@
             Controls.Add(dataGridView1);
             Controls.Add(label1);
             Name = "CheckinDanCheckout";
-            Size = new Size(1111, 538);
+            Size = new Size(1177, 538);
+            Load += CheckinDanCheckout_Load_1;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)tiketBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)tiketControllerBindingSource).EndInit();
@@ -235,15 +246,6 @@
         private Label label1;
         private DataGridView dataGridView1;
         private BindingSource tiketControllerBindingSource;
-        private DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn tanggalDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn jumlahPendakiDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn kontakDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn jalurDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn daftarPendakiDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn statusDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn keteranganDataGridViewTextBoxColumn;
-        private DataGridViewCheckBoxColumn Pilih;
         private BindingSource tiketBindingSource;
         private GroupBox gboxBarang;
         private Button btnTambahBarang;
@@ -252,5 +254,15 @@
         private Button btnCheckIn;
         private Button btnCheckOut;
         private Button btnKembali;
+        private DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn tanggalDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn jumlahPendakiDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn kontakDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn jalurDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn daftarPendakiDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn statusDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn keteranganDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn BarangBawaanColumn;
+        private DataGridViewCheckBoxColumn Pilih;
     }
 }
