@@ -1,4 +1,5 @@
 ﻿using System;
+using HikepassForm;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -15,15 +16,21 @@ namespace HikepassForm.View
 {
     public partial class Reservasi : UserControl
     {
+        // Clean Code: Menggunakan HttpClient sebagai field statis, efisien untuk reuse
         private static readonly HttpClient client = new HttpClient();
+
+        // Clean Code: Dictionary untuk menyimpan data pendaki tambahan
+        private Dictionary<string, string> daftarPendakiTambahan = new Dictionary<string, string>();
 
         public Reservasi()
         {
             InitializeComponent();
-            buttonTambahPendaki.Click += buttonTambahPendaki_Click_1; 
-            buttonSubmit.Click += ButtonSubmit_Click;
+            buttonTambahPendaki.Click += buttonTambahPendaki_Click_1;
+            buttonSubmit.Click += ButtonSubmit_Click; // Clean Code: Penamaan method PascalCase sesuai standar
         }
 
+        // Event handlers default - Clean Code: Dibiarkan kosong agar tidak error saat desain GUI
+        private void labelJudul_Click(object sender, EventArgs e) { }
         private void Reservasi_Load(object sender, EventArgs e) { }
         private void radioButton1_CheckedChanged(object sender, EventArgs e) { }
         private void radioButton2_CheckedChanged_1(object sender, EventArgs e) { }
@@ -47,6 +54,7 @@ namespace HikepassForm.View
 
         private void buttonMinus_Click(object sender, EventArgs e)
         {
+            // Clean Code: Kontrol jumlah minimum pendaki
             if (jumlahPendaki > 1)
             {
                 jumlahPendaki--;
@@ -72,6 +80,7 @@ namespace HikepassForm.View
         {
             try
             {
+                // Ambil data pendaki utama
                 string nama = textBoxNama.Text.Trim();
                 string nik = textBoxNIK.Text.Trim();
                 string kontak = textBoxKontak.Text.Trim();
@@ -79,11 +88,12 @@ namespace HikepassForm.View
                 string keterangan = textBoxKeterangan.Text.Trim();
                 DateTime tanggal = dateTimePickerTanggal.Value;
 
-                if (!int.TryParse(labelJumlah.Text, out int jumlahPendaki) || jumlahPendaki < 1)
+                if (!int.TryParse(labelJumlah.Text, out int parsedJumlah) || parsedJumlah < 1)
                 {
                     MessageBox.Show("Jumlah pendaki tidak valid.");
                     return;
                 }
+                jumlahPendaki = parsedJumlah;
 
                 if (string.IsNullOrWhiteSpace(nama) || string.IsNullOrWhiteSpace(nik))
                 {
@@ -109,43 +119,34 @@ namespace HikepassForm.View
                     return;
                 }
 
+                // Tentukan jalur
                 Tiket.JalurPendakian jalur = radioButton1.Checked
                     ? Tiket.JalurPendakian.Cinyiruan
                     : Tiket.JalurPendakian.Panorama;
 
+                // Buat daftar pendaki awal dari data utama
                 var daftarPendaki = new Dictionary<string, string>
                 {
                     { nik, $"{nama} - Usia {usia}, Kontak: {kontak}" }
                 };
 
-                for (int i = 2; i <= jumlahPendaki; i++)
+                // Tambahkan pendaki tambahan (jika ada)
+                foreach (var tambahan in daftarPendakiTambahan)
                 {
-                    string inputNama = Microsoft.VisualBasic.Interaction.InputBox($"Masukkan nama pendaki ke-{i}", "Input Nama");
-                    if (string.IsNullOrWhiteSpace(inputNama))
+                    if (!daftarPendaki.ContainsKey(tambahan.Key))
                     {
-                        MessageBox.Show($"Nama pendaki ke-{i} tidak boleh kosong.");
-                        return;
+                        daftarPendaki.Add(tambahan.Key, tambahan.Value);
                     }
-
-                    string inputNIK = Microsoft.VisualBasic.Interaction.InputBox($"Masukkan NIK pendaki ke-{i}", "Input NIK");
-                    if (string.IsNullOrWhiteSpace(inputNIK))
-                    {
-                        MessageBox.Show($"NIK pendaki ke-{i} tidak boleh kosong.");
-                        return;
-                    }
-
-                    string inputKontak = Microsoft.VisualBasic.Interaction.InputBox($"Masukkan kontak pendaki ke-{i}", "Input Kontak");
-                    string inputUsiaText = Microsoft.VisualBasic.Interaction.InputBox($"Masukkan usia pendaki ke-{i}", "Input Usia");
-
-                    if (!int.TryParse(inputUsiaText, out int inputUsia))
-                    {
-                        MessageBox.Show($"Usia pendaki ke-{i} harus berupa angka.");
-                        return;
-                    }
-
-                    daftarPendaki.Add(inputNIK, $"{inputNama} - Usia {inputUsia}, Kontak: {inputKontak}");
                 }
 
+                // Validasi jumlah data pendaki harus sesuai dengan input jumlah
+                if (daftarPendaki.Count != jumlahPendaki)
+                {
+                    MessageBox.Show($"Jumlah pendaki belum lengkap. Diperlukan {jumlahPendaki}, baru terisi {daftarPendaki.Count}.");
+                    return;
+                }
+
+                // Buat objek tiket
                 var tiket = new Tiket
                 {
                     Tanggal = tanggal,
@@ -158,6 +159,7 @@ namespace HikepassForm.View
                     Kontak = kontak
                 };
 
+                // Kirim ke API
                 var response = await client.PostAsJsonAsync("http://localhost:5226/api/reservasi", tiket);
 
                 if (response.IsSuccessStatusCode)
@@ -169,6 +171,7 @@ namespace HikepassForm.View
                         sb.AppendLine($"- {pendaki.Value}");
                     }
 
+                    // Tampilkan konfirmasi
                     Form resultDialog = new Form()
                     {
                         Text = "Konfirmasi Reservasi",
@@ -211,10 +214,10 @@ namespace HikepassForm.View
                     if (dialogResult == DialogResult.Yes)
                     {
                         MessageBox.Show("Mengalihkan ke halaman pembayaran...");
-                        // LOGIKA DISINI JANNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+                        // TODO: tambahkan logika ke halaman pembayaran
                     }
 
-                    ClearForm();
+                    ClearForm(); // Reset semua input
                 }
                 else
                 {
@@ -229,6 +232,7 @@ namespace HikepassForm.View
 
         private void ClearForm()
         {
+            // Clean Code: Reset semua input ke default
             textBoxNama.Text = "";
             textBoxNIK.Text = "";
             textBoxKontak.Text = "";
@@ -240,62 +244,70 @@ namespace HikepassForm.View
             jumlahPendaki = 1;
             labelJumlah.Text = "1";
             buttonTambahPendaki.Visible = false;
+            daftarPendakiTambahan.Clear();
         }
 
         private void buttonTambahPendaki_Click_1(object sender, EventArgs e)
         {
-            var daftarPendakiTambahan = new Dictionary<string, string>();
+            // Clean Code & Secure: Validasi input format data tambahan
+            int jumlahDibutuhkan = jumlahPendaki - 1; // pendaki utama sudah ada
+            int pendakiKe = 2;
 
-            for (int i = 2; i <= jumlahPendaki; i++)
+            while (daftarPendakiTambahan.Count < jumlahDibutuhkan)
             {
-                string inputNama = Microsoft.VisualBasic.Interaction.InputBox($"Masukkan nama pendaki ke-{i}", "Input Nama");
-                if (string.IsNullOrWhiteSpace(inputNama))
+                string input = Microsoft.VisualBasic.Interaction.InputBox(
+                    $"Masukkan data pendaki ke-{pendakiKe}\n(Nama - NIK - Kontak - Usia):",
+                    "Input Data Pendaki");
+
+                if (string.IsNullOrWhiteSpace(input))
                 {
-                    var result = MessageBox.Show($"Nama pendaki ke-{i} kosong. Apakah Anda ingin membatalkan input data tambahan?",
+                    var result = MessageBox.Show($"Data pendaki ke-{pendakiKe} kosong. Batalkan input data tambahan?",
                                                  "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (result == DialogResult.Yes) return;
-                    else i--;
-                    continue;
+                    else continue;
                 }
 
-                string inputNIK = Microsoft.VisualBasic.Interaction.InputBox($"Masukkan NIK pendaki ke-{i}", "Input NIK");
-                if (string.IsNullOrWhiteSpace(inputNIK))
+                var parts = input.Split('-');
+                if (parts.Length != 4)
                 {
-                    var result = MessageBox.Show($"NIK pendaki ke-{i} kosong. Apakah Anda ingin membatalkan input data tambahan?",
-                                                 "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (result == DialogResult.Yes) return;
-                    else i--;
+                    MessageBox.Show("Format salah. Gunakan format: Nama - NIK - Kontak - Usia");
                     continue;
                 }
 
-                string inputKontak = Microsoft.VisualBasic.Interaction.InputBox($"Masukkan kontak pendaki ke-{i}", "Input Kontak");
-                string inputUsiaText = Microsoft.VisualBasic.Interaction.InputBox($"Masukkan usia pendaki ke-{i}", "Input Usia");
+                string nama = parts[0].Trim();
+                string nik = parts[1].Trim();
+                string kontak = parts[2].Trim();
+                string usiaText = parts[3].Trim();
 
-                if (!int.TryParse(inputUsiaText, out int inputUsia))
+                if (string.IsNullOrWhiteSpace(nama) || string.IsNullOrWhiteSpace(nik))
                 {
-                    var result = MessageBox.Show($"Usia pendaki ke-{i} tidak valid. Apakah Anda ingin membatalkan input data tambahan?",
-                                                 "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                    if (result == DialogResult.Yes) return;
-                    else i--;
+                    MessageBox.Show("Nama dan NIK tidak boleh kosong.");
                     continue;
                 }
 
-                daftarPendakiTambahan[inputNIK] = $"{inputNama} - Usia {inputUsia}, Kontak: {inputKontak}";
+                if (!int.TryParse(usiaText, out int usia) || usia <= 0)
+                {
+                    MessageBox.Show("Usia harus berupa angka yang valid.");
+                    continue;
+                }
+
+                if (daftarPendakiTambahan.ContainsKey(nik) || nik == textBoxNIK.Text.Trim())
+                {
+                    MessageBox.Show("NIK tersebut sudah digunakan untuk pendaki utama atau pendaki lain. Gunakan NIK yang berbeda.");
+                    continue;
+                }
+
+                daftarPendakiTambahan[nik] = $"{nama} - Usia {usia}, Kontak: {kontak}";
+                pendakiKe++;
             }
 
-            MessageBox.Show("Data pendaki tambahan berhasil di simpan.");
+            MessageBox.Show("Data pendaki tambahan berhasil dicatat.");
         }
 
         private void buttonBack_Click(object sender, EventArgs e)
         {
-            //var dashboard = new DashboardPendaki();
-            //dashboard.Dock = DockStyle.Fill;
-
-            //if (this.Parent is Panel parentPanel)
-            //{
-            //    parentPanel.Controls.Clear();
-            //    parentPanel.Controls.Add(dashboard);
-            //}
+            var dashboard = this.Parent as DashboardPendaki;
+            dashboard?.PindahKeDashboard(); // Clean Code: Navigasi antar kontrol
         }
     }
 }

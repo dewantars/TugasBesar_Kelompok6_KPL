@@ -8,6 +8,7 @@ namespace HikepassForm.View
 
         protected override void Dispose(bool disposing)
         {
+            // Clean code: memastikan semua resource dibersihkan saat form ditutup
             if (disposing && (components != null))
             {
                 components.Dispose();
@@ -19,7 +20,6 @@ namespace HikepassForm.View
 
         private void InitializeComponent()
         {
-            label3 = new Label();
             radioButton1 = new RadioButton();
             radioButton2 = new RadioButton();
             label1 = new Label();
@@ -42,155 +42,93 @@ namespace HikepassForm.View
             buttonPlus = new Button();
             buttonTambahPendaki = new Button();
             buttonBack = new Button();
+            labelJudul = new Label();
             SuspendLayout();
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Microsoft Sans Serif", 18F);
-            label3.Location = new Point(333, 13);
-            label3.Name = "label3";
-            label3.Size = new Size(177, 40);
-            label3.TabIndex = 0;
-            label3.Text = "Reservasi";
-            label3.Click += label3_Click;
-            // 
+
             // radioButton1
-            // 
             radioButton1.AutoSize = true;
             radioButton1.Location = new Point(19, 374);
             radioButton1.Name = "radioButton1";
             radioButton1.Size = new Size(482, 29);
             radioButton1.TabIndex = 18;
             radioButton1.Text = "Puncak Besar Malabar Via Cinyiruan (Sedang) 50k/Orang";
-            // 
+
             // radioButton2
-            // 
             radioButton2.AutoSize = true;
             radioButton2.Location = new Point(19, 409);
             radioButton2.Name = "radioButton2";
             radioButton2.Size = new Size(485, 29);
             radioButton2.TabIndex = 19;
             radioButton2.Text = "Puncak Besar Malabar Via Panorama (Pendek) 20k/Orang";
-            // 
+
             // label1
-            // 
             label1.AutoSize = true;
             label1.Location = new Point(19, 344);
             label1.Name = "label1";
             label1.Size = new Size(173, 25);
             label1.TabIndex = 17;
             label1.Text = "Pilih Jalur Pendakian:";
-            // 
+
             // labelNama
-            // 
             labelNama.Location = new Point(19, 73);
             labelNama.Name = "labelNama";
             labelNama.Size = new Size(100, 23);
             labelNama.TabIndex = 1;
             labelNama.Text = "Nama";
-            // 
+
             // textBoxNama
-            // 
             textBoxNama.Location = new Point(182, 68);
             textBoxNama.Name = "textBoxNama";
             textBoxNama.Size = new Size(300, 31);
             textBoxNama.TabIndex = 2;
-            // 
+
             // labelNIK
-            // 
             labelNIK.Location = new Point(19, 108);
             labelNIK.Name = "labelNIK";
             labelNIK.Size = new Size(100, 23);
             labelNIK.TabIndex = 3;
             labelNIK.Text = "NIK";
-            // 
+
             // textBoxNIK
-            // 
             textBoxNIK.Location = new Point(182, 103);
             textBoxNIK.Name = "textBoxNIK";
             textBoxNIK.Size = new Size(300, 31);
             textBoxNIK.TabIndex = 4;
-            // 
+
             // labelKontak
-            // 
             labelKontak.Location = new Point(19, 143);
             labelKontak.Name = "labelKontak";
             labelKontak.Size = new Size(100, 23);
             labelKontak.TabIndex = 5;
             labelKontak.Text = "Kontak";
-            // 
+
             // textBoxKontak
-            // 
             textBoxKontak.Location = new Point(182, 138);
             textBoxKontak.Name = "textBoxKontak";
             textBoxKontak.Size = new Size(300, 31);
             textBoxKontak.TabIndex = 6;
-            // 
+
             // labelUsia
-            // 
             labelUsia.Location = new Point(19, 178);
             labelUsia.Name = "labelUsia";
             labelUsia.Size = new Size(100, 23);
             labelUsia.TabIndex = 7;
             labelUsia.Text = "Usia";
-            // 
+
             // textBoxUsia
-            // 
             textBoxUsia.Location = new Point(182, 173);
             textBoxUsia.Name = "textBoxUsia";
             textBoxUsia.Size = new Size(300, 31);
             textBoxUsia.TabIndex = 8;
-            // 
+
             // labelJumlahPendaki
-            // 
             labelJumlahPendaki.Location = new Point(19, 213);
             labelJumlahPendaki.Name = "labelJumlahPendaki";
             labelJumlahPendaki.Size = new Size(150, 23);
             labelJumlahPendaki.TabIndex = 9;
             labelJumlahPendaki.Text = "Jumlah Pendaki";
-            // 
-            // labelTanggal
-            // 
-            labelTanggal.Location = new Point(19, 259);
-            labelTanggal.Name = "labelTanggal";
-            labelTanggal.Size = new Size(135, 35);
-            labelTanggal.TabIndex = 13;
-            labelTanggal.Text = "Tanggal Pendakian";
-            // 
-            // dateTimePickerTanggal
-            // 
-            dateTimePickerTanggal.Location = new Point(182, 254);
-            dateTimePickerTanggal.Name = "dateTimePickerTanggal";
-            dateTimePickerTanggal.Size = new Size(300, 31);
-            dateTimePickerTanggal.TabIndex = 14;
-            // 
-            // labelKeterangan
-            // 
-            labelKeterangan.Location = new Point(19, 294);
-            labelKeterangan.Name = "labelKeterangan";
-            labelKeterangan.Size = new Size(124, 38);
-            labelKeterangan.TabIndex = 15;
-            labelKeterangan.Text = "Keterangan";
-            // 
-            // textBoxKeterangan
-            // 
-            textBoxKeterangan.Location = new Point(182, 289);
-            textBoxKeterangan.Name = "textBoxKeterangan";
-            textBoxKeterangan.Size = new Size(300, 31);
-            textBoxKeterangan.TabIndex = 16;
-            // 
-            // buttonSubmit
-            // 
-            buttonSubmit.Location = new Point(333, 456);
-            buttonSubmit.Name = "buttonSubmit";
-            buttonSubmit.Size = new Size(180, 46);
-            buttonSubmit.TabIndex = 20;
-            buttonSubmit.Text = "Simpan Reservasi";
-            buttonSubmit.Click += buttonSubmit_Click_1;
-            // 
+
             // buttonMinus
-            // 
             buttonMinus.Font = new Font("Microsoft Sans Serif", 14F);
             buttonMinus.Location = new Point(182, 208);
             buttonMinus.Name = "buttonMinus";
@@ -198,9 +136,8 @@ namespace HikepassForm.View
             buttonMinus.TabIndex = 10;
             buttonMinus.Text = "-";
             buttonMinus.Click += buttonMinus_Click;
-            // 
+
             // labelJumlah
-            // 
             labelJumlah.Font = new Font("Segoe UI", 9F);
             labelJumlah.Location = new Point(227, 212);
             labelJumlah.Name = "labelJumlah";
@@ -209,9 +146,8 @@ namespace HikepassForm.View
             labelJumlah.Text = "1";
             labelJumlah.TextAlign = ContentAlignment.MiddleCenter;
             labelJumlah.Click += labelJumlah_Click;
-            // 
+
             // buttonPlus
-            // 
             buttonPlus.Font = new Font("Microsoft Sans Serif", 14F);
             buttonPlus.Location = new Point(264, 208);
             buttonPlus.Name = "buttonPlus";
@@ -219,31 +155,72 @@ namespace HikepassForm.View
             buttonPlus.TabIndex = 12;
             buttonPlus.Text = "+";
             buttonPlus.Click += buttonPlus_Click;
-            // 
+
+            // labelTanggal
+            labelTanggal.Location = new Point(19, 259);
+            labelTanggal.Name = "labelTanggal";
+            labelTanggal.Size = new Size(135, 35);
+            labelTanggal.TabIndex = 13;
+            labelTanggal.Text = "Tanggal Pendakian";
+
+            // dateTimePickerTanggal
+            dateTimePickerTanggal.Location = new Point(182, 254);
+            dateTimePickerTanggal.Name = "dateTimePickerTanggal";
+            dateTimePickerTanggal.Size = new Size(300, 31);
+            dateTimePickerTanggal.TabIndex = 14;
+
+            // labelKeterangan
+            labelKeterangan.Location = new Point(19, 294);
+            labelKeterangan.Name = "labelKeterangan";
+            labelKeterangan.Size = new Size(124, 38);
+            labelKeterangan.TabIndex = 15;
+            labelKeterangan.Text = "Keterangan";
+
+            // textBoxKeterangan
+            textBoxKeterangan.Location = new Point(182, 289);
+            textBoxKeterangan.Name = "textBoxKeterangan";
+            textBoxKeterangan.Size = new Size(300, 31);
+            textBoxKeterangan.TabIndex = 16;
+
+            // buttonSubmit
+            buttonSubmit.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+            buttonSubmit.Location = new Point(333, 456);
+            buttonSubmit.Name = "buttonSubmit";
+            buttonSubmit.Size = new Size(180, 46);
+            buttonSubmit.TabIndex = 20;
+            buttonSubmit.Text = "Simpan Reservasi";
+
             // buttonTambahPendaki
-            // 
-            buttonTambahPendaki.Font = new Font("Microsoft Sans Serif", 9F);
+            buttonTambahPendaki.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
             buttonTambahPendaki.Location = new Point(312, 213);
             buttonTambahPendaki.Name = "buttonTambahPendaki";
             buttonTambahPendaki.Size = new Size(170, 30);
             buttonTambahPendaki.TabIndex = 21;
             buttonTambahPendaki.Text = "Tambahkan Data Pendaki";
             buttonTambahPendaki.Visible = false;
-            buttonTambahPendaki.Click += buttonTambahPendaki_Click_1;
-            // 
+
             // buttonBack
-            // 
-            buttonBack.Font = new Font("Microsoft Sans Serif", 9F);
+            buttonBack.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+            buttonBack.ForeColor = SystemColors.ActiveCaptionText;
             buttonBack.Location = new Point(18, 23);
             buttonBack.Name = "buttonBack";
             buttonBack.Size = new Size(100, 30);
             buttonBack.TabIndex = 22;
             buttonBack.Text = "Kembali";
             buttonBack.Click += buttonBack_Click;
-            // 
+
+            // labelJudul
+            labelJudul.AutoSize = true;
+            labelJudul.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            labelJudul.Location = new Point(356, 6);
+            labelJudul.Name = "labelJudul";
+            labelJudul.Size = new Size(176, 48);
+            labelJudul.TabIndex = 23;
+            labelJudul.Text = "Reservasi";
+            labelJudul.Click += labelJudul_Click;
+
             // Reservasi
-            // 
-            Controls.Add(label3);
+            Controls.Add(labelJudul);
             Controls.Add(labelNama);
             Controls.Add(textBoxNama);
             Controls.Add(labelNIK);
@@ -275,12 +252,13 @@ namespace HikepassForm.View
         }
 
         #endregion
+
+        // Clean code: deklarasi field UI dilakukan di bawah designer region
         private int jumlahPendaki = 1;
         private Button buttonMinus;
         private Button buttonPlus;
         private Label labelJumlah;
         private Button buttonTambahPendaki;
-        private Label label3;
         private RadioButton radioButton1;
         private RadioButton radioButton2;
         private Label label1;
@@ -299,5 +277,6 @@ namespace HikepassForm.View
         private TextBox textBoxKeterangan;
         private Button buttonSubmit;
         private Button buttonBack;
+        private Label labelJudul;
     }
 }

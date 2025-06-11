@@ -87,6 +87,7 @@
             btnInf.TabIndex = 12;
             btnInf.Text = "Lihat Informasi";
             btnInf.UseVisualStyleBackColor = true;
+            btnInf.Click += btnInf_Click;
             // 
             // btnLogout
             // 
@@ -108,6 +109,7 @@
             btnLaporan.TabIndex = 15;
             btnLaporan.Text = "Input Laporan";
             btnLaporan.UseVisualStyleBackColor = true;
+            btnLaporan.Click += btnLaporan_Click;
             // 
             // reservasi1
             // 
