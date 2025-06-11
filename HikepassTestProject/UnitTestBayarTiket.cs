@@ -32,10 +32,6 @@ namespace HikepassTestProject
 
             ControllerReservasi.reservasiList.Add(tiket);
 
-
-            var monitoringController = new MonitoringController(new MonitoringService());
-
-
             using (var sw = new StringWriter())
             {
                 Console.SetOut(sw);

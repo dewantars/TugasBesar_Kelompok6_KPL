@@ -7,24 +7,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HikepassForm.View;
+using HikepassLibrary.Controller;
+using HikepassLibrary.Model;
 
 namespace HikepassForm
 {
     public partial class DashboardPendaki : UserControl
     {
+
         public DashboardPendaki()
         {
             InitializeComponent();
+ 
         }
         public void LoadPage(UserControl page)
         {
-            this.Controls.Clear(); // Hapus konten sebelumnya
+            this.Controls.Clear(); // Hapus isi panel konten saja
             page.Dock = DockStyle.Fill;
             this.Controls.Add(page);
         }
         public void btnLogout_Click(object sender, EventArgs e)
         {
             this.Controls.Clear(); // Hapus konten sebelumnya
+        }
+        
+        public void back()
+        {
+            this.Controls.Clear();
+            InitializeComponent();
         }
 
         private void btnRsv_Click(object sender, EventArgs e)
@@ -37,6 +48,17 @@ namespace HikepassForm
         {
 
         }
+        private void btnTkt_Click(object sender, EventArgs e)
+        {
+            TiketSaya halamanTiketSaya = new TiketSaya();
+            LoadPage(halamanTiketSaya);
+
+            
+
+
+        }
+        
+
 
         private void btnLaporan_Click(object sender, EventArgs e)
         {

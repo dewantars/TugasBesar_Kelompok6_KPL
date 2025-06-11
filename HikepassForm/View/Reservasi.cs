@@ -11,11 +11,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HikepassLibrary.Model;
+using HikepassLibrary.Controller;
 
 namespace HikepassForm.View
 {
     public partial class Reservasi : UserControl
     {
+
+
         // Clean Code: Menggunakan HttpClient sebagai field statis, efisien untuk reuse
         private static readonly HttpClient client = new HttpClient();
 
@@ -27,6 +30,13 @@ namespace HikepassForm.View
             InitializeComponent();
             buttonTambahPendaki.Click += buttonTambahPendaki_Click_1;
             buttonSubmit.Click += ButtonSubmit_Click; // Clean Code: Penamaan method PascalCase sesuai standar
+            
+        }
+        public void LoadPage(UserControl page)
+        {
+            this.Controls.Clear(); 
+            page.Dock = DockStyle.Fill;
+            this.Controls.Add(page);
         }
 
         // Event handlers default - Clean Code: Dibiarkan kosong agar tidak error saat desain GUI
@@ -80,6 +90,7 @@ namespace HikepassForm.View
         {
             try
             {
+                int id = ControllerReservasi.reservasiList.Count == 0 ? 1 : ControllerReservasi.reservasiList.Max(r => r.Id) + 1;
                 // Ambil data pendaki utama
                 string nama = textBoxNama.Text.Trim();
                 string nik = textBoxNIK.Text.Trim();
@@ -149,6 +160,7 @@ namespace HikepassForm.View
                 // Buat objek tiket
                 var tiket = new Tiket
                 {
+                    Id = id,
                     Tanggal = tanggal,
                     JumlahPendaki = jumlahPendaki,
                     Jalur = jalur,
@@ -161,6 +173,7 @@ namespace HikepassForm.View
 
                 // Kirim ke API
                 var response = await client.PostAsJsonAsync("http://localhost:5226/api/reservasi", tiket);
+                ControllerReservasi.reservasiList.Add(tiket);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -214,8 +227,10 @@ namespace HikepassForm.View
                     if (dialogResult == DialogResult.Yes)
                     {
                         MessageBox.Show("Mengalihkan ke halaman pembayaran...");
-                        // TODO: tambahkan logika ke halaman pembayaran
+                        Pembayaran halamanPembayaran = new Pembayaran(ControllerReservasi.reservasiList);
+                        LoadPage(halamanPembayaran);
                     }
+
 
                     ClearForm(); // Reset semua input
                 }
