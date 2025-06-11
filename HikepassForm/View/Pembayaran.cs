@@ -16,13 +16,13 @@ namespace HikepassForm.View
     public partial class Pembayaran : UserControl
     {
         private readonly List<Tiket> daftarTiket;
-        private DashboardPendaki parentDashboard;
+        private TiketSaya tiketsayaMenu;
 
-        public Pembayaran(List<Tiket> tiketList, DashboardPendaki parent)
+        public Pembayaran(List<Tiket> tiketList )
         {
             InitializeComponent();
             this.daftarTiket = tiketList;
-            this.parentDashboard = parent;
+            
             
         }
 
@@ -112,7 +112,8 @@ namespace HikepassForm.View
 
         private void btnKembali_Click(object sender, EventArgs e)
         {
-            parentDashboard.back(); 
+            var tiketSaya = this.Parent as TiketSaya;
+            tiketSaya?.PindahKeTiketSaya();
 
 
         }

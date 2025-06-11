@@ -185,7 +185,7 @@
             Controls.Add(dataGridView1);
             Controls.Add(lblJudul);
             Name = "Pembayaran";
-            Size = new Size(973, 522);
+            Size = new Size(997, 528);
             Load += Pembayaran_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)tiketBindingSource).EndInit();

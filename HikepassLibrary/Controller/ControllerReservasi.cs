@@ -12,6 +12,7 @@ namespace HikepassLibrary.Controller
 {
     public static class ControllerReservasi
     {
+
         public static List<Tiket> reservasiList = new List<Tiket>();
         public static async Task GetAllReservasi(string baseUrl)
         {

@@ -48,6 +48,17 @@ namespace HikepassForm
         {
 
         }
+        private void btnTkt_Click(object sender, EventArgs e)
+        {
+            TiketSaya halamanTiketSaya = new TiketSaya();
+            LoadPage(halamanTiketSaya);
+
+            
+
+
+        }
+        
+
 
         private void btnLaporan_Click(object sender, EventArgs e)
         {

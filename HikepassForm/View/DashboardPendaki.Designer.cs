@@ -114,13 +114,10 @@
             // 
             // btnCheckIndanCheckOut
             // 
-            btnCheckIndanCheckOut.Location = new Point(53, 356);
+            btnCheckIndanCheckOut.Location = new Point(0, 0);
             btnCheckIndanCheckOut.Name = "btnCheckIndanCheckOut";
-            btnCheckIndanCheckOut.Size = new Size(148, 58);
-            btnCheckIndanCheckOut.TabIndex = 16;
-            btnCheckIndanCheckOut.Text = "Checkin dan Checkout";
-            btnCheckIndanCheckOut.UseVisualStyleBackColor = true;
-            btnCheckIndanCheckOut.Click += btnCheckIndanCheckOut_Click;
+            btnCheckIndanCheckOut.Size = new Size(75, 23);
+            btnCheckIndanCheckOut.TabIndex = 0;
             // 
             // DashboardPendaki
             // 

@@ -14,14 +14,14 @@ namespace HikepassForm.View
 
         private readonly List<Tiket> daftarTiket;
         private List<string> daftarBarangBaru;
-        private DashboardPendaki parentDashboard;
+        
 
-        public CheckinDanCheckout(List<Tiket> tiketList, DashboardPendaki parent)
+        public CheckinDanCheckout(List<Tiket> tiketList)
         {
             InitializeComponent();
             this.daftarTiket = tiketList;
             this.daftarBarangBaru = new List<string>();
-            this.parentDashboard = parent;
+            
 
             RefreshTampilan();
         }
@@ -232,16 +232,14 @@ namespace HikepassForm.View
 
         private void btnKembali_Click(object sender, EventArgs e)
         {
-            parentDashboard.back();
+            var tiketSaya = this.Parent as TiketSaya;
+            tiketSaya?.PindahKeTiketSaya();
         }
 
         
         private void listBoxBarang_SelectedIndexChanged(object sender, EventArgs e) { }
         private void txtBoxInputBarang_TextChanged(object sender, EventArgs e) { }
 
-        private void CheckinDanCheckout_Load_1(object sender, EventArgs e)
-        {
-
-        }
+        private void CheckinDanCheckout_Load_1(object sender, EventArgs e) { }
     }
 }
