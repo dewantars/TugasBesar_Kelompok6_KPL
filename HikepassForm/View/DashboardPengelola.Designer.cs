@@ -39,9 +39,10 @@
             // 
             // btnLogout
             // 
-            btnLogout.Location = new Point(740, 28);
+            btnLogout.Location = new Point(925, 35);
+            btnLogout.Margin = new Padding(4);
             btnLogout.Name = "btnLogout";
-            btnLogout.Size = new Size(94, 29);
+            btnLogout.Size = new Size(118, 36);
             btnLogout.TabIndex = 17;
             btnLogout.Text = "Log Out";
             btnLogout.UseVisualStyleBackColor = true;
@@ -49,9 +50,10 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(47, 107);
+            label1.Location = new Point(59, 134);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(192, 20);
+            label1.Size = new Size(228, 25);
             label1.TabIndex = 16;
             label1.Text = "Selamat Datang, Pengelola!";
             label1.Click += label1_Click;
@@ -59,52 +61,59 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Font = new Font("BD Cartoon Shout", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label3.Location = new Point(39, 59);
+            label3.Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label3.Location = new Point(49, 74);
+            label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(196, 33);
+            label3.Size = new Size(169, 40);
             label3.TabIndex = 15;
             label3.Text = "HikePass";
             // 
             // btnMonitoring
             // 
-            btnMonitoring.Location = new Point(39, 170);
+            btnMonitoring.Location = new Point(49, 212);
+            btnMonitoring.Margin = new Padding(4);
             btnMonitoring.Name = "btnMonitoring";
-            btnMonitoring.Size = new Size(171, 50);
+            btnMonitoring.Size = new Size(214, 62);
             btnMonitoring.TabIndex = 18;
             btnMonitoring.Text = "Monitoring";
             btnMonitoring.UseVisualStyleBackColor = true;
             // 
             // btnEditInform
             // 
-            btnEditInform.Location = new Point(235, 170);
+            btnEditInform.Location = new Point(294, 212);
+            btnEditInform.Margin = new Padding(4);
             btnEditInform.Name = "btnEditInform";
-            btnEditInform.Size = new Size(171, 50);
+            btnEditInform.Size = new Size(214, 62);
             btnEditInform.TabIndex = 19;
             btnEditInform.Text = "Edit Informasi";
             btnEditInform.UseVisualStyleBackColor = true;
+            btnEditInform.Click += btnEditInform_Click;
             // 
             // btnLhtLaporan
             // 
-            btnLhtLaporan.Location = new Point(39, 244);
+            btnLhtLaporan.Location = new Point(49, 305);
+            btnLhtLaporan.Margin = new Padding(4);
             btnLhtLaporan.Name = "btnLhtLaporan";
-            btnLhtLaporan.Size = new Size(171, 50);
+            btnLhtLaporan.Size = new Size(214, 62);
             btnLhtLaporan.TabIndex = 20;
             btnLhtLaporan.Text = "Lihat Laporan";
             btnLhtLaporan.UseVisualStyleBackColor = true;
+            btnLhtLaporan.Click += btnLhtLaporan_Click;
             // 
             // btnLhtRiwayat
             // 
-            btnLhtRiwayat.Location = new Point(235, 244);
+            btnLhtRiwayat.Location = new Point(294, 305);
+            btnLhtRiwayat.Margin = new Padding(4);
             btnLhtRiwayat.Name = "btnLhtRiwayat";
-            btnLhtRiwayat.Size = new Size(171, 50);
+            btnLhtRiwayat.Size = new Size(214, 62);
             btnLhtRiwayat.TabIndex = 21;
             btnLhtRiwayat.Text = "Lihat Riwayat";
             btnLhtRiwayat.UseVisualStyleBackColor = true;
             // 
             // DashboardPengelola
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(btnLhtRiwayat);
             Controls.Add(btnLhtLaporan);
@@ -113,8 +122,10 @@
             Controls.Add(btnLogout);
             Controls.Add(label1);
             Controls.Add(label3);
+            Margin = new Padding(4);
             Name = "DashboardPengelola";
-            Size = new Size(852, 494);
+            Size = new Size(1065, 618);
+            Load += DashboardPengelola_Load;
             ResumeLayout(false);
             PerformLayout();
         }
