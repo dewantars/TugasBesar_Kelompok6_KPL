@@ -88,6 +88,7 @@
             btnEditInform.TabIndex = 19;
             btnEditInform.Text = "Edit Informasi";
             btnEditInform.UseVisualStyleBackColor = true;
+            btnEditInform.Click += btnEditInform_Click;
             // 
             // btnLhtLaporan
             // 

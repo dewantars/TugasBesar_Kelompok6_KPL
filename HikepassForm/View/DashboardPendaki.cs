@@ -51,7 +51,8 @@ namespace HikepassForm
 
         private void btnInf_Click(object sender, EventArgs e)
         {
-
+            var halamanInformasi = new View.InformasiPendaki();
+            LoadPage(halamanInformasi);
         }
     }
 }

@@ -141,6 +141,7 @@
             Controls.Add(buttonKirim);
             Name = "LaporanPendaki";
             Size = new Size(852, 494);
+            Load += LaporanPendaki_Load;
             ResumeLayout(false);
             PerformLayout();
         }
