@@ -80,5 +80,10 @@ namespace HikepassForm.View
             var dashboard = this.Parent as DashboardPendaki;
             dashboard?.PindahKeDashboard();
         }
+
+        private void LaporanPendaki_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

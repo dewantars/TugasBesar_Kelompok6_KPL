@@ -41,5 +41,11 @@ namespace HikepassForm.View
             var dashboardPengelola = new DashboardPengelola();
             LoadPage(dashboardPengelola);
         }
+
+        private void btnEditInform_Click(object sender, EventArgs e)
+        {
+            var halamanInformasi = new View.InformasiPengelola();
+            LoadPage(halamanInformasi);
+        }
     }
 }
