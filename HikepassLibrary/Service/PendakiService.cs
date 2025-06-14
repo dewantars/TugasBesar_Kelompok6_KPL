@@ -1,35 +1,58 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HikepassLibrary.Model;
 
 namespace HikepassLibrary.Service
 {
-    public class PendakiService
+    public sealed class PendakiService
     {
+        // Field statis untuk menyimpan satu-satunya instance.
+        private static PendakiService? _instance;
+
+        // Lock untuk mendukung thread safety.
+        private static readonly object _lock = new object();
+
         private readonly ListPendaki _listPendaki;
-        public PendakiService()
+
+        // Konstruktor privat untuk mencegah instansiasi langsung.
+        private PendakiService()
         {
             _listPendaki = new ListPendaki();
         }
+
+        // Metode statis untuk mengakses instance tunggal.
+        public static PendakiService GetInstance()
+        {
+            if (_instance == null)
+            {
+                lock (_lock)
+                {
+                    if (_instance == null)
+                    {
+                        _instance = new PendakiService();
+                    }
+                }
+            }
+            return _instance;
+        }
+
+        // Semua metode instance tetap sama seperti sebelumnya.
         public void AddPendaki(Pendaki pendaki)
         {
-            if (pendaki == null)
+            if (pendaki == null || string.IsNullOrEmpty(pendaki.FullName) || string.IsNullOrEmpty(pendaki.Email))
             {
-                Console.WriteLine("Pendaki tidak valid.");
-                return;
+                throw new ArgumentException("Pendaki tidak valid. Pastikan data lengkap dan benar.");
             }
 
             if (_listPendaki.GetPendakiById(pendaki.Id) != null)
             {
-                Console.WriteLine($"Pendaki dengan ID {pendaki.Id} sudah ada.");
-                return;
+                throw new ArgumentException($"Pendaki dengan ID {pendaki.Id} sudah ada.");
             }
+
             _listPendaki.AddPendaki(pendaki);
             Console.WriteLine($"Pendaki {pendaki.FullName} berhasil ditambahkan.");
         }
+
         public void RemovePendaki(int id)
         {
             var pendaki = _listPendaki.GetPendakiById(id);
@@ -41,6 +64,7 @@ namespace HikepassLibrary.Service
             _listPendaki.RemovePendaki(pendaki);
             Console.WriteLine($"Pendaki {pendaki.FullName} berhasil dihapus.");
         }
+
         public Pendaki GetPendakiById(int id)
         {
             var pendaki = _listPendaki.GetPendakiById(id);
@@ -51,6 +75,7 @@ namespace HikepassLibrary.Service
             }
             return pendaki;
         }
+
         public void GetAllPendaki()
         {
             var pendakiList = _listPendaki.GetAllPendaki();
@@ -66,16 +91,19 @@ namespace HikepassLibrary.Service
                 Console.WriteLine($"ID: {pendaki.Id}, Nama: {pendaki.FullName}, Email: {pendaki.Email}");
             }
         }
+
         public void ClearPendakiList()
         {
             _listPendaki.ClearPendakiList();
             Console.WriteLine("Daftar pendaki berhasil dikosongkan.");
         }
+
         public int CountPendaki()
         {
             return _listPendaki.CountPendaki();
         }
-        public void updatePendaki(int id, Pendaki updatedPendaki)
+
+        public void UpdatePendaki(int id, Pendaki updatedPendaki)
         {
             var pendaki = _listPendaki.GetPendakiById(id);
             if (pendaki == null)
@@ -90,6 +118,7 @@ namespace HikepassLibrary.Service
 
             Console.WriteLine($"Pendaki dengan ID {id} berhasil diperbarui.");
         }
+
         public bool ValidasiPendaki(string username, string password)
         {
             var pendaki = _listPendaki.GetAllPendaki()
@@ -119,5 +148,10 @@ namespace HikepassLibrary.Service
                 .FirstOrDefault(p => p.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
         }
 
+        public Pendaki? Login(string username, string password)
+        {
+            return _listPendaki.GetAllPendaki()
+                .FirstOrDefault(p => p.Username == username && p.Password == password);
+        }
     }
 }

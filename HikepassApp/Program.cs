@@ -244,7 +244,7 @@ class Program
                             break;
 
                             case "4":
-                                LaporanService.inputLaporan();
+                                //LaporanService.inputLaporan();
                                 Console.WriteLine("-----------------------------------------------------------------");
                             break;
                             

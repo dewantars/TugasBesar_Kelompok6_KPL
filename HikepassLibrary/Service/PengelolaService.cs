@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HikepassLibrary.Controller;
 using HikepassLibrary.Model;
-using static HikepassLibrary.Model.User;
 
 namespace HikepassLibrary.Service
 {
@@ -13,9 +9,32 @@ namespace HikepassLibrary.Service
     {
         private readonly ListPengelola _listPengelola;
 
-        public PengelolaService()
+        // Instance statis untuk singleton
+        private static PengelolaService? _instance;
+
+        // Objek sinkronisasi untuk thread safety
+        private static readonly object LockObject = new object();
+
+        // Konstruktor privat untuk mencegah instansiasi langsung
+        private PengelolaService()
         {
             _listPengelola = new ListPengelola();
+        }
+
+        // Properti untuk mengakses instance singleton
+        public static PengelolaService GetInstance()
+        {
+            if (_instance == null)
+            {
+                lock (LockObject) // Memastikan thread safety
+                {
+                    if (_instance == null)
+                    {
+                        _instance = new PengelolaService();
+                    }
+                }
+            }
+            return _instance;
         }
 
         public void AddPengelola(Pengelola pengelola)
@@ -48,13 +67,7 @@ namespace HikepassLibrary.Service
 
         public Pengelola GetPengelolaById(int id)
         {
-            var pengelola = _listPengelola.GetPengelolaById(id);
-            if (pengelola == null)
-            {
-                Console.WriteLine($"Pengelola dengan ID {id} tidak ditemukan.");
-                return null;
-            }
-            return pengelola;
+            return _listPengelola.GetPengelolaById(id);
         }
 
         public void GetAllPengelola()
@@ -90,29 +103,31 @@ namespace HikepassLibrary.Service
                 Console.WriteLine($"Pengelola dengan ID {id} tidak ditemukan.");
                 return;
             }
-            pengelola = updatedPengelola;
+            pengelola.FullName = updatedPengelola.FullName;
+            pengelola.Username = updatedPengelola.Username;
+            pengelola.Password = updatedPengelola.Password;
+            pengelola.Email = updatedPengelola.Email;
             Console.WriteLine($"Data pengelola dengan ID {id} berhasil diperbarui.");
         }
 
-        // Perbaikan untuk method ini, seharusnya mengembalikan Pengelola berdasarkan username
         public Pengelola GetPengelolaByUsername(string username)
         {
-            return _listPengelola.GetAllPengelola().FirstOrDefault(p => p.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+            return _listPengelola.GetAllPengelola()
+                .FirstOrDefault(p => p.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
         }
 
-        // Validasi login dengan username, password, dan role
         public bool ValidasiPengelola(string username, string password)
         {
-            var pendaki = _listPengelola.GetAllPengelola()
+            var pengelola = _listPengelola.GetAllPengelola()
                 .FirstOrDefault(p => p.Username == username);
 
-            if (pendaki == null)
+            if (pengelola == null)
             {
                 Console.WriteLine("Username tidak ditemukan.");
                 return false;
             }
 
-            if (pendaki.Password == password)
+            if (pengelola.Password == password)
             {
                 Console.WriteLine("Validasi berhasil.");
                 return true;
@@ -123,8 +138,11 @@ namespace HikepassLibrary.Service
                 return false;
             }
         }
-        
+
+        public Pengelola? Login(string username, string password)
+        {
+            return _listPengelola.GetAllPengelola()
+                .FirstOrDefault(p => p.Username == username && p.Password == password);
+        }
     }
 }
-
-
