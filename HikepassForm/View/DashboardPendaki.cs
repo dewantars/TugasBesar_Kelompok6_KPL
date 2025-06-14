@@ -19,7 +19,7 @@ namespace HikepassForm
         public DashboardPendaki()
         {
             InitializeComponent();
- 
+
         }
         public void LoadPage(UserControl page)
         {
@@ -31,7 +31,7 @@ namespace HikepassForm
         {
             this.Controls.Clear(); // Hapus konten sebelumnya
         }
-        
+
         public void back()
         {
             this.Controls.Clear();
@@ -52,12 +52,8 @@ namespace HikepassForm
         {
             TiketSaya halamanTiketSaya = new TiketSaya();
             LoadPage(halamanTiketSaya);
-
-            
-
-
         }
-        
+
 
 
         private void btnLaporan_Click(object sender, EventArgs e)
@@ -75,6 +71,12 @@ namespace HikepassForm
         {
             var halamanInformasi = new View.InformasiPendaki();
             LoadPage(halamanInformasi);
+        }
+
+        private void btnLO_Click(object sender, EventArgs e)
+        {
+            var LoginPage = new LogIn();
+            LoadPage(LoginPage);
         }
     }
 }
