@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc; // Mengimpor library yang memang digunakan, tidak berlebihan
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +13,9 @@ namespace HikepassAPI.Controllers
     [ApiController]
     public class ReservasiController : ControllerBase
     {
+        // Clean code: nama method menggunakan PascalCase, sesuai standar konvensi C#
+        // Secure coding: pengecekan null dan kondisi kosong dilakukan secara eksplisit
+
         // GET: api/reservasi
         [HttpGet]
         public IActionResult GetAllReservasi()
@@ -35,7 +38,7 @@ namespace HikepassAPI.Controllers
 
         // GET: api/reservasi/{id}
         [HttpGet("{id}")]
-        public IActionResult GetReservasiById(int id)
+        public IActionResult GetReservasiById(int id) // Semua nama parameter dan variable menggunakan camelCase
         {
             // Design by Contract - Precondition
             Debug.Assert(id > 0, "ID harus lebih besar dari 0.");
@@ -44,12 +47,13 @@ namespace HikepassAPI.Controllers
             if (id <= 0)
                 return BadRequest("ID tidak valid.");
 
+            // Clean code: penggunaan FirstOrDefault aman terhadap null
+            // Secure coding: mencegah NullReferenceException dengan pengecekan null
             var reservasi = ControllerReservasi.reservasiList.FirstOrDefault(r => r.Id == id);
             if (reservasi == null)
                 return NotFound("Reservasi tidak ditemukan.");
 
             // Design by Contract - Postcondition
-            // Pastikan kalau data ada, id-nya sesuai
             Debug.Assert(reservasi.Id == id, "ID reservasi harus sesuai dengan yang diminta.");
 
             return Ok(reservasi);
@@ -69,9 +73,11 @@ namespace HikepassAPI.Controllers
             if (newReservasi == null)
                 return BadRequest("Data reservasi tidak boleh kosong.");
 
+            // Secure coding: pengecekan daftar pendaki tidak null dan tidak kosong
             if (newReservasi.DaftarPendaki == null || !newReservasi.DaftarPendaki.Any())
                 return BadRequest("Daftar pendaki tidak boleh kosong.");
 
+            // Secure coding: validasi enum mencegah manipulasi data
             if (!Enum.IsDefined(typeof(JalurPendakian), newReservasi.Jalur))
                 return BadRequest("Jalur pendakian tidak valid.");
 
@@ -81,10 +87,12 @@ namespace HikepassAPI.Controllers
             if (newReservasi.JumlahPendaki <= 0)
                 return BadRequest("Jumlah pendaki harus lebih dari 0.");
 
+            // Clean code: ID ditentukan otomatis berdasarkan jumlah data, readable dan jelas
             newReservasi.Id = ControllerReservasi.reservasiList.Count == 0
                 ? 1
                 : ControllerReservasi.reservasiList.Max(r => r.Id) + 1;
 
+            // Clean code: penetapan status awal dilakukan langsung di controller
             newReservasi.Status = StatusTiket.BelumDibayar;
 
             ControllerReservasi.reservasiList.Add(newReservasi);
@@ -93,7 +101,7 @@ namespace HikepassAPI.Controllers
             Debug.Assert(newReservasi.Id > 0, "ID reservasi harus terbentuk.");
             Debug.Assert(newReservasi.Status == StatusTiket.BelumDibayar, "Status awal harus BelumDibayar.");
 
-            return CreatedAtAction(nameof(GetReservasiById), new { id = newReservasi.Id }, newReservasi); 
+            return CreatedAtAction(nameof(GetReservasiById), new { id = newReservasi.Id }, newReservasi);
         }
 
         // PUT: api/reservasi/{id}
@@ -131,7 +139,7 @@ namespace HikepassAPI.Controllers
             if (reservasi == null)
                 return NotFound("Reservasi tidak ditemukan.");
 
-            // Update properti
+            // Clean code: proses update dilakukan per properti, tidak dihapus dan replace seluruh objek
             reservasi.DaftarPendaki = updatedReservasi.DaftarPendaki;
             reservasi.Jalur = updatedReservasi.Jalur;
             reservasi.Tanggal = updatedReservasi.Tanggal;
@@ -165,6 +173,7 @@ namespace HikepassAPI.Controllers
             if (reservasi == null)
                 return NotFound("Reservasi tidak ditemukan.");
 
+            // Clean code: penghapusan dilakukan langsung pada list
             ControllerReservasi.reservasiList.Remove(reservasi);
 
             // Design by Contract - Postcondition

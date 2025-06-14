@@ -42,7 +42,7 @@ namespace HikepassLibrary.Model
         public List<string> BarangBawaanSaatCheckout { get; set; } = new List<string>();
         public string Keterangan { get; set; }
 
-
+       
         public Tiket() { }
         public Tiket(int id, DateTime tanggalPendakian, JalurPendakian jalur, int jumlahPendaki, String keterangan)
         {
@@ -55,31 +55,7 @@ namespace HikepassLibrary.Model
             Status = StatusTiket.BelumDibayar;
             Keterangan = Keterangan;
         }
-        // Menyiapkan tabel keputusan
-        private void InitializeTabelKeputusan()
-        {
-            tabelKeputusan = new Dictionary<Tuple<JalurPendakian, Jarak>, string>()
-            {
-                { new Tuple<JalurPendakian, Jarak>(JalurPendakian.Panorama, Jarak.Pendek), "Jalur Panorama (Pendek)" },
-                { new Tuple<JalurPendakian, Jarak>(JalurPendakian.Panorama, Jarak.Sedang), "Jalur Panorama (Sedang)" },
-                { new Tuple<JalurPendakian, Jarak>(JalurPendakian.Cinyiruan, Jarak.Pendek), "Jalur Cinyiruan (Pendek)" },
-                { new Tuple<JalurPendakian, Jarak>(JalurPendakian.Cinyiruan, Jarak.Sedang), "Jalur Cinyiruan (Sedang)" }
-            };
-        }
-
        
-        public string PilihJalur(JalurPendakian jalur, Jarak jarak)
-        {
-            var kunci = new Tuple<JalurPendakian, Jarak>(jalur, jarak);
-            if (tabelKeputusan.ContainsKey(kunci))
-            {
-                return tabelKeputusan[kunci];
-            }
-            else
-            {
-                return "Tidak ada jalur yang cocok untuk kombinasi ini.";
-            }
-        }
         public void ShowTiketInfo()
         {
             Console.WriteLine($"ID Tiket: {Id}");
@@ -104,6 +80,23 @@ namespace HikepassLibrary.Model
                     // Jika data lengkap, tampilkan informasi pendaki
                     Console.WriteLine($"{pendaki.Key}: {pendakiInfo}");
                 }
+            }
+        }
+        public string BarangBawaanDisplay
+        {
+            get
+            {
+                // Menampilkan barang bawaan berdasarkan status tiket saat ini
+                if (this.Status == StatusTiket.Checkin && this.BarangBawaanSaatCheckin.Any())
+                {
+                    return string.Join(", ", this.BarangBawaanSaatCheckin);
+                }
+                if (this.Status == StatusTiket.Checkout && this.BarangBawaanSaatCheckout.Any())
+                {
+                    return string.Join(", ", this.BarangBawaanSaatCheckout);
+                }
+
+                return "-"; // Teks default jika tidak ada barang atau status tidak sesuai
             }
         }
 

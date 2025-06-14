@@ -5,12 +5,14 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using HikepassLibrary.Model;
+using HikepassLibrary.Controller;
 using static HikepassLibrary.Model.Tiket;
 
 namespace HikepassLibrary.Controller
 {
     public static class ControllerReservasi
     {
+
         public static List<Tiket> reservasiList = new List<Tiket>();
         public static async Task GetAllReservasi(string baseUrl)
         {

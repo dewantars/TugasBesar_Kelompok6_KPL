@@ -1,8 +1,11 @@
+using HikepassForm.View;
+
 namespace HikepassForm
 {
     public partial class Main : Form
     {
         private DashboardPendaki dashboard;
+        private DashboardPengelola dashboardPengelola;
 
         public Main()
         {
@@ -20,13 +23,21 @@ namespace HikepassForm
             this.Controls.Add(page);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+
+
+        private void btnlogin_Click(object sender, EventArgs e)
         {
+            
             var dashboard = new DashboardPendaki();
             LoadPage(dashboard);
         }
 
         private void signin_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Main_Load(object sender, EventArgs e)
         {
 
         }
