@@ -14,11 +14,11 @@ namespace HikepassForm.View
 {
     public partial class TiketSaya : UserControl
     {
-        
+
         public TiketSaya()
         {
             InitializeComponent();
-            
+
         }
 
         public void LoadPage(UserControl page)
@@ -36,6 +36,8 @@ namespace HikepassForm.View
 
         private void btnLihatTiket_Click(object sender, EventArgs e)
         {
+            LihatTiket halamanTiketSaya = new LihatTiket(ControllerReservasi.reservasiList);
+            LoadPage(halamanTiketSaya );
         }
 
         private void btnBayar_Click(object sender, EventArgs e)
@@ -50,12 +52,17 @@ namespace HikepassForm.View
             var halamanCheckin = new CheckinDanCheckout(ControllerReservasi.reservasiList);
             LoadPage(halamanCheckin);
         }
+        private void btnSelesaikan_Click(object sender, EventArgs e)
+        {
+            var halamanSelesaikan = new Selesaikan(ControllerReservasi.reservasiList);
+            LoadPage(halamanSelesaikan);
+        }
 
         public void PindahKeTiketSaya()
         {
             var tiketSaya = new TiketSaya();
             LoadPage(tiketSaya);
-            
+
         }
 
         private void btnKembali_Click(object sender, EventArgs e)
@@ -63,6 +70,8 @@ namespace HikepassForm.View
             var dashboard = new DashboardPendaki();
             LoadPage(dashboard);
         }
+
+        
     }
 
 }

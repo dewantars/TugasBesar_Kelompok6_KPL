@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using HikepassForm;
 using System.Collections.Generic;
 using System.ComponentModel;

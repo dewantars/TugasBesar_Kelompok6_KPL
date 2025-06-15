@@ -35,54 +35,67 @@ namespace HikepassForm.View
         // Method utama untuk menyegarkan dan mereset tampilan
         private void RefreshTampilan()
         {
-            // Filter untuk menampilkan tiket yang bisa di-check-in dan check-out .
             var tiketYangTampil = ControllerReservasi.reservasiList
                 .Where(t => t.Status == Tiket.StatusTiket.Dibayar || t.Status == Tiket.StatusTiket.Checkin)
+                .Select(t => new
+                {
+                    PilihTiket = false,
+                    t.Id,
+                    Tanggal = t.Tanggal.ToString("yyyy-MM-dd"),
+                    Jalur = t.Jalur.ToString(),
+                    JumlahPendaki = t.DaftarPendaki.Count,
+                    DaftarPendaki = string.Join(", ", t.DaftarPendaki.Select(p => $"{p.Value} (NIK: {p.Key})")),
+                    Status = t.Status.ToString(),
+                    t.Kontak,
+                    t.Keterangan,
+                    BarangBawaan = (t.Status == Tiket.StatusTiket.Checkin && t.BarangBawaanSaatCheckin.Any())
+                                   ? string.Join(", ", t.BarangBawaanSaatCheckin)
+                                   : (t.Status == Tiket.StatusTiket.Checkout && t.BarangBawaanSaatCheckout.Any())
+                                     ? string.Join(", ", t.BarangBawaanSaatCheckout)
+                                     : "-"
+                })
                 .ToList();
 
-            var bindingList = new BindingList<Tiket>(tiketYangTampil);
-
-            // untuk "mereset" grid
             dataGridView1.DataSource = null;
-            dataGridView1.DataSource = bindingList;
+            dataGridView1.DataSource = tiketYangTampil;
 
-
-            foreach (DataGridViewRow row in dataGridView1.Rows)
-            {
-
-                if (row.DataBoundItem is Tiket tiket)
-                {
-
-                    List<string> barangUntukDitampilkan = null;
-                    if (tiket.Status == Tiket.StatusTiket.Checkin && tiket.BarangBawaanSaatCheckin.Any())
-                    {
-                        barangUntukDitampilkan = tiket.BarangBawaanSaatCheckin;
-                    }
-                    else if (tiket.Status == Tiket.StatusTiket.Checkout && tiket.BarangBawaanSaatCheckout.Any())
-                    {
-                        barangUntukDitampilkan = tiket.BarangBawaanSaatCheckout;
-                    }
-
-
-                    if (barangUntukDitampilkan != null)
-                    {
-                        
-                        row.Cells["BarangBawaanColumn"].Value = string.Join(", ", barangUntukDitampilkan);
-                    }
-                    else
-                    {
-                        row.Cells["BarangBawaanColumn"].Value = "-"; 
-                    }
-                }
-            }
-            
+            dataGridView1.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
             dataGridView1.Refresh();
             UpdateTombolState();
         }
 
+        private void UpdateTombolState()
+        {
+            var tiketTercentang = new List<Tiket>();
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                if (Convert.ToBoolean(row.Cells["Pilih"].Value) == true)
+                {
+                    int id = (int)row.Cells["idDataGridViewTextBoxColumn"].Value;
+                    var tiket = ControllerReservasi.reservasiList.FirstOrDefault(t => t.Id == id);
+                    if (tiket != null)
+                    {
+                        tiketTercentang.Add(tiket);
+                    }
+                }
+            }
 
-      
+            if (!tiketTercentang.Any())
+            {
+                btnCheckIn.Enabled = false;
+                btnCheckOut.Enabled = false;
+                return;
+            }
+
+            btnCheckIn.Enabled = tiketTercentang.All(t => t.Status == Tiket.StatusTiket.Dibayar);
+            btnCheckOut.Enabled = tiketTercentang.All(t => t.Status == Tiket.StatusTiket.Checkin);
+        }
+
+
+
+
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             
@@ -100,30 +113,7 @@ namespace HikepassForm.View
         }
 
         
-        private void UpdateTombolState()
-        {
-            var tiketTercentang = new List<Tiket>();
-            foreach (DataGridViewRow row in dataGridView1.Rows)
-            {
-                if (Convert.ToBoolean(row.Cells["Pilih"].Value) == true)
-                {
-                    tiketTercentang.Add(row.DataBoundItem as Tiket);
-                }
-            }
-
-            if (!tiketTercentang.Any())
-            {
-                btnCheckIn.Enabled = false;
-                btnCheckOut.Enabled = false;
-                return;
-            }
-
-            // Aturan Tombol Check-in
-            btnCheckIn.Enabled = tiketTercentang.All(t => t.Status == Tiket.StatusTiket.Dibayar);
-
-            // Aturan Tombol Check-out
-            btnCheckOut.Enabled = tiketTercentang.All(t => t.Status == Tiket.StatusTiket.Checkin);
-        }
+        
 
 
         private void btnTambahBarang_Click(object sender, EventArgs e)
@@ -151,38 +141,29 @@ namespace HikepassForm.View
             await ProsesAksi("Check-out");
         }
 
-    
+
 
         private async Task ProsesAksi(string namaAksi)
         {
-           
             if (!daftarBarangBaru.Any())
             {
                 MessageBox.Show("Harap masukkan minimal satu barang bawaan sebagai syarat.", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            Tiket.StatusTiket statusSumber;
-            if (namaAksi == "Check-in")
-            {
-                statusSumber = Tiket.StatusTiket.Dibayar;
-            }
-            else if (namaAksi == "Check-out")
-            {
-                statusSumber = Tiket.StatusTiket.Checkin;
-            }
-            else
-            {
-                MessageBox.Show($"Aksi '{namaAksi}' tidak dikenal.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            Tiket.StatusTiket statusSumber = namaAksi == "Check-in" ? Tiket.StatusTiket.Dibayar : Tiket.StatusTiket.Checkin;
 
             var tiketUntukProses = new List<Tiket>();
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
-                if (Convert.ToBoolean(row.Cells["Pilih"].Value) == true && (row.DataBoundItem as Tiket)?.Status == statusSumber)
+                if (Convert.ToBoolean(row.Cells["Pilih"].Value) == true)
                 {
-                    tiketUntukProses.Add(row.DataBoundItem as Tiket);
+                    int id = (int)row.Cells["idDataGridViewTextBoxColumn"].Value;
+                    var tiket = ControllerReservasi.reservasiList.FirstOrDefault(t => t.Id == id);
+                    if (tiket != null && tiket.Status == statusSumber)
+                    {
+                        tiketUntukProses.Add(tiket);
+                    }
                 }
             }
 
@@ -195,31 +176,22 @@ namespace HikepassForm.View
             btnCheckIn.Enabled = false;
             btnCheckOut.Enabled = false;
 
-
-
             var updateTasks = new List<Task>();
             foreach (var tiket in tiketUntukProses)
             {
-                var tiketGlobal = ControllerReservasi.reservasiList.FirstOrDefault(t => t.Id == tiket.Id);
-                if (tiketGlobal != null)
+                if (namaAksi == "Check-in")
                 {
-                    //FORM HANYA MENGURUS BARANG BAWAAN
-                    if (namaAksi == "Check-in")
-                    {
-                        tiketGlobal.BarangBawaanSaatCheckin.AddRange(daftarBarangBaru);
-                    }
-                    else // Check-out
-                    {
-                        tiketGlobal.BarangBawaanSaatCheckout.AddRange(daftarBarangBaru);
-                    }
-
-                    updateTasks.Add(ControllerReservasi.UpdatedCheckInCheckOut("http://localhost:5226/api/reservasi", tiketGlobal.Id));
+                    tiket.BarangBawaanSaatCheckin.AddRange(daftarBarangBaru);
                 }
+                else
+                {
+                    tiket.BarangBawaanSaatCheckout.AddRange(daftarBarangBaru);
+                }
+
+                updateTasks.Add(ControllerReservasi.UpdatedCheckInCheckOut("http://localhost:5226/api/reservasi", tiket.Id));
             }
 
             await Task.WhenAll(updateTasks);
-
-
 
             MessageBox.Show($"{tiketUntukProses.Count} tiket berhasil di-{namaAksi}.", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
             listBoxBarang.Items.Clear();
@@ -228,6 +200,7 @@ namespace HikepassForm.View
 
             RefreshTampilan();
         }
+
 
 
         private void btnKembali_Click(object sender, EventArgs e)
