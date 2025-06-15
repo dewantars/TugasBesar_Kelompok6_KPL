@@ -14,50 +14,40 @@ namespace HikepassForm.View
 {
     public partial class LaporanPengelola : UserControl
     {
+        // Clean code: constructor menggunakan PascalCase sesuai standar method/fungsi
         public LaporanPengelola()
         {
             InitializeComponent();
-            LoadLaporan(); // Clean code: data langsung dimuat saat form dibuat
+            LoadLaporan();
         }
 
-        private void listViewLaporan_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // Event handler disiapkan jika ingin menambahkan interaksi saat item dipilih
-        }
+        // Event handler disiapkan jika ingin menambahkan interaksi saat item dipilih
+        private void labelJudul_Click(object sender, EventArgs e) { }
+        private void listViewLaporan_SelectedIndexChanged(object sender, EventArgs e) { }
 
+        // Clean code: method menggunakan PascalCase
+        // Clean code: white space dan indentation konsisten 4 spasi untuk blok kode
         private void LoadLaporan()
         {
-            listViewLaporan.Items.Clear(); // Clean code: selalu clear sebelum load ulang
+            // Clean code: pemanggilan service dan iterasi diberi jarak baris (white space) untuk keterbacaan
+            listViewLaporan.Items.Clear();
 
             foreach (var laporan in LaporanService.listLaporan)
             {
-                // Clean code: penggunaan ListViewItem untuk menampilkan setiap kolom data laporan
+                // Clean code: variable lokal menggunakan camelCase dan variable atau attribute declaration sudah jelas
                 var item = new ListViewItem(laporan.IdLaporan);
-                item.SubItems.Add(laporan.WaktuLaporan.ToString("dd/MM/yyyy HH:mm:ss")); // Format tanggal konsisten dan mudah dibaca
+                item.SubItems.Add(laporan.WaktuLaporan.ToString("dd/MM/yyyy HH:mm:ss"));
                 item.SubItems.Add(laporan.Deskripsi);
                 item.SubItems.Add(laporan.TitikLokasi);
                 item.SubItems.Add(laporan.TingkatKeparahan.ToString());
 
-                listViewLaporan.Items.Add(item); // Clean code: tambah item secara eksplisit ke list
+                listViewLaporan.Items.Add(item);
             }
-
-            // Secure coding: tidak memproses jika list kosong, mencegah error atau tampilan kosong yang tidak jelas
-            // (Bisa ditambah MessageBox jika ingin)
         }
-
         private void buttonBack_Click(object sender, EventArgs e)
         {
-            // Clean code: pengecekan Parent memastikan tidak terjadi NullReferenceException
-            if (this.Parent is Panel parentPanel)
-            {
-                parentPanel.Controls.Clear();
-
-                // Clean code: dashboard baru ditambahkan secara eksplisit sebagai kontrol utama
-                var dashboard = new DashboardPengelola();
-                parentPanel.Controls.Add(dashboard);
-            }
-
-            // Secure coding: penggantian panel dilakukan hanya jika Parent valid dan bertipe Panel
+            var dashboard = this.Parent as DashboardPengelola;
+            dashboard?.PindahKeDashboard();
         }
     }
 }

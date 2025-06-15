@@ -38,8 +38,8 @@ namespace HikepassForm.View
         }
         public void PindahKeDashboard()
         {
-            var dashboardPengelola = new DashboardPengelola();
-            LoadPage(dashboardPengelola);
+            this.Controls.Clear();
+            InitializeComponent();
         }
 
         private void btnEditInform_Click(object sender, EventArgs e)
@@ -52,6 +52,11 @@ namespace HikepassForm.View
         {
             var LoginPage = new LogIn();
             LoadPage(LoginPage);
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
