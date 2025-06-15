@@ -264,7 +264,6 @@ namespace HikepassForm.View
 
         private void buttonTambahPendaki_Click_1(object sender, EventArgs e)
         {
-            // Clean Code & Secure: Validasi input format data tambahan
             int jumlahDibutuhkan = jumlahPendaki - 1; // pendaki utama sudah ada
             int pendakiKe = 2;
 
@@ -272,7 +271,7 @@ namespace HikepassForm.View
             {
                 string input = Microsoft.VisualBasic.Interaction.InputBox(
                     $"Masukkan data pendaki ke-{pendakiKe}\n(Nama - NIK - Kontak - Usia):",
-                    "Input Data Pendaki");
+                    "Input Data Pendaki").Trim(); // COMMENT: Tambahkan Trim() untuk menghilangkan spasi awal/akhir seluruh input
 
                 if (string.IsNullOrWhiteSpace(input))
                 {
@@ -282,23 +281,20 @@ namespace HikepassForm.View
                     else continue;
                 }
 
-                var parts = input.Split('-');
-                if (parts.Length != 4)
+                var parts = input.Split('-').Select(p => p.Trim()).ToArray();
+                // COMMENT: Ubah jadi Select(p => p.Trim()) supaya setiap bagian di-trim, menghindari spasi berlebih
+
+                if (parts.Length != 4 || parts.Any(p => string.IsNullOrEmpty(p)))
                 {
-                    MessageBox.Show("Format salah. Gunakan format: Nama - NIK - Kontak - Usia");
+                    MessageBox.Show("Format salah. Gunakan format: Nama - NIK - Kontak - Usia\nPastikan semua field diisi.");
+                    // COMMENT: Tambahkan pengecekan parts.Any kosong untuk cegah bagian kosong meskipun split benar
                     continue;
                 }
 
-                string nama = parts[0].Trim();
-                string nik = parts[1].Trim();
-                string kontak = parts[2].Trim();
-                string usiaText = parts[3].Trim();
-
-                if (string.IsNullOrWhiteSpace(nama) || string.IsNullOrWhiteSpace(nik))
-                {
-                    MessageBox.Show("Nama dan NIK tidak boleh kosong.");
-                    continue;
-                }
+                string nama = parts[0];
+                string nik = parts[1];
+                string kontak = parts[2];
+                string usiaText = parts[3];
 
                 if (!int.TryParse(usiaText, out int usia) || usia <= 0)
                 {
@@ -318,6 +314,7 @@ namespace HikepassForm.View
 
             MessageBox.Show("Data pendaki tambahan berhasil dicatat.");
         }
+
 
         private void buttonBack_Click(object sender, EventArgs e)
         {

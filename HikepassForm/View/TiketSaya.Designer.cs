@@ -84,6 +84,7 @@
             btnSelesaikan.TabIndex = 4;
             btnSelesaikan.Text = "Selesaikan";
             btnSelesaikan.UseVisualStyleBackColor = true;
+            btnSelesaikan.Click += btnSelesaikan_Click;
             // 
             // btnKembali
             // 
