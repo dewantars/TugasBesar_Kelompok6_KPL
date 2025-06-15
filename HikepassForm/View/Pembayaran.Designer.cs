@@ -41,7 +41,7 @@
             tanggalDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             jalurDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             jumlahPendakiDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            daftarPendakiDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            daftarPendakiDisplayColumn = new DataGridViewTextBoxColumn();
             statusDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             kontakDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             keteranganDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
@@ -68,7 +68,7 @@
             dataGridView1.AutoGenerateColumns = false;
             dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { idDataGridViewTextBoxColumn, tanggalDataGridViewTextBoxColumn, jalurDataGridViewTextBoxColumn, jumlahPendakiDataGridViewTextBoxColumn, daftarPendakiDataGridViewTextBoxColumn, statusDataGridViewTextBoxColumn, kontakDataGridViewTextBoxColumn, keteranganDataGridViewTextBoxColumn, checkBox });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { idDataGridViewTextBoxColumn, tanggalDataGridViewTextBoxColumn, jalurDataGridViewTextBoxColumn, jumlahPendakiDataGridViewTextBoxColumn, daftarPendakiDisplayColumn, statusDataGridViewTextBoxColumn, kontakDataGridViewTextBoxColumn, keteranganDataGridViewTextBoxColumn, checkBox });
             dataGridView1.DataSource = tiketBindingSource;
             dataGridView1.Location = new Point(57, 82);
             dataGridView1.Name = "dataGridView1";
@@ -151,9 +151,9 @@
             // 
             // daftarPendakiDataGridViewTextBoxColumn
             // 
-            daftarPendakiDataGridViewTextBoxColumn.DataPropertyName = "DaftarPendaki";
-            daftarPendakiDataGridViewTextBoxColumn.HeaderText = "DaftarPendaki";
-            daftarPendakiDataGridViewTextBoxColumn.Name = "daftarPendakiDataGridViewTextBoxColumn";
+            daftarPendakiDisplayColumn.DataPropertyName = "DaftarPendakiDisplay";
+            daftarPendakiDisplayColumn.HeaderText = "DaftarPendaki";
+            daftarPendakiDisplayColumn.Name = "daftarPendakiDisplayColumn";
             // 
             // statusDataGridViewTextBoxColumn
             // 
@@ -215,7 +215,7 @@
         private DataGridViewTextBoxColumn tanggalDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn jalurDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn jumlahPendakiDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn daftarPendakiDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn daftarPendakiDisplayColumn;
         private DataGridViewTextBoxColumn statusDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn kontakDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn keteranganDataGridViewTextBoxColumn;

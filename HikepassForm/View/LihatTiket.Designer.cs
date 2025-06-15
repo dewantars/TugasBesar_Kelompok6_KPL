@@ -36,7 +36,7 @@
             jumlahPendakiDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             kontakDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             jalurDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            daftarPendakiDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            daftarPendakiDisplayColumn = new DataGridViewTextBoxColumn();
             statusDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             keteranganDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             barangBawaanDisplayDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
@@ -67,11 +67,11 @@
             dataGridView1.AutoGenerateColumns = false;
             dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { idDataGridViewTextBoxColumn, tanggalDataGridViewTextBoxColumn, jumlahPendakiDataGridViewTextBoxColumn, kontakDataGridViewTextBoxColumn, jalurDataGridViewTextBoxColumn, daftarPendakiDataGridViewTextBoxColumn, statusDataGridViewTextBoxColumn, keteranganDataGridViewTextBoxColumn, barangBawaanDisplayDataGridViewTextBoxColumn });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { idDataGridViewTextBoxColumn, tanggalDataGridViewTextBoxColumn, jumlahPendakiDataGridViewTextBoxColumn, kontakDataGridViewTextBoxColumn, jalurDataGridViewTextBoxColumn, daftarPendakiDisplayColumn, statusDataGridViewTextBoxColumn, keteranganDataGridViewTextBoxColumn, barangBawaanDisplayDataGridViewTextBoxColumn });
             dataGridView1.DataSource = tiketBindingSource;
             dataGridView1.Location = new Point(78, 126);
             dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(943, 151);
+            dataGridView1.Size = new Size(943, 351);
             dataGridView1.TabIndex = 1;
             // 
             // idDataGridViewTextBoxColumn
@@ -106,9 +106,9 @@
             // 
             // daftarPendakiDataGridViewTextBoxColumn
             // 
-            daftarPendakiDataGridViewTextBoxColumn.DataPropertyName = "DaftarPendaki";
-            daftarPendakiDataGridViewTextBoxColumn.HeaderText = "DaftarPendaki";
-            daftarPendakiDataGridViewTextBoxColumn.Name = "daftarPendakiDataGridViewTextBoxColumn";
+            daftarPendakiDisplayColumn.DataPropertyName = "DaftarPendakiDisplay";
+            daftarPendakiDisplayColumn.HeaderText = "DaftarPendaki";
+            daftarPendakiDisplayColumn.Name = "daftarPendakiDisplayColumn";
             // 
             // statusDataGridViewTextBoxColumn
             // 
@@ -180,7 +180,7 @@
         private DataGridViewTextBoxColumn jumlahPendakiDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn kontakDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn jalurDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn daftarPendakiDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn daftarPendakiDisplayColumn;
         private DataGridViewTextBoxColumn statusDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn keteranganDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn barangBawaanDisplayDataGridViewTextBoxColumn;

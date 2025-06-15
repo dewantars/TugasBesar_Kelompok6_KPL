@@ -99,6 +99,16 @@ namespace HikepassLibrary.Model
                 return "-"; // Teks default jika tidak ada barang atau status tidak sesuai
             }
         }
+        public string DaftarPendakiDisplay
+        {
+            get
+            {
+                return DaftarPendaki != null && DaftarPendaki.Any()
+                    ? string.Join(", ", DaftarPendaki.Select(p => $"{p.Value} (NIK: {p.Key})"))
+                    : "-";
+            }
+        }
+
 
     }
 }
