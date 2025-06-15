@@ -2,19 +2,11 @@
 {
     partial class LaporanPengelola
     {
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
+        protected override void Dispose(bool disposing) 
         {
-            // Clean code: memastikan komponen dibersihkan saat form ditutup
-            if (disposing && (components != null))
+            if (disposing && (components != null)) 
             {
                 components.Dispose();
             }
@@ -22,11 +14,6 @@
         }
 
         #region Component Designer generated code
-
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             labelJudul = new Label();
@@ -47,24 +34,19 @@
             labelJudul.Size = new Size(395, 48);
             labelJudul.TabIndex = 0;
             labelJudul.Text = "Daftar Laporan Masuk";
-            // Clean code: Penempatan label judul di atas UI, ukuran besar untuk hierarki visual
-
+            labelJudul.Click += labelJudul_Click;
+  
             // listViewLaporan
-            listViewLaporan.Columns.AddRange(new ColumnHeader[]
-            {
-                columnID, columnWaktu, columnDeskripsi, columnLokasi, columnKeparahan
-            });
+            listViewLaporan.Columns.AddRange(new ColumnHeader[] { columnID, columnWaktu, columnDeskripsi, columnLokasi, columnKeparahan });
             listViewLaporan.FullRowSelect = true;
             listViewLaporan.GridLines = true;
             listViewLaporan.Location = new Point(56, 80);
             listViewLaporan.Name = "listViewLaporan";
-            listViewLaporan.Size = new Size(756, 380);
+            listViewLaporan.Size = new Size(914, 397);
             listViewLaporan.TabIndex = 1;
             listViewLaporan.UseCompatibleStateImageBehavior = false;
             listViewLaporan.View = System.Windows.Forms.View.Details;
             listViewLaporan.SelectedIndexChanged += listViewLaporan_SelectedIndexChanged;
-            // Clean code: Properti UI ditulis lengkap dan konsisten
-            // Secure coding: FullRowSelect dan GridLines membantu keterbacaan dan pemilihan aman
 
             // columnID
             columnID.Text = "ID";
@@ -73,15 +55,15 @@
             // columnWaktu
             columnWaktu.Text = "Waktu";
             columnWaktu.Width = 160;
-
-            // columnDeskripsi
+ 
+            // columnDeskripsi 
             columnDeskripsi.Text = "Deskripsi";
             columnDeskripsi.Width = 200;
-
+      
             // columnLokasi
             columnLokasi.Text = "Lokasi";
             columnLokasi.Width = 120;
-
+        
             // columnKeparahan
             columnKeparahan.Text = "Keparahan";
             columnKeparahan.Width = 120;
@@ -94,7 +76,6 @@
             buttonBack.TabIndex = 24;
             buttonBack.Text = "Kembali";
             buttonBack.Click += buttonBack_Click;
-            // Clean code: tombol kembali mudah dijangkau di kiri atas
 
             // LaporanPengelola
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -103,15 +84,12 @@
             Controls.Add(labelJudul);
             Controls.Add(listViewLaporan);
             Name = "LaporanPengelola";
-            Size = new Size(852, 494);
+            Size = new Size(1000, 544);
             ResumeLayout(false);
             PerformLayout();
-            // Clean code: struktur UI jelas, komponen utama ditambahkan sebelum layout selesai
         }
 
         #endregion
-
-        // Clean code: deklarasi komponen UI dilakukan konsisten setelah region
         private System.Windows.Forms.Label labelJudul;
         private System.Windows.Forms.ListView listViewLaporan;
         private System.Windows.Forms.ColumnHeader columnID;

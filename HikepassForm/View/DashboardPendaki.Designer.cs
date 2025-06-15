@@ -33,36 +33,35 @@
             btnRsv = new Button();
             btnTkt = new Button();
             btnInf = new Button();
-            btnLogout = new Button();
             btnLaporan = new Button();
-            btnCheckIndanCheckOut = new Button();
+            btnLO = new Button();
             SuspendLayout();
             // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label3.Location = new Point(36, 34);
+            label3.Location = new Point(41, 45);
             label3.Name = "label3";
-            label3.Size = new Size(115, 29);
+            label3.Size = new Size(140, 36);
             label3.TabIndex = 8;
             label3.Text = "HikePass";
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(43, 70);
+            label1.Location = new Point(49, 93);
             label1.Name = "label1";
-            label1.Size = new Size(122, 15);
+            label1.Size = new Size(156, 20);
             label1.TabIndex = 9;
             label1.Text = "Selamat Datang, User!";
             // 
             // btnRsv
             // 
-            btnRsv.Location = new Point(51, 198);
-            btnRsv.Margin = new Padding(4);
+            btnRsv.Location = new Point(58, 178);
+            btnRsv.Margin = new Padding(5);
             btnRsv.Name = "btnRsv";
-            btnRsv.Size = new Size(150, 37);
+            btnRsv.Size = new Size(171, 49);
             btnRsv.TabIndex = 10;
             btnRsv.Text = "Reservasi";
             btnRsv.UseVisualStyleBackColor = true;
@@ -70,10 +69,10 @@
             // 
             // btnTkt
             // 
-            btnTkt.Location = new Point(51, 292);
-            btnTkt.Margin = new Padding(4);
+            btnTkt.Location = new Point(58, 264);
+            btnTkt.Margin = new Padding(5);
             btnTkt.Name = "btnTkt";
-            btnTkt.Size = new Size(150, 37);
+            btnTkt.Size = new Size(171, 49);
             btnTkt.TabIndex = 11;
             btnTkt.Text = "Tiket Saya";
             btnTkt.UseVisualStyleBackColor = true;
@@ -81,59 +80,50 @@
             // 
             // btnInf
             // 
-            btnInf.Location = new Point(310, 198);
-            btnInf.Margin = new Padding(4);
+            btnInf.Location = new Point(354, 178);
+            btnInf.Margin = new Padding(5);
             btnInf.Name = "btnInf";
-            btnInf.Size = new Size(150, 37);
+            btnInf.Size = new Size(171, 49);
             btnInf.TabIndex = 12;
             btnInf.Text = "Lihat Informasi";
             btnInf.UseVisualStyleBackColor = true;
             btnInf.Click += btnInf_Click;
             // 
-            // btnLogout
-            // 
-            btnLogout.Location = new Point(928, 18);
-            btnLogout.Margin = new Padding(4);
-            btnLogout.Name = "btnLogout";
-            btnLogout.Size = new Size(83, 22);
-            btnLogout.TabIndex = 14;
-            btnLogout.Text = "Log Out";
-            btnLogout.UseVisualStyleBackColor = true;
-            btnLogout.Click += btnLogout_Click;
-            // 
             // btnLaporan
             // 
-            btnLaporan.Location = new Point(310, 292);
-            btnLaporan.Margin = new Padding(4);
+            btnLaporan.Location = new Point(354, 264);
+            btnLaporan.Margin = new Padding(5);
             btnLaporan.Name = "btnLaporan";
-            btnLaporan.Size = new Size(150, 37);
+            btnLaporan.Size = new Size(171, 49);
             btnLaporan.TabIndex = 15;
             btnLaporan.Text = "Input Laporan";
             btnLaporan.UseVisualStyleBackColor = true;
             btnLaporan.Click += btnLaporan_Click;
             // 
-            // btnCheckIndanCheckOut
+            // btnLO
             // 
-            btnCheckIndanCheckOut.Location = new Point(0, 0);
-            btnCheckIndanCheckOut.Name = "btnCheckIndanCheckOut";
-            btnCheckIndanCheckOut.Size = new Size(75, 23);
-            btnCheckIndanCheckOut.TabIndex = 0;
+            btnLO.Location = new Point(725, 45);
+            btnLO.Margin = new Padding(3, 4, 3, 4);
+            btnLO.Name = "btnLO";
+            btnLO.Size = new Size(103, 31);
+            btnLO.TabIndex = 0;
+            btnLO.Text = "LogOut";
+            btnLO.Click += btnLO_Click;
             // 
             // DashboardPendaki
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(btnCheckIndanCheckOut);
+            Controls.Add(btnLO);
             Controls.Add(btnLaporan);
-            Controls.Add(btnLogout);
             Controls.Add(btnInf);
             Controls.Add(btnTkt);
             Controls.Add(btnRsv);
             Controls.Add(label1);
             Controls.Add(label3);
-            Margin = new Padding(4);
+            Margin = new Padding(5);
             Name = "DashboardPendaki";
-            Size = new Size(1050, 625);
+            Size = new Size(852, 494);
             Load += DashboardPendaki_Load;
             ResumeLayout(false);
             PerformLayout();
@@ -146,8 +136,7 @@
         private Button btnRsv;
         private Button btnTkt;
         private Button btnInf;
-        private Button btnLogout;
         private Button btnLaporan;
-        private Button btnCheckIndanCheckOut;
+        private Button btnLO;
     }
 }

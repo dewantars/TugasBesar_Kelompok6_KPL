@@ -3,11 +3,6 @@
     partial class LaporanPendaki
     {
         private System.ComponentModel.IContainer components = null;
-
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -18,11 +13,6 @@
         }
 
         #region Component Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             labelJudul = new Label();
@@ -31,12 +21,13 @@
             labelLokasi = new Label();
             textBoxLokasi = new TextBox();
             labelKeparahan = new Label();
-            comboBoxKeparahan = new ComboBox();
+            labelHintKeparahan = new Label();
+            textBoxKeparahan = new TextBox();
             buttonKirim = new Button();
             buttonBack = new Button();
             SuspendLayout();
 
-            // labelJudul
+            // labelJudul 
             labelJudul.AutoSize = true;
             labelJudul.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
             labelJudul.Location = new Point(309, 14);
@@ -55,7 +46,7 @@
             labelDeskripsi.Text = "Deskripsi Laporan";
             labelDeskripsi.Click += labelDeskripsi_Click;
 
-            // textBoxDeskripsi
+            // textBoxDeskripsi 
             textBoxDeskripsi.Location = new Point(203, 119);
             textBoxDeskripsi.Name = "textBoxDeskripsi";
             textBoxDeskripsi.Size = new Size(400, 31);
@@ -77,7 +68,7 @@
             textBoxLokasi.Size = new Size(400, 31);
             textBoxLokasi.TabIndex = 4;
             textBoxLokasi.TextChanged += textBoxLokasi_TextChanged;
-
+            
             // labelKeparahan
             labelKeparahan.AutoSize = true;
             labelKeparahan.Location = new Point(33, 224);
@@ -87,14 +78,23 @@
             labelKeparahan.Text = "Tingkat Keparahan";
             labelKeparahan.Click += labelKeparahan_Click;
 
-            // comboBoxKeparahan
-            comboBoxKeparahan.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxKeparahan.Items.AddRange(new object[] { "Ringan", "Sedang", "Berat" });
-            comboBoxKeparahan.Location = new Point(203, 219);
-            comboBoxKeparahan.Name = "comboBoxKeparahan";
-            comboBoxKeparahan.Size = new Size(200, 33);
-            comboBoxKeparahan.TabIndex = 6;
-            comboBoxKeparahan.SelectedIndexChanged += comboBoxKeparahan_SelectedIndexChanged;
+            // labelHintKeparahan
+            labelHintKeparahan.AutoSize = true;
+            labelHintKeparahan.Font = new Font("Segoe UI", 8F, FontStyle.Italic);
+            labelHintKeparahan.ForeColor = Color.Gray;
+            labelHintKeparahan.Location = new Point(203, 253);
+            labelHintKeparahan.Name = "labelHintKeparahan";
+            labelHintKeparahan.Size = new Size(356, 21);
+            labelHintKeparahan.TabIndex = 8;
+            labelHintKeparahan.Text = "(Masukkan: Ringan / Sedang / Berat atau lainnya)";
+            labelHintKeparahan.Click += labelHintKeparahan_Click;
+
+            // textBoxKeparahan
+            textBoxKeparahan.Location = new Point(203, 219);
+            textBoxKeparahan.Name = "textBoxKeparahan";
+            textBoxKeparahan.Size = new Size(400, 31);
+            textBoxKeparahan.TabIndex = 6;
+            textBoxKeparahan.TextChanged += textBoxKeparahan_TextChanged;
 
             // buttonKirim
             buttonKirim.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
@@ -117,15 +117,16 @@
             // LaporanPendaki
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(buttonBack);
             Controls.Add(labelJudul);
             Controls.Add(labelDeskripsi);
             Controls.Add(textBoxDeskripsi);
             Controls.Add(labelLokasi);
             Controls.Add(textBoxLokasi);
             Controls.Add(labelKeparahan);
-            Controls.Add(comboBoxKeparahan);
+            Controls.Add(textBoxKeparahan);
+            Controls.Add(labelHintKeparahan);
             Controls.Add(buttonKirim);
+            Controls.Add(buttonBack);
             Name = "LaporanPendaki";
             Size = new Size(852, 494);
             Load += LaporanPendaki_Load;
@@ -143,7 +144,8 @@
         private System.Windows.Forms.Label labelLokasi;
         private System.Windows.Forms.TextBox textBoxLokasi;
         private System.Windows.Forms.Label labelKeparahan;
-        private System.Windows.Forms.ComboBox comboBoxKeparahan;
+        private System.Windows.Forms.TextBox textBoxKeparahan;
+        private System.Windows.Forms.Label labelHintKeparahan;
         private System.Windows.Forms.Button buttonKirim;
         private Button buttonBack;
     }

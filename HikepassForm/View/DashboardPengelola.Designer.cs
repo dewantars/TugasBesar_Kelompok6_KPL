@@ -40,12 +40,13 @@
             // btnLogout
             // 
             btnLogout.Location = new Point(925, 35);
-            btnLogout.Margin = new Padding(4);
+            btnLogout.Margin = new Padding(4, 4, 4, 4);
             btnLogout.Name = "btnLogout";
             btnLogout.Size = new Size(118, 36);
             btnLogout.TabIndex = 17;
             btnLogout.Text = "Log Out";
             btnLogout.UseVisualStyleBackColor = true;
+            btnLogout.Click += btnLogout_Click;
             // 
             // label1
             // 
@@ -68,11 +69,12 @@
             label3.Size = new Size(169, 40);
             label3.TabIndex = 15;
             label3.Text = "HikePass";
+            label3.Click += label3_Click;
             // 
             // btnMonitoring
             // 
             btnMonitoring.Location = new Point(49, 212);
-            btnMonitoring.Margin = new Padding(4);
+            btnMonitoring.Margin = new Padding(4, 4, 4, 4);
             btnMonitoring.Name = "btnMonitoring";
             btnMonitoring.Size = new Size(214, 62);
             btnMonitoring.TabIndex = 18;
@@ -82,7 +84,7 @@
             // btnEditInform
             // 
             btnEditInform.Location = new Point(294, 212);
-            btnEditInform.Margin = new Padding(4);
+            btnEditInform.Margin = new Padding(4, 4, 4, 4);
             btnEditInform.Name = "btnEditInform";
             btnEditInform.Size = new Size(214, 62);
             btnEditInform.TabIndex = 19;
@@ -93,7 +95,7 @@
             // btnLhtLaporan
             // 
             btnLhtLaporan.Location = new Point(49, 305);
-            btnLhtLaporan.Margin = new Padding(4);
+            btnLhtLaporan.Margin = new Padding(4, 4, 4, 4);
             btnLhtLaporan.Name = "btnLhtLaporan";
             btnLhtLaporan.Size = new Size(214, 62);
             btnLhtLaporan.TabIndex = 20;
@@ -104,7 +106,7 @@
             // btnLhtRiwayat
             // 
             btnLhtRiwayat.Location = new Point(294, 305);
-            btnLhtRiwayat.Margin = new Padding(4);
+            btnLhtRiwayat.Margin = new Padding(4, 4, 4, 4);
             btnLhtRiwayat.Name = "btnLhtRiwayat";
             btnLhtRiwayat.Size = new Size(214, 62);
             btnLhtRiwayat.TabIndex = 21;
@@ -122,7 +124,7 @@
             Controls.Add(btnLogout);
             Controls.Add(label1);
             Controls.Add(label3);
-            Margin = new Padding(4);
+            Margin = new Padding(4, 4, 4, 4);
             Name = "DashboardPengelola";
             Size = new Size(1065, 618);
             Load += DashboardPengelola_Load;
