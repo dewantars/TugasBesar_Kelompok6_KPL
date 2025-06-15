@@ -43,35 +43,17 @@ namespace HikepassForm.View
 
         private void Pembayaran_Load(object sender, EventArgs e)
         {
-            var tiketBelumDibayar = daftarTiket
-                .Where(t => t.Status == Tiket.StatusTiket.BelumDibayar)
-                .Select(t => new
-                {
-                    t.Id,
-                    NamaPemesan = t.DaftarPendaki?.Values.FirstOrDefault() ?? "-",
-                    Tanggal = t.Tanggal.ToShortDateString(),
-                    Jalur = t.Jalur.ToString(),
-                    t.JumlahPendaki,
-                    DaftarPendaki = string.Join(Environment.NewLine,t.DaftarPendaki.Select(p =>$"NIK: {p.Key}; {p.Value}"))
-,
-                    Status = t.Status.ToString(),
-                    t.Kontak,
-                    t.Keterangan,
-                    PilihTiket = t.StatusPembayaran
-                })
-                .ToList();
+            var tiketYangTampil = ControllerReservasi.reservasiList.Where(t => t.Status == Tiket.StatusTiket.BelumDibayar).ToList();
 
-            dataGridView1.DataSource = tiketBelumDibayar;
+            // Reset datasource
+            dataGridView1.DataSource = null;
+            dataGridView1.DataSource = tiketYangTampil;
 
-            // Agar kolom daftar pendaki bisa multi-line
+            // Agar wrap dan ukuran sel otomatis menyesuaikan konten
             dataGridView1.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-
-           
-
-            // Agar row menyesuaikan tinggi
             dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
-            if (!tiketBelumDibayar.Any())
+            if (!tiketYangTampil.Any())
             {
                 lblStatusInfo.Text = "Tidak ada tiket yang perlu dibayar.";
                 btnBayar.Enabled = false;

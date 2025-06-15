@@ -25,22 +25,17 @@ namespace HikepassForm.View
 
         private void RefreshTampilan()
         {
-            var bindingList = new BindingList<Tiket>(daftarTiket);
+            var tiketYangTampil = ControllerReservasi.reservasiList.ToList();
 
             dataGridView1.DataSource = null;
-            dataGridView1.DataSource = bindingList;
+            dataGridView1.DataSource = tiketYangTampil;
 
-            // 🔑 Perbaikan: Set Daftar Pendaki tampil di grid
-            foreach (DataGridViewRow row in dataGridView1.Rows)
-            {
-                if (row.DataBoundItem is Tiket tiket)
-                {
-                    row.Cells["daftarPendakiDataGridViewTextBoxColumn"].Value =
-                        string.Join(", ", tiket.DaftarPendaki.Select(p => $"{p.Value} (NIK: {p.Key})"));
-                }
-            }
+            dataGridView1.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
             dataGridView1.Refresh();
+            
+
         }
 
         private void btnKembali_Click(object sender, EventArgs e)

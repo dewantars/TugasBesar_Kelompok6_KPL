@@ -23,36 +23,25 @@ namespace HikepassForm.View
 
             btnSelesaikan.Click += btnSelesaikan_Click;
             btnKembali.Click += btnKembali_Click;
+
+            dataGridView1.CellValueChanged += DataGridView1_CellValueChanged;
+            dataGridView1.CurrentCellDirtyStateChanged += DataGridView1_CurrentCellDirtyStateChanged;
         }
 
         private void RefreshTampilan()
         {
-            var tiketYangTampil = ControllerReservasi.reservasiList
-                .Where(t => t.Status == Tiket.StatusTiket.Checkout)
-                .Select(t => new
-                {
-                    t.Id,
-                    NamaPemesan = t.DaftarPendaki?.Values.FirstOrDefault() ?? "-",
-                    Tanggal = t.Tanggal.ToShortDateString(),
-                    Jalur = t.Jalur.ToString(),
-                    t.JumlahPendaki,
-                    DaftarPendaki = string.Join(Environment.NewLine, t.DaftarPendaki.Select(p => $"NIK: {p.Key}; {p.Value}")),
-                    t.Kontak,
-                    t.Keterangan,
-                    BarangBawaan = t.BarangBawaanSaatCheckout != null && t.BarangBawaanSaatCheckout.Any()
-                        ? string.Join(", ", t.BarangBawaanSaatCheckout)
-                        : "-",
-                    Status = t.Status.ToString(),
-                    Pilih = false // default uncheck
-                })
-                .ToList();
+            // Ambil tiket dengan status Dibayar atau Checkin
+            var tiketYangTampil = ControllerReservasi.reservasiList.Where(t => t.Status == Tiket.StatusTiket.Checkout ).ToList();
 
+            // Reset datasource
             dataGridView1.DataSource = null;
             dataGridView1.DataSource = tiketYangTampil;
 
+            // Agar wrap dan ukuran sel otomatis menyesuaikan konten
             dataGridView1.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
+            dataGridView1.Refresh();
             UpdateTombolState();
         }
 
@@ -67,11 +56,20 @@ namespace HikepassForm.View
 
         private void DataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == dataGridView1.Columns["Pilih"].Index && e.RowIndex >= 0)
+            // Pastikan index valid
+            if (e.RowIndex >= 0 && e.ColumnIndex == dataGridView1.Columns["Pilih"].Index)
             {
-                UpdateTombolState();
+                int idTiket = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells["idDataGridViewTextBoxColumn"].Value);
+               
+
+                var tiket = ControllerReservasi.reservasiList.FirstOrDefault(t => t.Id == idTiket);
+                if (tiket != null)
+                {
+                    UpdateTombolState();
+                }
             }
         }
+
 
 
         private void UpdateTombolState()
@@ -95,7 +93,7 @@ namespace HikepassForm.View
                     cell.Value != null && (bool)cell.Value)
                 {
                     found = true;
-                    int tiketId = Convert.ToInt32(row.Cells["Id"].Value);
+                    int tiketId = Convert.ToInt32(row.Cells["idDataGridViewTextBoxColumn"].Value);
 
                     // Panggil API update
                     await ControllerReservasi.Selesaikan("http://localhost:5226/api/reservasi", tiketId, false);

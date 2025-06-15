@@ -35,36 +35,26 @@ namespace HikepassForm.View
         // Method utama untuk menyegarkan dan mereset tampilan
         private void RefreshTampilan()
         {
+            // Ambil tiket dengan status Dibayar atau Checkin
             var tiketYangTampil = ControllerReservasi.reservasiList
                 .Where(t => t.Status == Tiket.StatusTiket.Dibayar || t.Status == Tiket.StatusTiket.Checkin)
-                .Select(t => new
-                {
-                    PilihTiket = false,
-                    t.Id,
-                    Tanggal = t.Tanggal.ToString("yyyy-MM-dd"),
-                    Jalur = t.Jalur.ToString(),
-                    JumlahPendaki = t.DaftarPendaki.Count,
-                    DaftarPendaki = string.Join(", ", t.DaftarPendaki.Select(p => $"{p.Value} (NIK: {p.Key})")),
-                    Status = t.Status.ToString(),
-                    t.Kontak,
-                    t.Keterangan,
-                    BarangBawaan = (t.Status == Tiket.StatusTiket.Checkin && t.BarangBawaanSaatCheckin.Any())
-                                   ? string.Join(", ", t.BarangBawaanSaatCheckin)
-                                   : (t.Status == Tiket.StatusTiket.Checkout && t.BarangBawaanSaatCheckout.Any())
-                                     ? string.Join(", ", t.BarangBawaanSaatCheckout)
-                                     : "-"
-                })
                 .ToList();
 
+            // Reset datasource
             dataGridView1.DataSource = null;
             dataGridView1.DataSource = tiketYangTampil;
 
+            // Agar wrap dan ukuran sel otomatis menyesuaikan konten
             dataGridView1.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
             dataGridView1.Refresh();
             UpdateTombolState();
         }
+
+
+
+
 
         private void UpdateTombolState()
         {
@@ -126,6 +116,8 @@ namespace HikepassForm.View
                 txtBoxInputBarang.Clear();
                 txtBoxInputBarang.Focus();
             }
+            RefreshTampilan();
+
         }
 
 
