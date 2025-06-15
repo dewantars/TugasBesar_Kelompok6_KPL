@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace HikepassLibrary.Model
 {
-    // Naming convention: nama class menggunakan PascalCase
+    //  Clean code: nama class menggunakan PascalCase
     public class Laporan<T>
     {
-        // Variable/property declaration: akses modifier eksplisit dan properti bernama deskriptif 
-        public string IdLaporan { get; private set; } // Naming convention: PascalCase untuk properti 
-        public string Deskripsi { get; private set; } // Naming convention & deklarasi bersih 
+        //  Clean code: variable/property declaration, akses modifier eksplisit dan properti dengan nama yang jelas dan deskriptif 
+        public string IdLaporan { get; private set; } // Clean code: PascalCase untuk properti 
+        public string Deskripsi { get; private set; } //  Clean code: naming convention & deklarasi bersih 
         public string TitikLokasi { get; private set; }
         public DateTime WaktuLaporan { get; private set; }
         public T TingkatKeparahan { get; private set; }
 
-        // Naming convention: nama konstruktor mengikuti nama class (PascalCase) 
+        // Clean code: nama konstruktor mengikuti nama class (PascalCase) 
         public Laporan(string id, string deskripsi, string lokasi, DateTime waktu, T keparahan)
         {
             // Defensive
@@ -40,9 +40,9 @@ namespace HikepassLibrary.Model
             Debug.Assert(!string.IsNullOrEmpty(IdLaporan), "ID tidak boleh kosong setelah konstruksi");
         }
 
-        public void PrintLaporan() // Naming convention: nama method pakai PascalCase dan deskriptif 
+        public void PrintLaporan() //  Clean code: nama method pakai PascalCase dan deskriptif 
         {
-            Console.WriteLine("---------------------------- Laporan ----------------------------"); // Indentasi rapi dan konsisten 
+            Console.WriteLine("---------------------------- Laporan ----------------------------"); // Clean code: white space antar logika validasi ditambahkan untuk keterbacaan
             Console.WriteLine("ID                : " + IdLaporan);
             Console.WriteLine("Waktu             : " + WaktuLaporan.ToString("dd/MM/yyyy HH:mm:ss"));
             Console.WriteLine("Deskripsi Laporan : " + Deskripsi);
@@ -50,12 +50,12 @@ namespace HikepassLibrary.Model
             Console.WriteLine("Keparahan         : " + TingkatKeparahan);
         }
 
-        public static Laporan<T> InputLaporan() // Nama method sesuai konvensi dan fungsionalitas 
+        public static Laporan<T> InputLaporan() 
         {
             Console.WriteLine("----------------------- Input Data Laporan ----------------------");
 
             // Defensive + precondition
-            string deskripsi; // Variable declaration: dideklarasikan dekat dengan penggunaannya 
+            string deskripsi; // Clean code: variable declaration jelas dan deskriptif
             do
             {
                 Console.Write("Deskripsi Laporan  : ");
@@ -73,7 +73,7 @@ namespace HikepassLibrary.Model
                     Console.WriteLine("Titik lokasi tidak boleh kosong.");
             } while (string.IsNullOrWhiteSpace(lokasi));
 
-            T keparahan; // Variable declaration: penamaan jelas dan berada dekat pemakaian 
+            T keparahan; //  Clean code: variable declaration, penamaan jelas dan berada dekat pemakaian 
 
             if (typeof(T) == typeof(string))
             {
@@ -108,7 +108,7 @@ namespace HikepassLibrary.Model
             }
 
             DateTime waktu = DateTime.Now;
-            string idOtomatis = "LAP" + waktu.ToString("yyyyMMddHHmmss"); // Naming convention: variabel pakai camelCase 
+            string idOtomatis = "LAP" + waktu.ToString("yyyyMMddHHmmss"); //  Clean code: variabel pakai camelCase 
 
             // Postcondition
             Debug.Assert(!string.IsNullOrEmpty(idOtomatis), "ID tidak terbentuk dengan benar"); // Validasi hasil pembuatan ID 

@@ -15,56 +15,55 @@ using HikepassLibrary.Controller;
 
 namespace HikepassForm.View
 {
+    // Clean code: nama class menggunakan PascalCase
     public partial class Reservasi : UserControl
     {
-
-
-        // Clean Code: Menggunakan HttpClient sebagai field statis, efisien untuk reuse
         private static readonly HttpClient client = new HttpClient();
-
-        // Clean Code: Dictionary untuk menyimpan data pendaki tambahan
         private Dictionary<string, string> daftarPendakiTambahan = new Dictionary<string, string>();
 
+        // Clean code: constructor menggunakan PascalCase
         public Reservasi()
         {
             InitializeComponent();
             buttonTambahPendaki.Click += buttonTambahPendaki_Click_1;
-            buttonSubmit.Click += ButtonSubmit_Click; // Clean Code: Penamaan method PascalCase sesuai standar
-            
+            buttonSubmit.Click += ButtonSubmit_Click;
+
         }
+
+        // Clean code: method menggunakan PascalCase
         public void LoadPage(UserControl page)
         {
-            this.Controls.Clear(); 
+            this.Controls.Clear();
             page.Dock = DockStyle.Fill;
             this.Controls.Add(page);
         }
 
-        // Event handlers default - Clean Code: Dibiarkan kosong agar tidak error saat desain GUI
+        // Event handler disiapkan jika ingin menambahkan interaksi saat item dipilih
         private void labelJudul_Click(object sender, EventArgs e) { }
-        private void Reservasi_Load(object sender, EventArgs e) { }
-        private void radioButton1_CheckedChanged(object sender, EventArgs e) { }
-        private void radioButton2_CheckedChanged_1(object sender, EventArgs e) { }
-        private void label1_Click_1(object sender, EventArgs e) { }
-        private void labelNama_Click(object sender, EventArgs e) { }
-        private void textBoxNama_TextChanged(object sender, EventArgs e) { }
-        private void labelNIK_Click(object sender, EventArgs e) { }
-        private void textBoxNIK_TextChanged(object sender, EventArgs e) { }
-        private void labelKontak_Click(object sender, EventArgs e) { }
-        private void textBoxKontak_TextChanged(object sender, EventArgs e) { }
-        private void labelUsia_Click(object sender, EventArgs e) { }
-        private void textBoxUsia_TextChanged(object sender, EventArgs e) { }
-        private void labelJumlahPendaki_Click(object sender, EventArgs e) { }
-        private void labelTanggal_Click(object sender, EventArgs e) { }
-        private void dateTimePickerTanggal_ValueChanged(object sender, EventArgs e) { }
-        private void labelKeterangan_Click(object sender, EventArgs e) { }
-        private void textBoxKeterangan_TextChanged(object sender, EventArgs e) { }
-        private void buttonSubmit_Click_1(object sender, EventArgs e) { }
+        private void labelNama_Click_1(object sender, EventArgs e) { }
+        private void textBoxNama_TextChanged_1(object sender, EventArgs e) { }
+        private void labelNIK_Click_1(object sender, EventArgs e) { }
+        private void textBoxNIK_TextChanged_1(object sender, EventArgs e) { }
+        private void labelKontak_Click_1(object sender, EventArgs e) { }
+        private void textBoxKontak_TextChanged_1(object sender, EventArgs e) { }
+        private void labelUsia_Click_1(object sender, EventArgs e) { }
+        private void textBoxUsia_TextChanged_1(object sender, EventArgs e) { }
+        private void labelJumlahPendaki_Click_1(object sender, EventArgs e) { }
         private void labelJumlah_Click(object sender, EventArgs e) { }
-        private void label3_Click(object sender, EventArgs e) { }
+        private void buttonTambahPendaki_Click(object sender, EventArgs e) { }
+        private void labelTanggal_Click_1(object sender, EventArgs e) { }
+        private void dateTimePickerTanggal_ValueChanged_1(object sender, EventArgs e) { }
+        private void labelKeterangan_Click_1(object sender, EventArgs e) { }
+        private void textBoxKeterangan_TextChanged_1(object sender, EventArgs e) { }
+        private void label1_Click(object sender, EventArgs e) { }
+        private void radioButton1_CheckedChanged_1(object sender, EventArgs e) { }
+        private void radioButton2_CheckedChanged(object sender, EventArgs e) { }
+        private void buttonSubmit_Click_2(object sender, EventArgs e) { }
+        private void Reservasi_Load(object sender, EventArgs e) { }
 
+        // Clean code: white space antar logika disusun jelas dan indentasi konsisten 4 spasi
         private void buttonMinus_Click(object sender, EventArgs e)
         {
-            // Clean Code: Kontrol jumlah minimum pendaki
             if (jumlahPendaki > 1)
             {
                 jumlahPendaki--;
@@ -86,14 +85,15 @@ namespace HikepassForm.View
             }
         }
 
-        private async void ButtonSubmit_Click(object sender, EventArgs e)
+        // Clean code: white space antar logika (validasi - pemrosesan - UI) jelas
+        private async void ButtonSubmit_Click(object sender, EventArgs e) 
         {
             try
             {
                 int id = ControllerReservasi.reservasiList.Count == 0 ? 1 : ControllerReservasi.reservasiList.Max(r => r.Id) + 1;
-                // Ambil data pendaki utama
-                string nama = textBoxNama.Text.Trim();
-                string nik = textBoxNIK.Text.Trim();
+                // Mengambil data pendaki utama
+                string nama = textBoxNama.Text.Trim(); // Clean code: variabel lokal menggunakan camelCase
+                string nik = textBoxNIK.Text.Trim(); // Clean code: deklarasi variabel dilakukan dekat dengan penggunaan
                 string kontak = textBoxKontak.Text.Trim();
                 string usiaText = textBoxUsia.Text.Trim();
                 string keterangan = textBoxKeterangan.Text.Trim();
@@ -130,18 +130,18 @@ namespace HikepassForm.View
                     return;
                 }
 
-                // Tentukan jalur
+                // Menentukan jalur
                 Tiket.JalurPendakian jalur = radioButton1.Checked
                     ? Tiket.JalurPendakian.Cinyiruan
                     : Tiket.JalurPendakian.Panorama;
 
-                // Buat daftar pendaki awal dari data utama
+                // Membuat daftar pendaki awal dari data utama
                 var daftarPendaki = new Dictionary<string, string>
                 {
                     { nik, $"{nama} - Usia {usia}, Kontak: {kontak}" }
                 };
 
-                // Tambahkan pendaki tambahan (jika ada)
+                // Menambahkan pendaki tambahan (jika ada)
                 foreach (var tambahan in daftarPendakiTambahan)
                 {
                     if (!daftarPendaki.ContainsKey(tambahan.Key))
@@ -150,14 +150,14 @@ namespace HikepassForm.View
                     }
                 }
 
-                // Validasi jumlah data pendaki harus sesuai dengan input jumlah
+                // Memvalidasi jumlah data pendaki harus sesuai dengan input jumlah
                 if (daftarPendaki.Count != jumlahPendaki)
                 {
                     MessageBox.Show($"Jumlah pendaki belum lengkap. Diperlukan {jumlahPendaki}, baru terisi {daftarPendaki.Count}.");
                     return;
                 }
 
-                // Buat objek tiket
+                // Membuat objek tiket
                 var tiket = new Tiket
                 {
                     Id = id,
@@ -171,7 +171,7 @@ namespace HikepassForm.View
                     Kontak = kontak
                 };
 
-                // Kirim ke API
+                // Mengirim ke API
                 var response = await client.PostAsJsonAsync("http://localhost:5226/api/reservasi", tiket);
                 ControllerReservasi.reservasiList.Add(tiket);
 
@@ -184,7 +184,7 @@ namespace HikepassForm.View
                         sb.AppendLine($"- {pendaki.Value}");
                     }
 
-                    // Tampilkan konfirmasi
+                    // Menampilkan konfirmasi
                     Form resultDialog = new Form()
                     {
                         Text = "Konfirmasi Reservasi",
@@ -231,8 +231,7 @@ namespace HikepassForm.View
                         LoadPage(halamanPembayaran);
                     }
 
-
-                    ClearForm(); // Reset semua input
+                    ClearForm();
                 }
                 else
                 {
@@ -247,7 +246,6 @@ namespace HikepassForm.View
 
         private void ClearForm()
         {
-            // Clean Code: Reset semua input ke default
             textBoxNama.Text = "";
             textBoxNIK.Text = "";
             textBoxKontak.Text = "";
@@ -264,8 +262,7 @@ namespace HikepassForm.View
 
         private void buttonTambahPendaki_Click_1(object sender, EventArgs e)
         {
-            // Clean Code & Secure: Validasi input format data tambahan
-            int jumlahDibutuhkan = jumlahPendaki - 1; // pendaki utama sudah ada
+            int jumlahDibutuhkan = jumlahPendaki - 1; // Pendaki utama sudah ada
             int pendakiKe = 2;
 
             while (daftarPendakiTambahan.Count < jumlahDibutuhkan)
@@ -322,7 +319,7 @@ namespace HikepassForm.View
         private void buttonBack_Click(object sender, EventArgs e)
         {
             var dashboard = this.Parent as DashboardPendaki;
-            dashboard?.PindahKeDashboard(); // Clean Code: Navigasi antar kontrol
+            dashboard?.PindahKeDashboard(); 
         }
     }
 }
