@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using HikepassLibrary.Controller;
 using HikepassLibrary.Model;
@@ -16,27 +13,63 @@ namespace HikepassForm.View
     public partial class Pembayaran : UserControl
     {
         private readonly List<Tiket> daftarTiket;
-        private TiketSaya tiketsayaMenu;
 
-        public Pembayaran(List<Tiket> tiketList )
+        public Pembayaran(List<Tiket> tiketList)
         {
             InitializeComponent();
             this.daftarTiket = tiketList;
-            
-            
         }
+
         public void LoadPage(UserControl page)
         {
-            this.Controls.Clear(); // Hapus isi panel konten saja
+            this.Controls.Clear();
             page.Dock = DockStyle.Fill;
             this.Controls.Add(page);
         }
 
+        private void RefreshTampilan()
+        {
+
+            var tiketYangTampil = ControllerReservasi.reservasiList.Where(t => t.Status == Tiket.StatusTiket.BelumDibayar).ToList();
+
+            var bindingList = new BindingList<Tiket>(tiketYangTampil);
+
+            // untuk "mereset" grid
+            dataGridView1.DataSource = null;
+            dataGridView1.DataSource = bindingList;
+            dataGridView1.Refresh();
+
+        }
+
         private void Pembayaran_Load(object sender, EventArgs e)
         {
-            // Saring untuk menampilkan tiket yang relevan saat form dimuat
-            var tiketBelumDibayar = daftarTiket.Where(t => t.Status == Tiket.StatusTiket.BelumDibayar).ToList();
-            tiketBindingSource.DataSource = tiketBelumDibayar;
+            var tiketBelumDibayar = daftarTiket
+                .Where(t => t.Status == Tiket.StatusTiket.BelumDibayar)
+                .Select(t => new
+                {
+                    t.Id,
+                    NamaPemesan = t.DaftarPendaki?.Values.FirstOrDefault() ?? "-",
+                    Tanggal = t.Tanggal.ToShortDateString(),
+                    Jalur = t.Jalur.ToString(),
+                    t.JumlahPendaki,
+                    DaftarPendaki = string.Join(Environment.NewLine,t.DaftarPendaki.Select(p =>$"NIK: {p.Key}; {p.Value}"))
+,
+                    Status = t.Status.ToString(),
+                    t.Kontak,
+                    t.Keterangan,
+                    PilihTiket = t.StatusPembayaran
+                })
+                .ToList();
+
+            dataGridView1.DataSource = tiketBelumDibayar;
+
+            // Agar kolom daftar pendaki bisa multi-line
+            dataGridView1.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+
+           
+
+            // Agar row menyesuaikan tinggi
+            dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
             if (!tiketBelumDibayar.Any())
             {
@@ -46,82 +79,80 @@ namespace HikepassForm.View
             else
             {
                 lblStatusInfo.Text = "Silakan pilih tiket yang akan dibayar.";
+                btnBayar.Enabled = true;
             }
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+
+
+
+        private void DataGridView1_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
-            // Memastikan nilai checkbox langsung tersimpan di objek saat diklik
-            if (e.ColumnIndex == dataGridView1.Columns["checkBox"].Index && e.RowIndex >= 0)
+            if (dataGridView1.IsCurrentCellDirty)
             {
                 dataGridView1.CommitEdit(DataGridViewDataErrorContexts.Commit);
             }
         }
 
-        private async void btnBayar_Click(object sender, EventArgs e)
+        private void DataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            // Ambil dari list reservasiList di controller
-            var tiketTerpilih = ControllerReservasi.reservasiList
-                                .Where(t => t.StatusPembayaran) // yang dicentang
-                                .ToList();
-
-            if (tiketTerpilih == null || !tiketTerpilih.Any())
+            if (e.ColumnIndex == dataGridView1.Columns["PilihTiket"].Index && e.RowIndex >= 0)
             {
-                MessageBox.Show("Silakan centang minimal satu tiket yang ingin Anda bayar.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
+                int idTiket = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells["Id"].Value);
+                bool isChecked = Convert.ToBoolean(dataGridView1.Rows[e.RowIndex].Cells["PilihTiket"].Value);
 
-            btnBayar.Enabled = false;
-            lblStatusInfo.Text = "Memproses pembayaran...";
-
-            try
-            {
-                foreach (Tiket tiket in tiketTerpilih)
+                var tiket = ControllerReservasi.reservasiList.FirstOrDefault(t => t.Id == idTiket);
+                if (tiket != null)
                 {
-                    if (tiket.Status == Tiket.StatusTiket.BelumDibayar)
-                    {
-                        // Update status ke server
-                        await ControllerReservasi.UpdatedPembayaran("http://localhost:5226/api/reservasi", tiket.Id);
-
-                        // Jika sukses, update juga status lokalnya di reservasiList
-                        var tiketDiList = ControllerReservasi.reservasiList.FirstOrDefault(t => t.Id == tiket.Id);
-                        if (tiketDiList != null)
-                        {
-                            tiketDiList.Status = Tiket.StatusTiket.Dibayar;
-                            tiketDiList.StatusPembayaran = false; // Uncheck lagi biar nggak keikut klik lagi
-                        }
-                    }
+                    tiket.StatusPembayaran = isChecked;
                 }
-
-                // Refresh UI: hanya tampilkan tiket yang belum dibayar
-                var tiketSisa = ControllerReservasi.reservasiList
-                                    .Where(t => t.Status == Tiket.StatusTiket.BelumDibayar)
-                                    .ToList();
-
-                tiketBindingSource.DataSource = tiketSisa;
-
-                MessageBox.Show($"{tiketTerpilih.Count} tiket telah diproses untuk pembayaran.", "Proses Selesai", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                lblStatusInfo.Text = tiketSisa.Any() ? "Pembayaran selesai." : "Semua tiket sudah lunas.";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Terjadi kesalahan teknis: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                lblStatusInfo.Text = "Terjadi kesalahan.";
-            }
-            finally
-            {
-                btnBayar.Enabled = ControllerReservasi.reservasiList.Any(t => t.Status == Tiket.StatusTiket.BelumDibayar);
             }
         }
 
+        private async void btnBayar_Click(object sender, EventArgs e)
+        {
+            bool found = false;
+            List<int> tiketYangDibayar = new List<int>();
+
+             foreach (var id in tiketYangDibayar)
+            {
+                var t = daftarTiket.FirstOrDefault(x => x.Id == id);
+                if (t != null)
+                {
+                    t.Status = Tiket.StatusTiket.Dibayar;
+                    t.StatusPembayaran = false;
+                }
+            }
+
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                if (row.Cells["checkBox"] is DataGridViewCheckBoxCell cell &&
+                    cell.Value != null && (bool)cell.Value)
+                {
+                    found = true;
+                    int tiketId = (int)row.Cells["idDataGridViewTextBoxColumn"].Value;
+
+                    await ControllerReservasi.UpdatedPembayaran("http://localhost:5226/api/reservasi", tiketId);
+                    tiketYangDibayar.Add(tiketId);
+                }
+            }
+
+            if (!found)
+            {
+                MessageBox.Show("Silakan pilih tiket yang ingin dibayar.");
+                return;
+            }
+
+           
+
+            RefreshTampilan();
+            MessageBox.Show("Pembayaran berhasil diproses.");
+        }
 
         private void btnKembali_Click(object sender, EventArgs e)
         {
             var tiketSaya = new TiketSaya();
             LoadPage(tiketSaya);
-
-
         }
     }
 }

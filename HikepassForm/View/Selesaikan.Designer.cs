@@ -1,6 +1,6 @@
 ﻿namespace HikepassForm.View
 {
-    partial class Pembayaran
+    partial class Selesaikan
     {
         /// <summary>
         /// Required designer variable.
@@ -29,14 +29,12 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            lblJudul = new Label();
             dataGridView1 = new DataGridView();
             tiketBindingSource = new BindingSource(components);
+            lblInfo = new Label();
+            lblJudul = new Label();
+            btnSelesaikan = new Button();
             btnKembali = new Button();
-            btnBayar = new Button();
-            lblStatus = new Label();
-            lblStatusInfo = new Label();
-            reservasiControllerBindingSource = new BindingSource(components);
             idDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             tanggalDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             jalurDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
@@ -45,85 +43,71 @@
             statusDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             kontakDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             keteranganDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            checkBox = new DataGridViewCheckBoxColumn();
+            barangBawaanDisplayDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            Pilih = new DataGridViewCheckBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)tiketBindingSource).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)reservasiControllerBindingSource).BeginInit();
             SuspendLayout();
-            // 
-            // lblJudul
-            // 
-            lblJudul.AutoSize = true;
-            lblJudul.Font = new Font("Segoe UI Semibold", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblJudul.Location = new Point(528, 24);
-            lblJudul.Name = "lblJudul";
-            lblJudul.Size = new Size(149, 32);
-            lblJudul.TabIndex = 0;
-            lblJudul.Text = "Pembayaran";
             // 
             // dataGridView1
             // 
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.AllowUserToOrderColumns = true;
             dataGridView1.AutoGenerateColumns = false;
-            dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { idDataGridViewTextBoxColumn, tanggalDataGridViewTextBoxColumn, jalurDataGridViewTextBoxColumn, jumlahPendakiDataGridViewTextBoxColumn, daftarPendakiDataGridViewTextBoxColumn, statusDataGridViewTextBoxColumn, kontakDataGridViewTextBoxColumn, keteranganDataGridViewTextBoxColumn, checkBox });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { idDataGridViewTextBoxColumn, tanggalDataGridViewTextBoxColumn, jalurDataGridViewTextBoxColumn, jumlahPendakiDataGridViewTextBoxColumn, daftarPendakiDataGridViewTextBoxColumn, statusDataGridViewTextBoxColumn, kontakDataGridViewTextBoxColumn, keteranganDataGridViewTextBoxColumn, barangBawaanDisplayDataGridViewTextBoxColumn, Pilih });
             dataGridView1.DataSource = tiketBindingSource;
-            dataGridView1.Location = new Point(57, 82);
+            dataGridView1.Location = new Point(49, 112);
             dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(943, 220);
+            dataGridView1.Size = new Size(1043, 274);
             dataGridView1.TabIndex = 1;
             // 
             // tiketBindingSource
             // 
             tiketBindingSource.DataSource = typeof(HikepassLibrary.Model.Tiket);
             // 
+            // lblInfo
+            // 
+            lblInfo.AutoSize = true;
+            lblInfo.Location = new Point(564, 449);
+            lblInfo.Name = "lblInfo";
+            lblInfo.Size = new Size(145, 15);
+            lblInfo.TabIndex = 1;
+            lblInfo.Text = "Pilih Tiket di Kolom kanan";
+            // 
+            // lblJudul
+            // 
+            lblJudul.AutoSize = true;
+            lblJudul.Font = new Font("Segoe UI Semibold", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblJudul.Location = new Point(564, 32);
+            lblJudul.Name = "lblJudul";
+            lblJudul.Size = new Size(128, 32);
+            lblJudul.TabIndex = 2;
+            lblJudul.Text = "Selesaikan";
+            // 
+            // btnSelesaikan
+            // 
+            btnSelesaikan.BackColor = Color.SeaGreen;
+            btnSelesaikan.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnSelesaikan.ForeColor = Color.White;
+            btnSelesaikan.Location = new Point(536, 481);
+            btnSelesaikan.Name = "btnSelesaikan";
+            btnSelesaikan.Size = new Size(194, 52);
+            btnSelesaikan.TabIndex = 3;
+            btnSelesaikan.Text = "KONFIRMASI";
+            btnSelesaikan.UseVisualStyleBackColor = false;
+            // 
             // btnKembali
             // 
-            btnKembali.BackColor = Color.Firebrick;
+            btnKembali.BackColor = Color.Brown;
             btnKembali.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnKembali.ForeColor = Color.White;
-            btnKembali.Location = new Point(993, 31);
+            btnKembali.Location = new Point(1067, 38);
             btnKembali.Name = "btnKembali";
-            btnKembali.Size = new Size(107, 29);
-            btnKembali.TabIndex = 2;
+            btnKembali.Size = new Size(125, 30);
+            btnKembali.TabIndex = 4;
             btnKembali.Text = "KEMBALI";
             btnKembali.UseVisualStyleBackColor = false;
-            btnKembali.Click += btnKembali_Click;
-            // 
-            // btnBayar
-            // 
-            btnBayar.BackColor = Color.SeaGreen;
-            btnBayar.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnBayar.ForeColor = Color.White;
-            btnBayar.Location = new Point(532, 400);
-            btnBayar.Name = "btnBayar";
-            btnBayar.Size = new Size(124, 36);
-            btnBayar.TabIndex = 3;
-            btnBayar.Text = "BAYAR";
-            btnBayar.UseVisualStyleBackColor = false;
-            btnBayar.Click += btnBayar_Click;
-            // 
-            // lblStatus
-            // 
-            lblStatus.AutoSize = true;
-            lblStatus.Location = new Point(491, 368);
-            lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(45, 15);
-            lblStatus.TabIndex = 4;
-            lblStatus.Text = "Status :";
-            // 
-            // lblStatusInfo
-            // 
-            lblStatusInfo.Location = new Point(542, 365);
-            lblStatusInfo.Name = "lblStatusInfo";
-            lblStatusInfo.Size = new Size(385, 18);
-            lblStatusInfo.TabIndex = 5;
-            // 
-            // reservasiControllerBindingSource
-            // 
-            reservasiControllerBindingSource.DataSource = typeof(HikepassAPI.Controllers.ReservasiController);
             // 
             // idDataGridViewTextBoxColumn
             // 
@@ -173,44 +157,45 @@
             keteranganDataGridViewTextBoxColumn.HeaderText = "Keterangan";
             keteranganDataGridViewTextBoxColumn.Name = "keteranganDataGridViewTextBoxColumn";
             // 
-            // checkBox
+            // barangBawaanDisplayDataGridViewTextBoxColumn
             // 
-            checkBox.DataPropertyName = "StatusPembayaran";
-            checkBox.FalseValue = false;
-            checkBox.HeaderText = "Pilih Tiket";
-            checkBox.Name = "checkBox";
-            checkBox.TrueValue = true;
+            barangBawaanDisplayDataGridViewTextBoxColumn.DataPropertyName = "BarangBawaanDisplay";
+            barangBawaanDisplayDataGridViewTextBoxColumn.HeaderText = "BarangBawaanDisplay";
+            barangBawaanDisplayDataGridViewTextBoxColumn.Name = "barangBawaanDisplayDataGridViewTextBoxColumn";
+            barangBawaanDisplayDataGridViewTextBoxColumn.ReadOnly = true;
             // 
-            // Pembayaran
+            // Pilih
+            // 
+            Pilih.FalseValue = false;
+            Pilih.HeaderText = "Pilih Tiket";
+            Pilih.Name = "Pilih";
+            Pilih.TrueValue = true;
+            // 
+            // Selesaikan
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(lblStatusInfo);
-            Controls.Add(lblStatus);
-            Controls.Add(btnBayar);
             Controls.Add(btnKembali);
-            Controls.Add(dataGridView1);
+            Controls.Add(btnSelesaikan);
             Controls.Add(lblJudul);
-            Name = "Pembayaran";
-            Size = new Size(1162, 555);
-            Load += Pembayaran_Load;
+            Controls.Add(lblInfo);
+            Controls.Add(dataGridView1);
+            Name = "Selesaikan";
+            Size = new Size(1246, 606);
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)tiketBindingSource).EndInit();
-            ((System.ComponentModel.ISupportInitialize)reservasiControllerBindingSource).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private Label lblJudul;
         private DataGridView dataGridView1;
         private BindingSource tiketBindingSource;
+        private Label lblInfo;
+        private Label lblJudul;
+        private Button btnSelesaikan;
         private Button btnKembali;
-        private Button btnBayar;
-        private Label lblStatus;
-        private Label lblStatusInfo;
-        private BindingSource reservasiControllerBindingSource;
         private DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn tanggalDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn jalurDataGridViewTextBoxColumn;
@@ -219,6 +204,7 @@
         private DataGridViewTextBoxColumn statusDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn kontakDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn keteranganDataGridViewTextBoxColumn;
-        private DataGridViewCheckBoxColumn checkBox;
+        private DataGridViewTextBoxColumn barangBawaanDisplayDataGridViewTextBoxColumn;
+        private DataGridViewCheckBoxColumn Pilih;
     }
 }
