@@ -167,7 +167,7 @@ namespace HikepassForm.View
 
         private void buttonKembali_Click(object sender, EventArgs e)
         {
-            var dashboard = this.Parent as DashboardPendaki;
+            var dashboard = this.Parent as DashboardPengelola;
             dashboard?.PindahKeDashboard();
         }
 
