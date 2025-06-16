@@ -47,7 +47,7 @@ namespace HikepassForm.View
         private void buttonBack_Click(object sender, EventArgs e)
         {
             var dashboard = this.Parent as DashboardPengelola;
-            dashboard?.PindahKeDashboard();
+            dashboard?.PindahKeDashboard(); // Secure coding: aman dari NullReferenceException
         }
     }
 }

@@ -38,6 +38,7 @@ namespace HikepassForm.View
             string lokasi = textBoxLokasi.Text.Trim(); // Clean code: variable declaration jelas dan deskriptif
             string keparahan = textBoxKeparahan.Text.Trim();
 
+            // Secure coding: validasi input wajib untuk mencegah data kosong dan potensi penyalahgunaan
             if (string.IsNullOrWhiteSpace(deskripsi))
             {
                 MessageBox.Show("Deskripsi tidak boleh kosong.", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -75,6 +76,7 @@ namespace HikepassForm.View
             }
             catch (Exception ex)
             {
+                // Secure coding: exception handling mencegah aplikasi crash saat terjadi kesalahan
                 // Clean code: exception handling dengan pesan yang jelas
                 MessageBox.Show("Terjadi kesalahan saat mengirim laporan: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

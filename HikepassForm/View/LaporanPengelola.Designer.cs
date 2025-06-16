@@ -25,50 +25,59 @@
             columnKeparahan = new ColumnHeader();
             buttonBack = new Button();
             SuspendLayout();
-
+            // 
             // labelJudul
+            // 
             labelJudul.AutoSize = true;
             labelJudul.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            labelJudul.Location = new Point(248, 12);
+            labelJudul.Location = new Point(313, 13);
             labelJudul.Name = "labelJudul";
             labelJudul.Size = new Size(395, 48);
             labelJudul.TabIndex = 0;
             labelJudul.Text = "Daftar Laporan Masuk";
             labelJudul.Click += labelJudul_Click;
-  
+            // 
             // listViewLaporan
+            // 
+            listViewLaporan.BackColor = SystemColors.InactiveBorder;
             listViewLaporan.Columns.AddRange(new ColumnHeader[] { columnID, columnWaktu, columnDeskripsi, columnLokasi, columnKeparahan });
             listViewLaporan.FullRowSelect = true;
             listViewLaporan.GridLines = true;
             listViewLaporan.Location = new Point(56, 80);
             listViewLaporan.Name = "listViewLaporan";
-            listViewLaporan.Size = new Size(914, 397);
+            listViewLaporan.Size = new Size(883, 397);
             listViewLaporan.TabIndex = 1;
             listViewLaporan.UseCompatibleStateImageBehavior = false;
             listViewLaporan.View = System.Windows.Forms.View.Details;
             listViewLaporan.SelectedIndexChanged += listViewLaporan_SelectedIndexChanged;
-
+            // 
             // columnID
+            // 
             columnID.Text = "ID";
             columnID.Width = 150;
-
+            // 
             // columnWaktu
+            // 
             columnWaktu.Text = "Waktu";
             columnWaktu.Width = 160;
- 
-            // columnDeskripsi 
+            // 
+            // columnDeskripsi
+            // 
             columnDeskripsi.Text = "Deskripsi";
             columnDeskripsi.Width = 200;
-      
+            // 
             // columnLokasi
+            // 
             columnLokasi.Text = "Lokasi";
             columnLokasi.Width = 120;
-        
+            // 
             // columnKeparahan
+            // 
             columnKeparahan.Text = "Keparahan";
             columnKeparahan.Width = 120;
-
+            // 
             // buttonBack
+            // 
             buttonBack.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
             buttonBack.Location = new Point(56, 30);
             buttonBack.Name = "buttonBack";
@@ -76,8 +85,9 @@
             buttonBack.TabIndex = 24;
             buttonBack.Text = "Kembali";
             buttonBack.Click += buttonBack_Click;
-
+            // 
             // LaporanPengelola
+            // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(buttonBack);
