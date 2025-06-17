@@ -1,4 +1,5 @@
-﻿using HikepassLibrary.Model;
+﻿// Import class dan library
+using HikepassLibrary.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,10 +13,13 @@ using System.Windows.Forms;
 
 namespace HikepassForm.View
 {
+    // Komponen UserControl untuk halaman Informasi Pengelola
     public partial class InformasiPengelola : UserControl
     {
+        // Konstruktor
         public InformasiPengelola()
         {
+            // Clean code: PascalCase
             InitializeComponent();
         }
 
@@ -27,66 +31,100 @@ namespace HikepassForm.View
 
         private void buttonTampilkan_Click(object sender, EventArgs e)
         {
-            // isi berdasarkan Informasi.cs dan InformasiService.cs
-            string kategoriInput = textBoxKategori.Text.Trim();
+            // Clean code: CamelCase
+            string input = textBoxKategori.Text.Trim();
 
-            if (string.IsNullOrWhiteSpace(kategoriInput))
+            // Secure code: memastikan dan tampil pesan jika kategori kosong
+            if (string.IsNullOrWhiteSpace(input))
             {
                 MessageBox.Show("Kategori tidak boleh kosong.");
                 return;
             }
 
-            string kategori = kategoriInput.ToLower() switch
-            {
-                "1" or "peraturan" => "Peraturan",
-                "2" or "tips" => "Tips",
-                "3" or "umum" => "Umum",
-                _ => null
-            };
+            string kategori;
 
+            // Clean code: white space, indention
+            if (int.TryParse(input, out int angka))
+            {
+                // Mapping input integer ke kategori string
+                kategori = angka switch
+                {
+                    1 => "Peraturan",
+                    2 => "Tips",
+                    3 => "Umum",
+                    _ => null
+                };
+            }
+            else
+            {
+                // Mapping input string ke kategori string
+                string lower = input.ToLower();
+                kategori = lower switch
+                {
+                    "peraturan" => "Peraturan",
+                    "tips" => "Tips",
+                    "umum" => "Umum",
+                    _ => null
+                };
+            }
+
+            // Secure code: memastikan dan tampil pesan jika kategori tidak valid
             if (kategori == null)
             {
-                MessageBox.Show("Kategori tidak valid. Masukkan 1, 2, 3 atau nama kategori langsung.");
+                MessageBox.Show("Kategori tidak valid. Masukkan 1, 2, 3 atau Peraturan/Tips/Umum.");
                 return;
             }
 
-            List<Informasi<string>> daftar = new List<Informasi<string>>();
+            // Buat list untuk data informasi
+            List<Informasi<string>> informasi = new List<Informasi<string>>();
 
             try
             {
+                // Baca file informasi.json
                 string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "informasi.json");
                 string json = File.ReadAllText(path);
-                daftar = JsonSerializer.Deserialize<List<Informasi<string>>>(json) ?? new List<Informasi<string>>();
+                // Ubah JSON jadi list objek
+                informasi = JsonSerializer.Deserialize<List<Informasi<string>>>(json) ?? new List<Informasi<string>>();
             }
             catch (Exception ex)
             {
+                // Secure code: memastikan dan tampil pesan jika file gagal dibaca
                 MessageBox.Show($"Gagal membaca file informasi: {ex.Message}");
                 return;
             }
 
-            var hasil = daftar.Where(i => i.Kategori.Equals(kategori, StringComparison.OrdinalIgnoreCase)).ToList();
+            // Filter data sesuai kategori
+            var hasil = informasi
+                .Where(i => i.Kategori.Equals(kategori, StringComparison.OrdinalIgnoreCase))
+                .ToList();
 
+            // Secure code: memastikan dan tampil pesan jika Informasi idak ditemukan
             if (hasil.Count == 0)
             {
                 MessageBox.Show($"Tidak ada informasi dalam kategori '{kategori}'.");
                 return;
             }
 
-            string output = "";
+            // Format Informasi agar rapi
+            StringBuilder output = new();
             foreach (var info in hasil)
             {
-                output += string.Format("{0,-14}: {1}\n", "ID", info.IdInformasi);
-                output += string.Format("{0,-10}: {1}\n", "Kategori", info.Kategori);
-                output += string.Format("{0,-12}: {1}\n", "Judul", info.Judul);
-                output += string.Format("{0,-10}: {1}\n", "Deskripsi", info.Deskripsi);
-                output += string.Format("{0,-10}: {1}\n\n", "Tanggal", info.TanggalDibuat.ToString("dd/MM/yyyy HH.mm.ss"));
+                output.AppendLine(string.Format("{0,-14}: {1}", "ID", info.IdInformasi));
+                output.AppendLine(string.Format("{0,-10}: {1}", "Kategori", info.Kategori));
+                output.AppendLine(string.Format("{0,-12}: {1}", "Judul", info.Judul));
+                output.AppendLine(string.Format("{0,-10}: {1}", "Deskripsi", info.Deskripsi));
+                output.AppendLine(string.Format("{0,-10}: {1}", "Tanggal", info.TanggalDibuat.ToString("dd/MM/yyyy HH.mm.ss")));
             }
-            labelInformasi1Pengelola.Text = output;
 
+            // Tampil Informasi ke label
+            labelInformasiPengelola.Text = output.ToString();
+
+            // Aktifkan textBox, button
             textBoxYorN.Enabled = true;
+            buttonEdit.Enabled = true;
         }
 
-        private void labelInformasi1Pengelola_Click(object sender, EventArgs e) { }
+        private void labelInformasiPengelola_Click(object sender, EventArgs e) { }
 
         private void labelEditInformasi_Click(object sender, EventArgs e) { }
 
@@ -94,20 +132,39 @@ namespace HikepassForm.View
 
         private void buttonEdit_Click(object sender, EventArgs e)
         {
-            // isi berdasarkan Informasi.cs dan InformasiService.cs
-            string konfirmasi = textBoxYorN.Text.Trim().ToLower();
+            string input = textBoxYorN.Text.Trim().ToLower();
 
-            if (konfirmasi != "y")
+            // Secure code: memastikan dan tampil pesan jika kategori kosong
+            if (string.IsNullOrWhiteSpace(input))
             {
-                MessageBox.Show("Tidak ada Informasi yang diedit.");
-                textBoxJudul.Enabled = false;
-                textBoxDeskripsi.Enabled = false;
+                MessageBox.Show("Input tidak boleh kosong.");
                 return;
             }
 
-            textBoxJudul.Enabled = true;
-            textBoxDeskripsi.Enabled = true;
-            MessageBox.Show("Silakan edit informasi pada kolom Judul dan Deskripsi, lalu tekan Simpan.");
+           if (input == "n")
+           {
+                // Jika tidak ada Informasi yang ingin diedit, reset input, output, button
+                MessageBox.Show("Tidak ada Informasi yang diedit.");
+                textBoxKategori.Clear();
+                labelInformasiPengelola.Text = "";
+                textBoxYorN.Clear();
+                buttonEdit.Enabled = false;
+                textBoxJudul.Enabled = false;
+                textBoxDeskripsi.Enabled = false;
+                return;
+
+           } else if (input == "y") 
+           { 
+                // Jika ada Informasi ingin diedit, aktifkan tetxtBox, button
+                textBoxJudul.Enabled = true;
+                textBoxDeskripsi.Enabled = true;
+                buttonSimpan.Enabled = true;
+                MessageBox.Show("Silakan edit informasi pada kolom Judul dan Deskripsi, lalu tekan Simpan.");
+           } else
+           {
+                MessageBox.Show("Input tidak valid. Masukkan y/n.");
+                return;
+           }
         }
 
         private void labelEditJudul_Click(object sender, EventArgs e) { }
@@ -120,53 +177,87 @@ namespace HikepassForm.View
 
         private void buttonSimpan_Click(object sender, EventArgs e)
         {
-            // isi berdasarkan Informasi.cs dan InformasiService.cs
-            string kategoriInput = textBoxKategori.Text.Trim();
+            // Clean code: CamelCase
+            string input = textBoxKategori.Text.Trim();
 
-            string kategori = kategoriInput.ToLower() switch
+            // Secure code: memastikan dan tampil pesan jika kategori kosong
+            if (string.IsNullOrWhiteSpace(input))
             {
-                "1" or "peraturan" => "Peraturan",
-                "2" or "tips" => "Tips",
-                "3" or "umum" => "Umum",
-                _ => null
-            };
-
-            if (kategori == null)
-            {
-                MessageBox.Show("Kategori tidak valid.");
+                MessageBox.Show("Kategori tidak boleh kosong.");
                 return;
             }
 
+            string kategori;
+
+            // Clean code: white space, indention
+            if (int.TryParse(input, out int angka))
+            {
+                // Mapping input integer ke kategori string
+                kategori = angka switch
+                {
+                    1 => "Peraturan",
+                    2 => "Tips",
+                    3 => "Umum",
+                    _ => null
+                };
+            }
+            else
+            {
+                // Mapping input string ke kategori string
+                string lower = input.ToLower();
+                kategori = lower switch
+                {
+                    "peraturan" => "Peraturan",
+                    "tips" => "Tips",
+                    "umum" => "Umum",
+                    _ => null
+                };
+            }
+
+            // Secure code: memastikan dan tampil pesan jika kategori tidak valid
+            if (kategori == null)
+            {
+                MessageBox.Show("Kategori tidak valid. Masukkan 1/2/3 atau Peraturan/Tips/Umum.");
+                return;
+            }
+
+            // Clean code: variable/aatribute declaration
             string judul = textBoxJudul.Text.Trim();
             string deskripsi = textBoxDeskripsi.Text.Trim();
 
+            // Secure code: memastikan dan tampil pesan jika judul/kategori kosong
             if (string.IsNullOrWhiteSpace(judul) || string.IsNullOrWhiteSpace(deskripsi))
             {
                 MessageBox.Show("Judul dan Deskripsi tidak boleh kosong.");
                 return;
             }
 
-            List<Informasi<string>> semua = new List<Informasi<string>>();
+            // Buat list untuk data informasi
+            List<Informasi<string>> informasi = new List<Informasi<string>>();
             string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "informasi.json");
 
             try
             {
                 if (File.Exists(path))
                 {
+                    // Baca file informasi.json
                     string json = File.ReadAllText(path);
-                    semua = JsonSerializer.Deserialize<List<Informasi<string>>>(json) ?? new List<Informasi<string>>();
+                    // Ubah JSON jadi list objek
+                    informasi = JsonSerializer.Deserialize<List<Informasi<string>>>(json) ?? new List<Informasi<string>>();
                 }
             }
             catch (Exception ex)
             {
+                // Secure code: memastikan dan tampil pesan jika file gagal dibaca
                 MessageBox.Show("Gagal membaca file: " + ex.Message);
                 return;
             }
 
-            // Hapus data lama
-            semua.RemoveAll(i => i.Kategori.Equals(kategori, StringComparison.OrdinalIgnoreCase));
+            // Hapus Informasi lama
+            informasi.RemoveAll(i => i.Kategori.Equals(kategori, StringComparison.OrdinalIgnoreCase));
 
-            var dataBaru = new Informasi<string>(
+            // Buat Informasi baru
+            var informasiBaru = new Informasi<string>(
                 id: "INF" + DateTime.Now.ToString("yyyyMMddHHmmss"),
                 kategori: kategori,
                 judul: judul,
@@ -174,43 +265,52 @@ namespace HikepassForm.View
                 tanggal: DateTime.Now
             );
 
-            semua.Add(dataBaru);
+            // Tambah Informasi ke list
+            informasi.Add(informasiBaru);
 
             try
             {
                 var options = new JsonSerializerOptions { WriteIndented = true };
-                File.WriteAllText(path, JsonSerializer.Serialize(semua, options));
+                // Tulis ke file json
+                File.WriteAllText(path, JsonSerializer.Serialize(informasi, options));
                 MessageBox.Show("Informasi berhasil disimpan!");
             }
             catch (Exception ex)
             {
+                // Secure code: memastikan dan tampil pesan jika file gagal disimpan
                 MessageBox.Show("Gagal menyimpan: " + ex.Message);
             }
 
             // Reset semua input dan output
             textBoxKategori.Clear();
+            labelInformasiPengelola.Text = "";
+            textBoxYorN.Clear();
             textBoxJudul.Clear();
             textBoxDeskripsi.Clear();
-            textBoxYorN.Clear();
-            labelInformasi1Pengelola.Text = "";
 
-            // Kunci ulang semua textbox
+            // Kunci ulang semua textBox dan button
+            textBoxYorN.Enabled = false;
+            buttonEdit.Enabled = false;
             textBoxJudul.Enabled = false;
             textBoxDeskripsi.Enabled = false;
-            textBoxYorN.Enabled = false;
+            buttonSimpan.Enabled = false;
         }
 
+        // Kembali ke halaman dashboard
         private void buttonKembali_Click(object sender, EventArgs e)
         {
             var dashboard = this.Parent as DashboardPengelola;
             dashboard?.PindahKeDashboard();
         }
 
+        // Kunci semua textBox dan button
         private void InformasiPengelola_Load(object sender, EventArgs e) 
         {
             textBoxYorN.Enabled = false;
+            buttonEdit.Enabled = false;
             textBoxJudul.Enabled = false;
             textBoxDeskripsi.Enabled = false;
+            buttonSimpan.Enabled = false;
         }
 
     }
