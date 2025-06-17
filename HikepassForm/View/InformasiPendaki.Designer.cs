@@ -56,7 +56,7 @@
             labelTampilkanInformasi.Name = "labelTampilkanInformasi";
             labelTampilkanInformasi.Size = new Size(475, 25);
             labelTampilkanInformasi.TabIndex = 1;
-            labelTampilkanInformasi.Text = "Masukkan kategori (1 = Peraturan, 2 = Tips, 3 = Umum):";
+            labelTampilkanInformasi.Text = "Masukkan kategori (Peraturan / Tips / Umum):";
             labelTampilkanInformasi.Click += labelTampilkanInformasi_Click;
             // 
             // textBoxKategori

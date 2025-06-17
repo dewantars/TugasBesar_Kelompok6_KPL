@@ -20,7 +20,7 @@ namespace HikepassLibrary.Service
         }
 
         // Membaca objek Informasi dari file JSON
-        private List<Informasi<string>> GetAllInformasi()
+        public List<Informasi<string>> GetAllInformasi()
         {
             if (!File.Exists(filePath))
                 return new List<Informasi<string>>();
