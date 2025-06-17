@@ -1,15 +1,9 @@
-﻿// Import class dan library
-using HikepassLibrary.Model; 
+﻿using HikepassLibrary.Model;
 using HikepassLibrary.Service;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;             
-using System.Drawing;
-using System.Linq;
+using System.IO;
 using System.Text;
-using System.Text.Json;       
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace HikepassForm.View
@@ -17,11 +11,15 @@ namespace HikepassForm.View
     // Komponen UserControl untuk halaman Informasi Pendaki
     public partial class InformasiPendaki : UserControl
     {
+        // Service untuk akses data
+        private readonly InformasiService informasiService;
+
         // Konstruktor
         public InformasiPendaki()
         {
             // Clean code: PascalCase
             InitializeComponent();
+            informasiService = new InformasiService("informasi.json");
         }
 
         private void labelInformasi_Click(object sender, EventArgs e) { }
@@ -43,49 +41,24 @@ namespace HikepassForm.View
             }
 
             string kategori;
-            
+
             // Clean code: white space, indention
-            if (int.TryParse(input, out int angka))
-            {
-                // Mapping input integer ke kategori string
-                kategori = angka switch
-                {
-                    1 => "Peraturan",
-                    2 => "Tips",
-                    3 => "Umum",
-                    _ => null
-                };
-            }
-            else
-            {
-                // Mapping input string ke kategori string
-                string lower = input.ToLower();
-                kategori = lower switch
-                {
-                    "peraturan" => "Peraturan",
-                    "tips" => "Tips",
-                    "umum" => "Umum",
-                    _ => null
-                };
-            }
+            kategori = KonversiInputKeKategori(input);
 
             // Secure code: memastikan dan tampil pesan jika kategori tidak valid
             if (kategori == null)
             {
-                MessageBox.Show("Kategori tidak valid. Masukkan 1, 2, 3 atau Peraturan/Tips/Umum.");
+                MessageBox.Show("Kategori tidak valid. Masukkan Peraturan / Tips / Umum.");
                 return;
             }
 
             // Buat list untuk data informasi
-            List<Informasi<string>> informasi = new List<Informasi<string>>();
+            List<Informasi<string>> informasi = new();
 
             try
             {
-                // Baca file informasi.json
-                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "informasi.json");
-                string json = File.ReadAllText(path);
-                // Ubah JSON jadi list objek
-                informasi = JsonSerializer.Deserialize<List<Informasi<string>>>(json) ?? new List<Informasi<string>>();
+                // Ambil semua informasi dari service
+                informasi = informasiService.GetAllInformasi();
             }
             catch (Exception ex)
             {
@@ -96,10 +69,9 @@ namespace HikepassForm.View
 
             // Filter data sesuai kategori
             var hasil = informasi
-                .Where(i => i.Kategori.Equals(kategori, StringComparison.OrdinalIgnoreCase))
-                .ToList();
+                .FindAll(i => i.Kategori.Equals(kategori, StringComparison.OrdinalIgnoreCase));
 
-            // Secure code: memastikan dan tampil pesan jika Informasi idak ditemukan
+            // Secure code: memastikan dan tampil pesan jika Informasi tidak ditemukan
             if (hasil.Count == 0)
             {
                 MessageBox.Show($"Tidak ada informasi dalam kategori '{kategori}'.");
@@ -121,7 +93,31 @@ namespace HikepassForm.View
             labelInformasiPendaki.Text = output.ToString();
         }
 
-        private void labelInformasiPendaki_Click(object sender, EventArgs e) { }
+        // Mapping input pengguna ke nama kategori
+        private string KonversiInputKeKategori(string input)
+        {
+            if (int.TryParse(input, out int angka))
+            {
+                // Mapping input integer ke kategori string
+                return angka switch
+                {
+                    1 => "Peraturan",
+                    2 => "Tips",
+                    3 => "Umum",
+                    _ => null
+                };
+            }
+
+            // Mapping input string ke kategori string
+            string lower = input.ToLower();
+            return lower switch
+            {
+                "peraturan" => "Peraturan",
+                "tips" => "Tips",
+                "umum" => "Umum",
+                _ => null
+            };
+        }
 
         // Kembali ke halaman dashboard
         private void buttonKembali_Click(object sender, EventArgs e)
@@ -129,6 +125,9 @@ namespace HikepassForm.View
             var dashboard = this.Parent as DashboardPendaki;
             dashboard?.PindahKeDashboard();
         }
+
+        private void labelInformasiPendaki_Click(object sender, EventArgs e) { }
+
         private void InformasiPendaki_Load(object sender, EventArgs e) { }
     }
 }
