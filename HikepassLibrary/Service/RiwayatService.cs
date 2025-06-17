@@ -2,6 +2,7 @@ using HikepassLibrary.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -16,7 +17,11 @@ namespace HikepassLibrary.Service
             if (string.IsNullOrWhiteSpace(filePath))
                 throw new ArgumentException("File path tidak boleh null atau kosong.", nameof(filePath));
 
-            _filePath = filePath;
+            // Validasi jika path file berisi karakter yang tidak valid
+            if (filePath.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
+                throw new ArgumentException("File path mengandung karakter tidak valid.", nameof(filePath));
+
+            _filePath = Path.GetFullPath(filePath); // Menghindari path traversal
         }
 
         // Method untuk menyimpan riwayat ke file JSON
@@ -38,10 +43,22 @@ namespace HikepassLibrary.Service
                 };
 
                 string jsonString = JsonSerializer.Serialize(riwayatList, options);
-                File.WriteAllText(_filePath, jsonString);
 
-                if (!File.Exists(_filePath))
-                    throw new IOException("Gagal menyimpan riwayat ke file.");
+                // Gunakan stream untuk menulis file dengan pengaturan akses terbatas
+                using (var fileStream = new FileStream(_filePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                    using (var writer = new StreamWriter(fileStream))
+                    {
+                        writer.Write(jsonString);
+                    }
+                }
+
+                Console.WriteLine("Riwayat berhasil disimpan.");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine("Akses ke file ditolak. Pastikan aplikasi memiliki izin yang sesuai.");
+                throw;
             }
             catch (Exception ex)
             {
@@ -50,7 +67,7 @@ namespace HikepassLibrary.Service
             }
         }
 
-        // Method untuk memuat riwayat dari file JSON
+        // Method untuk memuat riwayat dSari file JSON
         public List<Tiket> LoadRiwayat()
         {
             if (string.IsNullOrWhiteSpace(_filePath))
@@ -60,24 +77,35 @@ namespace HikepassLibrary.Service
             {
                 if (File.Exists(_filePath))
                 {
-                    string jsonString = File.ReadAllText(_filePath);
-                    var options = new JsonSerializerOptions
+                    using (var fileStream = new FileStream(_filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
                     {
-                        Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
-                    };
+                        using (var reader = new StreamReader(fileStream))
+                        {
+                            string jsonString = reader.ReadToEnd();
+                            var options = new JsonSerializerOptions
+                            {
+                                Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
+                            };
 
-                    var riwayatList = JsonSerializer.Deserialize<List<Tiket>>(jsonString, options);
+                            var riwayatList = JsonSerializer.Deserialize<List<Tiket>>(jsonString, options);
 
-                    if (riwayatList == null)
-                        throw new InvalidDataException("File JSON tidak dapat di-deserialisasi dengan benar.");
+                            if (riwayatList == null)
+                                throw new InvalidDataException("File JSON tidak dapat di-deserialisasi dengan benar.");
 
-                    return riwayatList;
+                            return riwayatList;
+                        }
+                    }
                 }
                 else
                 {
                     Console.WriteLine("File tidak ditemukan. Memuat riwayat kosong.");
                     return new List<Tiket>();
                 }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine("Akses ke file ditolak. Pastikan aplikasi memiliki izin yang sesuai.");
+                throw;
             }
             catch (Exception ex)
             {

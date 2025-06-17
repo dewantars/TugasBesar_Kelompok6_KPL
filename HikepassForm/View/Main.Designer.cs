@@ -32,9 +32,10 @@
             // 
             // Main
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1051, 562);
+            ClientSize = new Size(1310, 693);
+            Margin = new Padding(2, 2, 2, 2);
             Name = "Main";
             Text = "HikePass";
             ResumeLayout(false);
