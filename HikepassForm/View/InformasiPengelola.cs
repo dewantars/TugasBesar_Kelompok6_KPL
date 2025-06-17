@@ -1,22 +1,27 @@
-﻿using HikepassLibrary.Model;
+﻿// Import class dan library
+using HikepassLibrary.Model;
+using HikepassLibrary.Service;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
+using System.IO;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace HikepassForm.View
 {
+    // Komponen UserControl untuk halaman Informasi Pengelola
     public partial class InformasiPengelola : UserControl
     {
+        // Service untuk mengelola data
+        private readonly InformasiService informasiService;
+
+        // Konstruktor
         public InformasiPengelola()
         {
+            // Clean code: PascalCase
             InitializeComponent();
+            informasiService = new InformasiService("informasi.json");
         }
 
         private void labelInformasi_Click(object sender, EventArgs e) { }
@@ -27,64 +32,71 @@ namespace HikepassForm.View
 
         private void buttonTampilkan_Click(object sender, EventArgs e)
         {
-            // isi berdasarkan Informasi.cs dan InformasiService.cs
-            string kategoriInput = textBoxKategori.Text.Trim();
+            // Clean code: CamelCase
+            string input = textBoxKategori.Text.Trim();
 
-            if (string.IsNullOrWhiteSpace(kategoriInput))
+            // Secure code: memastikan dan tampil pesan jika kategori kosong
+            if (string.IsNullOrWhiteSpace(input))
             {
                 MessageBox.Show("Kategori tidak boleh kosong.");
                 return;
             }
 
-            string kategori = kategoriInput.ToLower() switch
-            {
-                "1" or "peraturan" => "Peraturan",
-                "2" or "tips" => "Tips",
-                "3" or "umum" => "Umum",
-                _ => null
-            };
+            string kategori = KonversiInputKeKategori(input);
 
+            // Secure code: memastikan dan tampil pesan jika kategori tidak valid
             if (kategori == null)
             {
-                MessageBox.Show("Kategori tidak valid. Masukkan 1, 2, 3 atau nama kategori langsung.");
+                MessageBox.Show("Kategori tidak valid. Masukkan Peraturan / Tips / Umum.");
                 return;
             }
 
-            List<Informasi<string>> daftar = new List<Informasi<string>>();
+            // Buat list untuk data informasi
+            List<Informasi<string>> informasi = new();
 
             try
             {
-                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "informasi.json");
-                string json = File.ReadAllText(path);
-                daftar = JsonSerializer.Deserialize<List<Informasi<string>>>(json) ?? new List<Informasi<string>>();
+                // Ambil semua informasi dari service
+                informasi = informasiService.GetAllInformasi();
             }
             catch (Exception ex)
             {
+                // Secure code: memastikan dan tampil pesan jika file gagal dibaca
                 MessageBox.Show($"Gagal membaca file informasi: {ex.Message}");
                 return;
             }
 
-            var hasil = daftar.Where(i => i.Kategori.Equals(kategori, StringComparison.OrdinalIgnoreCase)).ToList();
+            // Filter data sesuai kategori
+            var hasil = informasi.FindAll(i =>
+                i.Kategori.Equals(kategori, StringComparison.OrdinalIgnoreCase));
 
+            // Secure code: memastikan dan tampil pesan jika Informasi tidak ditemukan
             if (hasil.Count == 0)
             {
                 MessageBox.Show($"Tidak ada informasi dalam kategori '{kategori}'.");
                 return;
             }
 
-            string output = "";
+            // Format Informasi agar rapi
+            StringBuilder output = new();
             foreach (var info in hasil)
             {
-                output += string.Format("{0,-14}: {1}\n", "ID", info.IdInformasi);
-                output += string.Format("{0,-10}: {1}\n", "Kategori", info.Kategori);
-                output += string.Format("{0,-12}: {1}\n", "Judul", info.Judul);
-                output += string.Format("{0,-10}: {1}\n", "Deskripsi", info.Deskripsi);
-                output += string.Format("{0,-10}: {1}\n\n", "Tanggal", info.TanggalDibuat.ToString("dd/MM/yyyy HH.mm.ss"));
+                output.AppendLine(string.Format("{0,-14}: {1}", "ID", info.IdInformasi));
+                output.AppendLine(string.Format("{0,-10}: {1}", "Kategori", info.Kategori));
+                output.AppendLine(string.Format("{0,-12}: {1}", "Judul", info.Judul));
+                output.AppendLine(string.Format("{0,-10}: {1}", "Deskripsi", info.Deskripsi));
+                output.AppendLine(string.Format("{0,-10}: {1}", "Tanggal", info.TanggalDibuat.ToString("dd/MM/yyyy HH.mm.ss")));
             }
-            labelInformasi1Pengelola.Text = output;
+
+            // Tampil Informasi ke label
+            labelInformasiPengelola.Text = output.ToString();
+
+            // Aktifkan textBox, button
+            textBoxYorN.Enabled = true;
+            buttonEdit.Enabled = true;
         }
 
-        private void labelInformasi1Pengelola_Click(object sender, EventArgs e) { }
+        private void labelInformasiPengelola_Click(object sender, EventArgs e) { }
 
         private void labelEditInformasi_Click(object sender, EventArgs e) { }
 
@@ -92,85 +104,146 @@ namespace HikepassForm.View
 
         private void buttonEdit_Click(object sender, EventArgs e)
         {
-            // isi berdasarkan Informasi.cs dan InformasiService.cs
-            string kategoriInput = textBoxKategori.Text.Trim();
+            string input = textBoxYorN.Text.Trim().ToLower();
 
-            if (string.IsNullOrWhiteSpace(kategoriInput))
+            // Secure code: memastikan dan tampil pesan jika input kosong
+            if (string.IsNullOrWhiteSpace(input))
             {
-                MessageBox.Show("Kategori tidak boleh kosong.");
+                MessageBox.Show("Input tidak boleh kosong.");
                 return;
             }
 
-            string kategori = kategoriInput.ToLower() switch
+            if (input == "n")
             {
-                "1" or "peraturan" => "Peraturan",
-                "2" or "tips" => "Tips",
-                "3" or "umum" => "Umum",
-                _ => null
-            };
-
-            if (kategori == null)
+                // Jika tidak ada Informasi yang ingin diedit, reset input, output, button
+                MessageBox.Show("Tidak ada Informasi yang diedit.");
+                textBoxKategori.Clear();
+                labelInformasiPengelola.Text = "";
+                textBoxYorN.Clear();
+                buttonEdit.Enabled = false;
+                textBoxJudul.Enabled = false;
+                textBoxDeskripsi.Enabled = false;
+            }
+            else if (input == "y")
             {
-                MessageBox.Show("Kategori tidak valid. Masukkan 1, 2, 3 atau nama kategori langsung.");
+                // Jika ada Informasi ingin diedit, aktifkan textbox, button
+                textBoxJudul.Enabled = true;
+                textBoxDeskripsi.Enabled = true;
+                buttonSimpan.Enabled = true;
+                MessageBox.Show("Silakan edit informasi pada kolom Judul dan Deskripsi, lalu tekan Simpan.");
+            }
+            else
+            {
+                MessageBox.Show("Input tidak valid. Masukkan y/n.");
                 return;
-            }
-
-            // Konfirmasi
-            DialogResult result = MessageBox.Show(
-                $"Apakah Anda yakin ingin mengedit informasi kategori '{kategori}'?",
-                "Konfirmasi Edit",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
-
-            if (result != DialogResult.Yes)
-            {
-                MessageBox.Show("Edit dibatalkan.");
-                return;
-            }
-
-            List<Informasi<string>> semua = new List<Informasi<string>>();
-
-            try
-            {
-                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "informasi.json");
-                string json = File.ReadAllText(path);
-                semua = JsonSerializer.Deserialize<List<Informasi<string>>>(json) ?? new List<Informasi<string>>();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Gagal membaca file informasi: {ex.Message}");
-                return;
-            }
-
-            // Hapus data lama dengan kategori yang sama
-            semua.RemoveAll(i => i.Kategori.Equals(kategori, StringComparison.OrdinalIgnoreCase));
-
-            // Tambah data baru (input Pengelola melalui EditInformasi)
-            var infoBaru = Informasi<string>.EditInformasi();
-            semua.Add(infoBaru);
-
-            // Simpan ulang
-            try
-            {
-                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "informasi.json");
-                var options = new JsonSerializerOptions { WriteIndented = true };
-                File.WriteAllText(path, JsonSerializer.Serialize(semua, options));
-                MessageBox.Show("Informasi berhasil diedit dan disimpan!");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Gagal menyimpan file: {ex.Message}");
             }
         }
 
-        private void labelInformasi2Pengelola_Click(object sender, EventArgs e) { }
+        private void labelEditJudul_Click(object sender, EventArgs e) { }
 
+        private void textBoxJudul_TextChanged(object sender, EventArgs e) { }
+
+        private void labelEditDeskripsi_Click(object sender, EventArgs e) { }
+
+        private void textBoxDeskripsi_TextChanged(object sender, EventArgs e) { }
+
+        private void buttonSimpan_Click(object sender, EventArgs e)
+        {
+            // Clean code: CamelCase
+            string input = textBoxKategori.Text.Trim();
+            string kategori = KonversiInputKeKategori(input);
+
+            // Validasi input
+            if (kategori == null)
+            {
+                MessageBox.Show("Kategori tidak valid. Masukkan Peraturan / Tips / Umum.");
+                return;
+            }
+
+            string judul = textBoxJudul.Text.Trim();
+            string deskripsi = textBoxDeskripsi.Text.Trim();
+
+            // Secure code: memastikan dan tampil pesan jika judul/kategori kosong
+            if (string.IsNullOrWhiteSpace(judul) || string.IsNullOrWhiteSpace(deskripsi))
+            {
+                MessageBox.Show("Judul dan Deskripsi tidak boleh kosong.");
+                return;
+            }
+
+            // Hapus dan ganti informasi lewat service
+            List<Informasi<string>> semua = informasiService.GetAllInformasi();
+            semua.RemoveAll(i => i.Kategori.Equals(kategori, StringComparison.OrdinalIgnoreCase));
+            semua.Add(new Informasi<string>(
+                id: "INF" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                kategori: kategori,
+                judul: judul,
+                deskripsi: deskripsi,
+                tanggal: DateTime.Now
+            ));
+
+            try
+            {
+                informasiService.SimpanInformasi(semua);
+                MessageBox.Show("Informasi berhasil disimpan!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal menyimpan: " + ex.Message);
+            }
+
+            // Reset semua input dan output
+            textBoxKategori.Clear();
+            labelInformasiPengelola.Text = "";
+            textBoxYorN.Clear();
+            textBoxJudul.Clear();
+            textBoxDeskripsi.Clear();
+
+            // Kunci ulang semua textBox dan button
+            textBoxYorN.Enabled = false;
+            buttonEdit.Enabled = false;
+            textBoxJudul.Enabled = false;
+            textBoxDeskripsi.Enabled = false;
+            buttonSimpan.Enabled = false;
+        }
+
+        private string KonversiInputKeKategori(string input)
+        {
+            if (int.TryParse(input, out int angka))
+            {
+                return angka switch
+                {
+                    1 => "Peraturan",
+                    2 => "Tips",
+                    3 => "Umum",
+                    _ => null
+                };
+            }
+
+            string lower = input.ToLower();
+            return lower switch
+            {
+                "peraturan" => "Peraturan",
+                "tips" => "Tips",
+                "umum" => "Umum",
+                _ => null
+            };
+        }
+
+        // Kembali ke halaman dashboard
         private void buttonKembali_Click(object sender, EventArgs e)
         {
             var dashboard = this.Parent as DashboardPengelola;
             dashboard?.PindahKeDashboard();
         }
 
-        private void InformasiPengelola_Load(object sender, EventArgs e) { }
+        // Kunci semua textBox dan button
+        private void InformasiPengelola_Load(object sender, EventArgs e)
+        {
+            textBoxYorN.Enabled = false;
+            buttonEdit.Enabled = false;
+            textBoxJudul.Enabled = false;
+            textBoxDeskripsi.Enabled = false;
+            buttonSimpan.Enabled = false;
+        }
     }
 }

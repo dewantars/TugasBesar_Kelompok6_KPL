@@ -58,5 +58,11 @@ namespace HikepassForm.View
         {
 
         }
+
+        private void btnLhtRiwayat_Click(object sender, EventArgs e)
+        {
+            var RiwayatPendakian = new RiwayatPendakian();
+            LoadPage(RiwayatPendakian);
+        }
     }
 }

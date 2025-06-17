@@ -34,23 +34,25 @@
             btnCheckinDanCheckout = new Button();
             btnSelesaikan = new Button();
             btnKembali = new Button();
+            button1 = new Button();
             SuspendLayout();
             // 
             // lblJudul
             // 
             lblJudul.AutoSize = true;
             lblJudul.Font = new Font("Segoe UI Semibold", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblJudul.Location = new Point(476, 36);
+            lblJudul.Location = new Point(544, 48);
             lblJudul.Name = "lblJudul";
-            lblJudul.Size = new Size(126, 32);
+            lblJudul.Size = new Size(156, 41);
             lblJudul.TabIndex = 0;
             lblJudul.Text = "Tiket Saya";
             // 
             // btnLihatTiket
             // 
-            btnLihatTiket.Location = new Point(468, 171);
+            btnLihatTiket.Location = new Point(518, 133);
+            btnLihatTiket.Margin = new Padding(3, 4, 3, 4);
             btnLihatTiket.Name = "btnLihatTiket";
-            btnLihatTiket.Size = new Size(180, 50);
+            btnLihatTiket.Size = new Size(206, 67);
             btnLihatTiket.TabIndex = 1;
             btnLihatTiket.Text = "Lihat Tiket";
             btnLihatTiket.UseVisualStyleBackColor = true;
@@ -58,9 +60,10 @@
             // 
             // btnBayar
             // 
-            btnBayar.Location = new Point(466, 240);
+            btnBayar.Location = new Point(518, 222);
+            btnBayar.Margin = new Padding(3, 4, 3, 4);
             btnBayar.Name = "btnBayar";
-            btnBayar.Size = new Size(180, 50);
+            btnBayar.Size = new Size(206, 67);
             btnBayar.TabIndex = 2;
             btnBayar.Text = "Bayar";
             btnBayar.UseVisualStyleBackColor = true;
@@ -68,9 +71,10 @@
             // 
             // btnCheckinDanCheckout
             // 
-            btnCheckinDanCheckout.Location = new Point(464, 330);
+            btnCheckinDanCheckout.Location = new Point(518, 310);
+            btnCheckinDanCheckout.Margin = new Padding(3, 4, 3, 4);
             btnCheckinDanCheckout.Name = "btnCheckinDanCheckout";
-            btnCheckinDanCheckout.Size = new Size(180, 50);
+            btnCheckinDanCheckout.Size = new Size(206, 67);
             btnCheckinDanCheckout.TabIndex = 3;
             btnCheckinDanCheckout.Text = "CheckIn dan CheckOut";
             btnCheckinDanCheckout.UseVisualStyleBackColor = true;
@@ -78,9 +82,10 @@
             // 
             // btnSelesaikan
             // 
-            btnSelesaikan.Location = new Point(461, 415);
+            btnSelesaikan.Location = new Point(518, 401);
+            btnSelesaikan.Margin = new Padding(3, 4, 3, 4);
             btnSelesaikan.Name = "btnSelesaikan";
-            btnSelesaikan.Size = new Size(180, 50);
+            btnSelesaikan.Size = new Size(206, 67);
             btnSelesaikan.TabIndex = 4;
             btnSelesaikan.Text = "Selesaikan";
             btnSelesaikan.UseVisualStyleBackColor = true;
@@ -88,26 +93,39 @@
             // 
             // btnKembali
             // 
-            btnKembali.Location = new Point(905, 33);
+            btnKembali.Location = new Point(1034, 44);
+            btnKembali.Margin = new Padding(3, 4, 3, 4);
             btnKembali.Name = "btnKembali";
-            btnKembali.Size = new Size(104, 35);
+            btnKembali.Size = new Size(119, 47);
             btnKembali.TabIndex = 5;
             btnKembali.Text = "Kembali";
             btnKembali.UseVisualStyleBackColor = true;
             btnKembali.Click += btnKembali_Click;
             // 
+            // button1
+            // 
+            button1.Location = new Point(518, 491);
+            button1.Name = "button1";
+            button1.Size = new Size(206, 67);
+            button1.TabIndex = 6;
+            button1.Text = "Riwayat Pendakian";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // TiketSaya
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(button1);
             Controls.Add(btnKembali);
             Controls.Add(btnSelesaikan);
             Controls.Add(btnCheckinDanCheckout);
             Controls.Add(btnBayar);
             Controls.Add(btnLihatTiket);
             Controls.Add(lblJudul);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "TiketSaya";
-            Size = new Size(1320, 608);
+            Size = new Size(1509, 811);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -120,5 +138,6 @@
         private Button btnCheckinDanCheckout;
         private Button btnSelesaikan;
         private Button btnKembali;
+        private Button button1;
     }
 }

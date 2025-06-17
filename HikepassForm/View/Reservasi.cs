@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using HikepassLibrary.Model;
 using HikepassLibrary.Controller;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace HikepassForm.View
 {
@@ -85,6 +86,7 @@ namespace HikepassForm.View
             }
         }
 
+        // Secure coding: semua input pengguna divalidasi sebelum diproses
         // Clean code: white space antar logika (validasi - pemrosesan - UI) jelas
         private async void ButtonSubmit_Click(object sender, EventArgs e) 
         {
@@ -99,6 +101,7 @@ namespace HikepassForm.View
                 string keterangan = textBoxKeterangan.Text.Trim();
                 DateTime tanggal = dateTimePickerTanggal.Value;
 
+                // Secure coding: validasi jumlah pendaki harus angka dan minimal 1
                 if (!int.TryParse(labelJumlah.Text, out int parsedJumlah) || parsedJumlah < 1)
                 {
                     MessageBox.Show("Jumlah pendaki tidak valid.");
@@ -106,6 +109,7 @@ namespace HikepassForm.View
                 }
                 jumlahPendaki = parsedJumlah;
 
+                // Secure coding: validasi input teks wajib
                 if (string.IsNullOrWhiteSpace(nama) || string.IsNullOrWhiteSpace(nik))
                 {
                     MessageBox.Show("Nama dan NIK pendaki utama tidak boleh kosong.");
@@ -141,7 +145,7 @@ namespace HikepassForm.View
                     { nik, $"{nama} - Usia {usia}, Kontak: {kontak}" }
                 };
 
-                // Menambahkan pendaki tambahan (jika ada)
+                // Menambahkan pendaki tambahan (jika ada) 
                 foreach (var tambahan in daftarPendakiTambahan)
                 {
                     if (!daftarPendaki.ContainsKey(tambahan.Key))
@@ -150,7 +154,7 @@ namespace HikepassForm.View
                     }
                 }
 
-                // Memvalidasi jumlah data pendaki harus sesuai dengan input jumlah
+                // Secure coding: validasi jumlah data pendaki sesuai input
                 if (daftarPendaki.Count != jumlahPendaki)
                 {
                     MessageBox.Show($"Jumlah pendaki belum lengkap. Diperlukan {jumlahPendaki}, baru terisi {daftarPendaki.Count}.");
@@ -240,6 +244,7 @@ namespace HikepassForm.View
             }
             catch (Exception ex)
             {
+                // Secure coding: exception handling untuk menghindari crash
                 MessageBox.Show("Terjadi kesalahan: " + ex.Message);
             }
         }
@@ -303,6 +308,7 @@ namespace HikepassForm.View
                     continue;
                 }
 
+                // Secure coding: memastikan NIK tidak ganda
                 if (daftarPendakiTambahan.ContainsKey(nik) || nik == textBoxNIK.Text.Trim())
                 {
                     MessageBox.Show("NIK tersebut sudah digunakan untuk pendaki utama atau pendaki lain. Gunakan NIK yang berbeda.");
@@ -319,7 +325,7 @@ namespace HikepassForm.View
         private void buttonBack_Click(object sender, EventArgs e)
         {
             var dashboard = this.Parent as DashboardPendaki;
-            dashboard?.PindahKeDashboard(); 
+            dashboard?.PindahKeDashboard(); // Secure coding: penggunaan null-conditional operator
         }
     }
 }

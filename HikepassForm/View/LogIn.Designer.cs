@@ -23,16 +23,80 @@
 
         private void InitializeComponent()
         {
-            panel1 = new Panel();
-            btnlogin = new Button();
-            label3 = new Label();
-            label2 = new Label();
-            txtPw = new TextBox();
-            label1 = new Label();
-            txtUn = new TextBox();
             signin = new Label();
+            txtUn = new TextBox();
+            label1 = new Label();
+            txtPw = new TextBox();
+            label2 = new Label();
+            label3 = new Label();
+            btnlogin = new Button();
+            panel1 = new Panel();
             panel1.SuspendLayout();
             SuspendLayout();
+            // 
+            // signin
+            // 
+            signin.AutoSize = true;
+            signin.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold);
+            signin.Location = new Point(379, 307);
+            signin.Name = "signin";
+            signin.Size = new Size(99, 38);
+            signin.TabIndex = 0;
+            signin.Text = "Log In";
+            // 
+            // txtUn
+            // 
+            txtUn.Location = new Point(539, 290);
+            txtUn.Name = "txtUn";
+            txtUn.Size = new Size(276, 27);
+            txtUn.TabIndex = 1;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(539, 267);
+            label1.Name = "label1";
+            label1.Size = new Size(73, 20);
+            label1.TabIndex = 2;
+            label1.Text = "username";
+            // 
+            // txtPw
+            // 
+            txtPw.Location = new Point(539, 348);
+            txtPw.Name = "txtPw";
+            txtPw.Size = new Size(276, 27);
+            txtPw.TabIndex = 3;
+            txtPw.UseSystemPasswordChar = true;
+            txtPw.TextChanged += txtPw_TextChanged;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(539, 325);
+            label2.Name = "label2";
+            label2.Size = new Size(72, 20);
+            label2.TabIndex = 4;
+            label2.Text = "password";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("BD Cartoon Shout", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label3.Location = new Point(550, 159);
+            label3.Name = "label3";
+            label3.Size = new Size(196, 33);
+            label3.TabIndex = 7;
+            label3.Text = "HikePass";
+            // 
+            // btnlogin
+            // 
+            btnlogin.Location = new Point(539, 393);
+            btnlogin.Name = "btnlogin";
+            btnlogin.Size = new Size(94, 29);
+            btnlogin.TabIndex = 8;
+            btnlogin.Text = "Log In";
+            btnlogin.UseVisualStyleBackColor = true;
+            btnlogin.Click += btnlogin_Click;
             // 
             // panel1
             // 
@@ -43,105 +107,31 @@
             panel1.Controls.Add(label1);
             panel1.Controls.Add(txtUn);
             panel1.Controls.Add(signin);
-            panel1.Location = new Point(2, 15);
-            panel1.Margin = new Padding(4);
+            panel1.Location = new Point(3, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1051, 550);
+            panel1.Size = new Size(1322, 734);
             panel1.TabIndex = 0;
             panel1.Paint += panel1_Paint;
             // 
-            // btnlogin
-            // 
-            btnlogin.Location = new Point(366, 320);
-            btnlogin.Margin = new Padding(4);
-            btnlogin.Name = "btnlogin";
-            btnlogin.Size = new Size(118, 36);
-            btnlogin.TabIndex = 8;
-            btnlogin.Text = "Log In";
-            btnlogin.UseVisualStyleBackColor = true;
-            btnlogin.Click += btnlogin_Click;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Regular, GraphicsUnit.Point);
-            label3.Location = new Point(380, 28);
-            label3.Margin = new Padding(4, 0, 4, 0);
-            label3.Name = "label3";
-            label3.Size = new Size(169, 40);
-            label3.TabIndex = 7;
-            label3.Text = "HikePass";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(366, 235);
-            label2.Margin = new Padding(4, 0, 4, 0);
-            label2.Name = "label2";
-            label2.Size = new Size(89, 25);
-            label2.TabIndex = 4;
-            label2.Text = "password";
-            // 
-            // txtPw
-            // 
-            txtPw.Location = new Point(366, 264);
-            txtPw.Margin = new Padding(4);
-            txtPw.Name = "txtPw";
-            txtPw.Size = new Size(344, 31);
-            txtPw.TabIndex = 3;
-            txtPw.UseSystemPasswordChar = true;
-            txtPw.TextChanged += txtPw_TextChanged;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(366, 162);
-            label1.Margin = new Padding(4, 0, 4, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(89, 25);
-            label1.TabIndex = 2;
-            label1.Text = "username";
-            // 
-            // txtUn
-            // 
-            txtUn.Location = new Point(366, 191);
-            txtUn.Margin = new Padding(4);
-            txtUn.Name = "txtUn";
-            txtUn.Size = new Size(344, 31);
-            txtUn.TabIndex = 1;
-            // 
-            // signin
-            // 
-            signin.AutoSize = true;
-            signin.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold, GraphicsUnit.Point);
-            signin.Location = new Point(166, 212);
-            signin.Margin = new Padding(4, 0, 4, 0);
-            signin.Name = "signin";
-            signin.Size = new Size(116, 45);
-            signin.TabIndex = 0;
-            signin.Text = "Log In";
-            // 
             // LogIn
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(panel1);
-            Margin = new Padding(4);
             Name = "LogIn";
-            Size = new Size(1051, 562);
-            this.Load += new System.EventHandler(this.LogIn_Load);
+            Size = new Size(1328, 740);
+            Load += LogIn_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ResumeLayout(false);
         }
-
-        private Panel panel1;
         private Label signin;
-        private Label label2;
-        private Label label1;
         private TextBox txtUn;
+        private Label label1;
         private TextBox txtPw;
+        private Label label2;
         private Label label3;
         private Button btnlogin;
+        private Panel panel1;
     }
 }

@@ -2,22 +2,24 @@
 using HikepassLibrary.Service;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
+using System.IO;
 using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace HikepassForm.View
 {
+    // Komponen UserControl untuk halaman Informasi Pendaki
     public partial class InformasiPendaki : UserControl
     {
+        // Service untuk akses data
+        private readonly InformasiService informasiService;
+
+        // Konstruktor
         public InformasiPendaki()
         {
+            // Clean code: PascalCase
             InitializeComponent();
+            informasiService = new InformasiService("informasi.json");
         }
 
         private void labelInformasi_Click(object sender, EventArgs e) { }
@@ -28,70 +30,104 @@ namespace HikepassForm.View
 
         private void buttonTampilkan_Click(object sender, EventArgs e)
         {
-            // isi berdasarkan Informasi.cs dan InformasiService.cs
-            string kategoriInput = textBoxKategori.Text.Trim();
+            // Clean code: CamelCase
+            string input = textBoxKategori.Text.Trim();
 
-            if (string.IsNullOrWhiteSpace(kategoriInput))
+            // Secure code: memastikan dan tampil pesan jika kategori kosong
+            if (string.IsNullOrWhiteSpace(input))
             {
                 MessageBox.Show("Kategori tidak boleh kosong.");
                 return;
             }
 
-            string kategori = kategoriInput.ToLower() switch
-            {
-                "1" or "peraturan" => "Peraturan",
-                "2" or "tips" => "Tips",
-                "3" or "umum" => "Umum",
-                _ => null
-            };
+            string kategori;
 
+            // Clean code: white space, indention
+            kategori = KonversiInputKeKategori(input);
+
+            // Secure code: memastikan dan tampil pesan jika kategori tidak valid
             if (kategori == null)
             {
-                MessageBox.Show("Kategori tidak valid. Masukkan 1, 2, 3 atau nama kategori langsung.");
+                MessageBox.Show("Kategori tidak valid. Masukkan Peraturan / Tips / Umum.");
                 return;
             }
 
-            List<Informasi<string>> daftar = new List<Informasi<string>>();
+            // Buat list untuk data informasi
+            List<Informasi<string>> informasi = new();
 
             try
             {
-                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "informasi.json");
-                string json = File.ReadAllText(path);
-                daftar = JsonSerializer.Deserialize<List<Informasi<string>>>(json) ?? new List<Informasi<string>>();
+                // Ambil semua informasi dari service
+                informasi = informasiService.GetAllInformasi();
             }
             catch (Exception ex)
             {
+                // Secure code: memastikan dan tampil pesan jika file gagal dibaca
                 MessageBox.Show($"Gagal membaca file informasi: {ex.Message}");
                 return;
             }
 
-            var hasil = daftar.Where(i => i.Kategori.Equals(kategori, StringComparison.OrdinalIgnoreCase)).ToList();
+            // Filter data sesuai kategori
+            var hasil = informasi
+                .FindAll(i => i.Kategori.Equals(kategori, StringComparison.OrdinalIgnoreCase));
 
+            // Secure code: memastikan dan tampil pesan jika Informasi tidak ditemukan
             if (hasil.Count == 0)
             {
                 MessageBox.Show($"Tidak ada informasi dalam kategori '{kategori}'.");
                 return;
             }
 
-            string output = "";
+            // Format Informasi agar rapi
+            StringBuilder output = new();
             foreach (var info in hasil)
             {
-                output += string.Format("{0,-14}: {1}\n", "ID", info.IdInformasi);
-                output += string.Format("{0,-10}: {1}\n", "Kategori", info.Kategori);
-                output += string.Format("{0,-12}: {1}\n", "Judul", info.Judul);
-                output += string.Format("{0,-10}: {1}\n", "Deskripsi", info.Deskripsi);
-                output += string.Format("{0,-10}: {1}\n\n", "Tanggal", info.TanggalDibuat.ToString("dd/MM/yyyy HH.mm.ss"));
+                output.AppendLine(string.Format("{0,-14}: {1}", "ID", info.IdInformasi));
+                output.AppendLine(string.Format("{0,-10}: {1}", "Kategori", info.Kategori));
+                output.AppendLine(string.Format("{0,-12}: {1}", "Judul", info.Judul));
+                output.AppendLine(string.Format("{0,-10}: {1}", "Deskripsi", info.Deskripsi));
+                output.AppendLine(string.Format("{0,-10}: {1}", "Tanggal", info.TanggalDibuat.ToString("dd/MM/yyyy HH.mm.ss")));
             }
-            labelInformasiPendaki.Text = output;
+
+            // Tampil Informasi ke label
+            labelInformasiPendaki.Text = output.ToString();
         }
 
-        private void labelInformasiPendaki_Click(object sender, EventArgs e) { }
+        // Mapping input pengguna ke nama kategori
+        private string KonversiInputKeKategori(string input)
+        {
+            if (int.TryParse(input, out int angka))
+            {
+                // Mapping input integer ke kategori string
+                return angka switch
+                {
+                    1 => "Peraturan",
+                    2 => "Tips",
+                    3 => "Umum",
+                    _ => null
+                };
+            }
 
+            // Mapping input string ke kategori string
+            string lower = input.ToLower();
+            return lower switch
+            {
+                "peraturan" => "Peraturan",
+                "tips" => "Tips",
+                "umum" => "Umum",
+                _ => null
+            };
+        }
+
+        // Kembali ke halaman dashboard
         private void buttonKembali_Click(object sender, EventArgs e)
         {
             var dashboard = this.Parent as DashboardPendaki;
             dashboard?.PindahKeDashboard();
         }
+
+        private void labelInformasiPendaki_Click(object sender, EventArgs e) { }
+
         private void InformasiPendaki_Load(object sender, EventArgs e) { }
     }
 }

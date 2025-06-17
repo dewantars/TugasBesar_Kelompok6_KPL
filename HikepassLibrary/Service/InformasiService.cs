@@ -20,7 +20,7 @@ namespace HikepassLibrary.Service
         }
 
         // Membaca objek Informasi dari file JSON
-        private List<Informasi<string>> GetAllInformasi()
+        public List<Informasi<string>> GetAllInformasi()
         {
             if (!File.Exists(filePath))
                 return new List<Informasi<string>>();
@@ -99,7 +99,7 @@ namespace HikepassLibrary.Service
         }
 
         // Menyimpan Informasi ke file JSON, Secure coding: WriteIndented
-        private void SimpanInformasi(List<Informasi<string>> data)
+        public void SimpanInformasi(List<Informasi<string>> data)
         {
             var options = new JsonSerializerOptions { WriteIndented = true };
             File.WriteAllText(filePath, JsonSerializer.Serialize(data, options));
