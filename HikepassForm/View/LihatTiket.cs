@@ -11,37 +11,55 @@ namespace HikepassForm.View
 {
     public partial class LihatTiket : UserControl
     {
+        // Menyimpan daftar tiket yang diterima dari konstruktor
         private readonly List<Tiket> daftarTiket;
 
         public LihatTiket(List<Tiket> tiketList)
         {
             InitializeComponent();
+
+            // Inisialisasi daftar tiket
             this.daftarTiket = tiketList;
 
+            // Langsung tampilkan tiket di grid saat control dibuat
             RefreshTampilan();
 
+            // Pasang event handler tombol kembali
             btnKembali.Click += btnKembali_Click;
         }
 
         private void RefreshTampilan()
         {
-            var tiketYangTampil = ControllerReservasi.reservasiList.ToList();
+            // Ambil list tiket dari controller, pastikan tidak null
+            List<Tiket> tiketListToDisplay = ControllerReservasi.reservasiList?.ToList() ?? new List<Tiket>();
 
-            dataGridView1.DataSource = null;
-            dataGridView1.DataSource = tiketYangTampil;
+            try
+            {
+                // Reset data source agar binding baru bersih
+                dataGridView1.DataSource = null;
+                dataGridView1.DataSource = tiketListToDisplay;
 
-            dataGridView1.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+                // Atur tampilan agar teks wrap dan tinggi baris menyesuaikan isi
+                dataGridView1.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+                dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
-            dataGridView1.Refresh();
-            
-
+                // Refresh DataGridView untuk memastikan tampilan diperbarui
+                dataGridView1.Refresh();
+            }
+            catch (Exception ex)
+            {
+                // Tampilkan pesan jika terjadi error saat bind data
+                MessageBox.Show($"Terjadi kesalahan saat menampilkan tiket: {ex.Message}","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
         }
 
         private void btnKembali_Click(object sender, EventArgs e)
         {
-            var parent = this.Parent as TiketSaya;
-            parent?.PindahKeTiketSaya();
+            // Navigasi kembali ke halaman TiketSaya
+            if (this.Parent is TiketSaya parent)
+            {
+                parent.PindahKeTiketSaya();
+            }
         }
     }
 }

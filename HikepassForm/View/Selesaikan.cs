@@ -12,32 +12,37 @@ namespace HikepassForm.View
 {
     public partial class Selesaikan : UserControl
     {
-        private readonly List<Tiket> daftarTiket;
+        // Gunakan naming convention _camelCase untuk atribut private
+        private readonly List<Tiket> _daftarTiket;
 
         public Selesaikan(List<Tiket> tiketList)
         {
             InitializeComponent();
-            this.daftarTiket = tiketList;
+            _daftarTiket = tiketList;
 
             RefreshTampilan();
 
-            btnSelesaikan.Click += btnSelesaikan_Click;
-            btnKembali.Click += btnKembali_Click;
+            // Pasang event handler button
+            btnSelesaikan.Click += BtnSelesaikan_Click;
+            btnKembali.Click += BtnKembali_Click;
 
+            // Pasang event handler untuk grid
             dataGridView1.CellValueChanged += DataGridView1_CellValueChanged;
             dataGridView1.CurrentCellDirtyStateChanged += DataGridView1_CurrentCellDirtyStateChanged;
         }
 
         private void RefreshTampilan()
         {
-            // Ambil tiket dengan status Dibayar atau Checkin
-            var tiketYangTampil = ControllerReservasi.reservasiList.Where(t => t.Status == Tiket.StatusTiket.Checkout ).ToList();
+            // Ambil tiket dengan status Checkout
+            var tiketYangTampil = ControllerReservasi.reservasiList
+                .Where(t => t.Status == Tiket.StatusTiket.Checkout)
+                .ToList();
 
-            // Reset datasource
+            // Reset datasource grid view
             dataGridView1.DataSource = null;
             dataGridView1.DataSource = tiketYangTampil;
 
-            // Agar wrap dan ukuran sel otomatis menyesuaikan konten
+            // Agar text wrap dan sel menyesuaikan konten
             dataGridView1.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
@@ -45,9 +50,9 @@ namespace HikepassForm.View
             UpdateTombolState();
         }
 
-
         private void DataGridView1_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
+            // Commit edit agar CellValueChanged langsung terpanggil saat checkbox diubah
             if (dataGridView1.IsCurrentCellDirty)
             {
                 dataGridView1.CommitEdit(DataGridViewDataErrorContexts.Commit);
@@ -56,24 +61,23 @@ namespace HikepassForm.View
 
         private void DataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            // Pastikan index valid
+            // Pastikan baris dan kolom valid
             if (e.RowIndex >= 0 && e.ColumnIndex == dataGridView1.Columns["Pilih"].Index)
             {
-                int idTiket = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells["idDataGridViewTextBoxColumn"].Value);
-               
-
-                var tiket = ControllerReservasi.reservasiList.FirstOrDefault(t => t.Id == idTiket);
-                if (tiket != null)
+                if (int.TryParse(dataGridView1.Rows[e.RowIndex].Cells["idDataGridViewTextBoxColumn"].Value?.ToString(), out int idTiket))
                 {
-                    UpdateTombolState();
+                    var tiket = ControllerReservasi.reservasiList.FirstOrDefault(t => t.Id == idTiket);
+                    if (tiket != null)
+                    {
+                        UpdateTombolState();
+                    }
                 }
             }
         }
 
-
-
         private void UpdateTombolState()
         {
+            // Cek apakah ada baris yang dipilih
             bool adaYangDipilih = dataGridView1.Rows
                 .Cast<DataGridViewRow>()
                 .Any(r => r.Cells["Pilih"].Value != null && (bool)r.Cells["Pilih"].Value);
@@ -81,30 +85,38 @@ namespace HikepassForm.View
             btnSelesaikan.Enabled = adaYangDipilih;
         }
 
-        private async void btnSelesaikan_Click(object sender, EventArgs e)
+        private async void BtnSelesaikan_Click(object sender, EventArgs e)
         {
             bool found = false;
-            List<int> tiketYangDiselesaikan = new List<int>();
+            var tiketYangDiselesaikan = new List<int>();
 
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
-                // Ambil sel checkbox (gunakan nama kolom checkbox yang sesuai)
+                // Cek apakah row dicentang
                 if (row.Cells["Pilih"] is DataGridViewCheckBoxCell cell &&
                     cell.Value != null && (bool)cell.Value)
                 {
                     found = true;
-                    int tiketId = Convert.ToInt32(row.Cells["idDataGridViewTextBoxColumn"].Value);
 
-                    // Panggil API update
-                    await ControllerReservasi.Selesaikan("http://localhost:5226/api/reservasi", tiketId, false);
-
-                    tiketYangDiselesaikan.Add(tiketId);
-
-                    // Update data lokal
-                    var t = daftarTiket.FirstOrDefault(x => x.Id == tiketId);
-                    if (t != null)
+                    if (int.TryParse(row.Cells["idDataGridViewTextBoxColumn"].Value?.ToString(), out int tiketId))
                     {
-                        t.Status = Tiket.StatusTiket.Selesai;
+                        try
+                        {
+                            // Secure code: Bungkus API call dengan try-catch
+                            await ControllerReservasi.Selesaikan("http://localhost:5226/api/reservasi", tiketId, false);
+
+                            tiketYangDiselesaikan.Add(tiketId);
+
+                            var t = _daftarTiket.FirstOrDefault(x => x.Id == tiketId);
+                            if (t != null)
+                            {
+                                t.Status = Tiket.StatusTiket.Selesai;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Terjadi error saat menyelesaikan tiket ID {tiketId}: {ex.Message}");
+                        }
                     }
                 }
             }
@@ -115,17 +127,18 @@ namespace HikepassForm.View
                 return;
             }
 
-            // Perbarui tampilan
             RefreshTampilan();
 
             MessageBox.Show("Proses penyelesaian berhasil diproses.");
         }
 
-
-        private void btnKembali_Click(object sender, EventArgs e)
+        private void BtnKembali_Click(object sender, EventArgs e)
         {
-            var parent = this.Parent as TiketSaya;
-            parent?.PindahKeTiketSaya();
+            // Navigasi kembali ke halaman TiketSaya
+            if (this.Parent is TiketSaya parent)
+            {
+                parent.PindahKeTiketSaya();
+            }
         }
     }
 }

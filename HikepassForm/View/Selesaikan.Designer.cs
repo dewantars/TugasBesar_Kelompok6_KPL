@@ -97,7 +97,7 @@
             btnSelesaikan.TabIndex = 3;
             btnSelesaikan.Text = "KONFIRMASI";
             btnSelesaikan.UseVisualStyleBackColor = false;
-            btnSelesaikan.Click += btnSelesaikan_Click;
+            btnSelesaikan.Click += BtnSelesaikan_Click;
             // 
             // btnKembali
             // 

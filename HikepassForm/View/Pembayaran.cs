@@ -12,16 +12,17 @@ namespace HikepassForm.View
 {
     public partial class Pembayaran : UserControl
     {
-        private readonly List<Tiket> daftarTiket;
+        private readonly List<Tiket> _daftarTiket;
 
         public Pembayaran(List<Tiket> tiketList)
         {
             InitializeComponent();
-            this.daftarTiket = tiketList;
+            _daftarTiket = tiketList ?? new List<Tiket>(); // pastikan tidak null untuk keamanan
         }
 
         public void LoadPage(UserControl page)
         {
+            // Ganti halaman saat navigasi
             this.Controls.Clear();
             page.Dock = DockStyle.Fill;
             this.Controls.Add(page);
@@ -29,47 +30,43 @@ namespace HikepassForm.View
 
         private void RefreshTampilan()
         {
+            // Ambil tiket dengan status 'Belum Dibayar'
+            var tiketBelumDibayar = ControllerReservasi.reservasiList
+                .Where(t => t.Status == StatusTiket.BelumDibayar)
+                .ToList();
 
-            var tiketYangTampil = ControllerReservasi.reservasiList.Where(t => t.Status == Tiket.StatusTiket.BelumDibayar).ToList();
-
-            var bindingList = new BindingList<Tiket>(tiketYangTampil);
-
-            // untuk "mereset" grid
+            // Bind data ke DataGridView
+            var bindingList = new BindingList<Tiket>(tiketBelumDibayar);
             dataGridView1.DataSource = null;
             dataGridView1.DataSource = bindingList;
             dataGridView1.Refresh();
 
-        }
-
-        private void Pembayaran_Load(object sender, EventArgs e)
-        {
-            var tiketYangTampil = ControllerReservasi.reservasiList.Where(t => t.Status == Tiket.StatusTiket.BelumDibayar).ToList();
-
-            // Reset datasource
-            dataGridView1.DataSource = null;
-            dataGridView1.DataSource = tiketYangTampil;
-
-            // Agar wrap dan ukuran sel otomatis menyesuaikan konten
-            dataGridView1.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-
-            if (!tiketYangTampil.Any())
-            {
-                lblStatusInfo.Text = "Tidak ada tiket yang perlu dibayar.";
-                btnBayar.Enabled = false;
-            }
-            else
+            // Update tampilan label dan tombol
+            if (tiketBelumDibayar.Any())
             {
                 lblStatusInfo.Text = "Silakan pilih tiket yang akan dibayar.";
                 btnBayar.Enabled = true;
             }
+            else
+            {
+                lblStatusInfo.Text = "Tidak ada tiket yang perlu dibayar.";
+                btnBayar.Enabled = false;
+            }
         }
 
+        private void Pembayaran_Load(object sender, EventArgs e)
+        {
+            // Inisialisasi tampilan saat form dimuat
+            RefreshTampilan();
 
-
+            // Pengaturan wrap text dan ukuran sel
+            dataGridView1.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+        }
 
         private void DataGridView1_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
+            // Commit perubahan saat checkbox di-edit
             if (dataGridView1.IsCurrentCellDirty)
             {
                 dataGridView1.CommitEdit(DataGridViewDataErrorContexts.Commit);
@@ -78,61 +75,82 @@ namespace HikepassForm.View
 
         private void DataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == dataGridView1.Columns["PilihTiket"].Index && e.RowIndex >= 0)
-            {
-                int idTiket = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells["Id"].Value);
-                bool isChecked = Convert.ToBoolean(dataGridView1.Rows[e.RowIndex].Cells["PilihTiket"].Value);
+            // Pastikan bukan baris header
+            if (e.RowIndex < 0) return;
 
-                var tiket = ControllerReservasi.reservasiList.FirstOrDefault(t => t.Id == idTiket);
-                if (tiket != null)
+            // Cek perubahan pada kolom PilihTiket
+            if (dataGridView1.Columns["PilihTiket"] != null &&
+                e.ColumnIndex == dataGridView1.Columns["PilihTiket"].Index)
+            {
+                var idCell = dataGridView1.Rows[e.RowIndex].Cells["Id"].Value;
+                var pilihCell = dataGridView1.Rows[e.RowIndex].Cells["PilihTiket"].Value;
+
+                if (idCell != null && pilihCell != null)
                 {
-                    tiket.StatusPembayaran = isChecked;
+                    int idTiket = Convert.ToInt32(idCell);
+                    bool isChecked = Convert.ToBoolean(pilihCell);
+
+                    // Update status pembayaran tiket
+                    var tiket = ControllerReservasi.reservasiList.FirstOrDefault(t => t.Id == idTiket);
+                    if (tiket != null)
+                    {
+                        tiket.StatusPembayaran = isChecked;
+                    }
                 }
             }
         }
 
         private async void btnBayar_Click(object sender, EventArgs e)
         {
-            bool found = false;
-            List<int> tiketYangDibayar = new List<int>();
-
-             foreach (var id in tiketYangDibayar)
+            try
             {
-                var t = daftarTiket.FirstOrDefault(x => x.Id == id);
-                if (t != null)
+                // Kumpulkan ID tiket yang dicentang
+                var tiketYangDibayar = new List<int>();
+
+                foreach (DataGridViewRow row in dataGridView1.Rows)
                 {
-                    t.Status = Tiket.StatusTiket.Dibayar;
-                    t.StatusPembayaran = false;
+                    if (row.Cells["checkBox"] is DataGridViewCheckBoxCell cell &&
+                        cell.Value != null && (bool)cell.Value)
+                    {
+                        int tiketId = Convert.ToInt32(row.Cells["idDataGridViewTextBoxColumn"].Value);
+                        tiketYangDibayar.Add(tiketId);
+                    }
                 }
-            }
 
-            foreach (DataGridViewRow row in dataGridView1.Rows)
-            {
-                if (row.Cells["checkBox"] is DataGridViewCheckBoxCell cell &&
-                    cell.Value != null && (bool)cell.Value)
+                if (!tiketYangDibayar.Any())
                 {
-                    found = true;
-                    int tiketId = (int)row.Cells["idDataGridViewTextBoxColumn"].Value;
-
-                    await ControllerReservasi.UpdatedPembayaran("http://localhost:5226/api/reservasi", tiketId);
-                    tiketYangDibayar.Add(tiketId);
+                    // Validasi: Tidak ada tiket dipilih
+                    MessageBox.Show("Silakan pilih tiket yang ingin dibayar.");
+                    return;
                 }
-            }
 
-            if (!found)
+                foreach (var id in tiketYangDibayar)
+                {
+                    // Update status pada objek lokal
+                    var tiket = _daftarTiket.FirstOrDefault(t => t.Id == id);
+                    if (tiket != null)
+                    {
+                        tiket.Status = StatusTiket.Dibayar;
+                        tiket.StatusPembayaran = false;
+                    }
+
+                    // Kirim update ke API
+                    await ControllerReservasi.UpdatedPembayaran("http://localhost:5226/api/reservasi", id);
+                }
+
+                RefreshTampilan();
+                MessageBox.Show("Pembayaran berhasil diproses.");
+            }
+            catch (Exception ex)
             {
-                MessageBox.Show("Silakan pilih tiket yang ingin dibayar.");
-                return;
+                // Tangani error tak terduga
+                MessageBox.Show($"Terjadi kesalahan saat memproses pembayaran: {ex.Message}");
             }
-
-           
-
-            RefreshTampilan();
-            MessageBox.Show("Pembayaran berhasil diproses.");
         }
 
         private void btnKembali_Click(object sender, EventArgs e)
         {
+            // Navigasi ke halaman TiketSaya
             var tiketSaya = new TiketSaya();
             LoadPage(tiketSaya);
         }
