@@ -14,6 +14,8 @@ namespace HikepassLibrary.Controller
     {
 
         public static List<Tiket> reservasiList = new List<Tiket>();
+
+        public static RiwayatPendakian riwayatPendakian = new RiwayatPendakian();
         public static async Task GetAllReservasi(string baseUrl)
         {
             try
@@ -392,6 +394,8 @@ namespace HikepassLibrary.Controller
                 {
                     tiketToUpdate.Status = Tiket.StatusTiket.Selesai;
                     tiketToUpdate.IsCheckedIn = false;
+                    RiwayatPendakian.riwayatList.Add(tiketToUpdate);
+                    riwayatPendakian.SaveRiwayat();
                 }
                 else
                 {
