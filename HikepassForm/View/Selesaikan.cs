@@ -31,7 +31,7 @@ namespace HikepassForm.View
         private void RefreshTampilan()
         {
             // Ambil tiket dengan status Dibayar atau Checkin
-            var tiketYangTampil = ControllerReservasi.reservasiList.Where(t => t.Status == Tiket.StatusTiket.Checkout ).ToList();
+            var tiketYangTampil = ControllerReservasi.reservasiList.Where(t => t.Status == Tiket.StatusTiket.Checkout).ToList();
 
             // Reset datasource
             dataGridView1.DataSource = null;
@@ -60,7 +60,7 @@ namespace HikepassForm.View
             if (e.RowIndex >= 0 && e.ColumnIndex == dataGridView1.Columns["Pilih"].Index)
             {
                 int idTiket = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells["idDataGridViewTextBoxColumn"].Value);
-               
+
 
                 var tiket = ControllerReservasi.reservasiList.FirstOrDefault(t => t.Id == idTiket);
                 if (tiket != null)
@@ -126,6 +126,11 @@ namespace HikepassForm.View
         {
             var parent = this.Parent as TiketSaya;
             parent?.PindahKeTiketSaya();
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

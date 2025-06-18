@@ -37,7 +37,7 @@ namespace HikepassForm.View
         private void btnLihatTiket_Click(object sender, EventArgs e)
         {
             LihatTiket halamanTiketSaya = new LihatTiket(ControllerReservasi.reservasiList);
-            LoadPage(halamanTiketSaya );
+            LoadPage(halamanTiketSaya);
         }
 
         private void btnBayar_Click(object sender, EventArgs e)
@@ -71,7 +71,11 @@ namespace HikepassForm.View
             LoadPage(dashboard);
         }
 
-        
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var riwaypendakian = new RiwayatPendakian();
+            LoadPage(riwaypendakian);
+        }
     }
 
 }

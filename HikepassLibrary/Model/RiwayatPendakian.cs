@@ -8,17 +8,23 @@ using System.Threading.Tasks;
 
 namespace HikepassLibrary.Model
 {
+    // Kelas untuk mengelola riwayat pendakian
     public class RiwayatPendakian
     {
+        // Menyimpan daftar tiket pendakian
         public static List<Tiket> riwayatList = new List<Tiket>();
+
+        // Objek service untuk mengelola data riwayat pendakian
         private readonly RiwayatService _riwayatService;
 
+        // Konstruktor untuk menginisialisasi kelas dan memuat data dari file JSON
         public RiwayatPendakian(string filePath = "RiwayatPendakian.json")
         {
             _riwayatService = new RiwayatService(filePath);
             riwayatList = _riwayatService.LoadRiwayat(); // Memuat riwayat saat inisialisasi
         }
 
+        // Menampilkan daftar riwayat pendakian di konsol
         public void ShowRiwayat()
         {
             if (riwayatList.Count == 0)
@@ -37,6 +43,7 @@ namespace HikepassLibrary.Model
             }
         }
 
+        // Menyimpan data riwayat pendakian ke file JSON
         public void SaveRiwayat()
         {
             _riwayatService.SaveRiwayat(riwayatList);

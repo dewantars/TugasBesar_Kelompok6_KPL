@@ -1,4 +1,4 @@
-﻿namespace HikepassForm.View
+namespace HikepassForm.View
 {
     partial class LogIn
     {

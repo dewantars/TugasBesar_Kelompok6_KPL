@@ -102,7 +102,7 @@
             // 
             // btnLO
             // 
-            btnLO.Location = new Point(725, 45);
+            btnLO.Location = new Point(41, 381);
             btnLO.Margin = new Padding(3, 4, 3, 4);
             btnLO.Name = "btnLO";
             btnLO.Size = new Size(103, 31);
