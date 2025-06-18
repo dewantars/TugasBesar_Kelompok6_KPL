@@ -12,7 +12,7 @@ using HikepassLibrary.Model;
 
 namespace HikepassForm.View
 {
-    public partial class LogIn: UserControl
+    public partial class LogIn : UserControl
     {
         private readonly UserController userController;
         private static bool isDummyDataAdded = false;
@@ -82,6 +82,11 @@ namespace HikepassForm.View
         private void txtPw_TextChanged(object sender, EventArgs e)
         {
             Console.WriteLine("Password text changed");
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
