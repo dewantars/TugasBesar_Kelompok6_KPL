@@ -64,13 +64,14 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Regular, GraphicsUnit.Point);
+            label3.Font = new Font("Microsoft Sans Serif", 18F);
             label3.Location = new Point(380, 28);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(169, 40);
             label3.TabIndex = 7;
             label3.Text = "HikePass";
+            label3.Click += label3_Click;
             // 
             // label2
             // 
@@ -113,7 +114,7 @@
             // signin
             // 
             signin.AutoSize = true;
-            signin.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold, GraphicsUnit.Point);
+            signin.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold);
             signin.Location = new Point(166, 212);
             signin.Margin = new Padding(4, 0, 4, 0);
             signin.Name = "signin";
@@ -129,7 +130,7 @@
             Margin = new Padding(4);
             Name = "LogIn";
             Size = new Size(1051, 562);
-            this.Load += new System.EventHandler(this.LogIn_Load);
+            Load += LogIn_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ResumeLayout(false);
